@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自然共鳴 | ローグライクカードゲーム</title>
+  <link rel="stylesheet" href="./css/top.css">
+  <link rel="stylesheet" href="./css/effect.css">
+  <link rel="stylesheet" href="./css/gallery.css">
+  <link rel="stylesheet" href="./css/rules.css">
+  <link rel="stylesheet" href="./css/game.css">
+  <link rel="stylesheet" href="./css/game-result.css">
+  <link rel="stylesheet" href="./css/game-middle.css">
+  <link rel="stylesheet" href="./css/game-finish.css">
+</head>
+<body>
+
+  <!-- bodyの背景画像 -->
+  <div class="body-background-wrapper">
+    <img src="./images/background_ruins.avif" alt="神秘的な背景" class="body-background-image">
+    <div class="body-overlay"></div>
+  </div>
+
+  <div id="modal-top" class="modal">
+    <!-- 背景画像 -->
+    <div class="top-background-wrapper">
+      <img src="./images/background_ruins.avif" alt="神秘的な背景" class="top-background-image">
+      <div class="top-overlay"></div>
+    </div>
+    <!-- コンテンツ -->
+    <div class="top-container">
+      <header class="top-header">
+        <h1 class="top-main-title">自然共鳴</h1>
+        <p class="top-sub-title"><span>五つの自然属性、紡がれる戦術。</span><span>運命はカードに刻まれる</span></p>
+      </header>
+      <!-- ルールボタン -->
+      <button class="top-rules-button">
+        <span class="top-rules-icon">📜</span>
+        <span class="top-rules-text">ルール</span>
+      </button>
+      <!-- ボタン -->
+      <div class="top-button-group">
+        <button class="top-button top-card-list-button">
+          <span class="top-button-text">カード図鑑を見る</span>
+          <span class="top-button-subtext">戦略の扉を開く</span>
+        </button>
+        <button class="top-button top-start-game-button">
+          <span class="top-button-text">新たな旅を始める</span>
+          <span class="top-button-subtext">未知の運命へ</span>
+        </button>
+        <button class="top-button top-continue-game-button">
+          <span class="top-button-text">前回の冒険から</span>
+          <span class="top-button-subtext">物語を紡ぎ直す</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-gallery" class="modal">
+    <div class="gallery-background-wrapper">
+      <img src="./images/background_ruins.avif" alt="神秘的な背景" class="gallery-background-image">
+      <div class="gallery-overlay"></div>
+    </div>
+    <div class="gallery-container">
+      <nav class="attribute-tabs">
+        <button class="tab-button active" data-attribute="虛">虚</button>
+        <button class="tab-button" data-attribute="霧">霧</button>
+        <button class="tab-button" data-attribute="燐">燐</button>
+        <button class="tab-button" data-attribute="暁">暁</button>
+        <button class="tab-button" data-attribute="砂">砂</button>
+      </nav>
+
+      <main class="card-list-area">
+        <div id="cards-虚" class="attribute-cards active-attribute">
+          <section class="card-type-section">
+            <h3>通常タイプ</h3>
+            <div class="cards-grid">
+              <div class="card-placeholder" data-card-id="虚-通常-1">虚 通常1</div>
+              <div class="card-placeholder" data-card-id="虚-通常-2">虚 通常2</div>
+              <div class="card-placeholder" data-card-id="虚-通常-3">虚 通常3</div>
+            </div>
+          </section>
+          <section class="card-type-section">
+            <h3>コンボタイプ</h3>
+            <div class="cards-grid">
+              <div class="card-placeholder" data-card-id="虚-コンボ-1">虚 コンボ1</div>
+              <div class="card-placeholder" data-card-id="虚-コンボ-2">虚 コンボ2</div>
+              <div class="card-placeholder" data-card-id="虚-コンボ-3">虚 コンボ3</div>
+            </div>
+          </section>
+          <section class="card-type-section">
+            <h3>刻印タイプ</h3>
+            <div class="cards-grid">
+              <div class="card-placeholder" data-card-id="虚-刻印-1">虚 刻印1</div>
+              <div class="card-placeholder" data-card-id="虚-刻印-2">虚 刻印2</div>
+              <div class="card-placeholder" data-card-id="虚-刻印-3">虚 刻印3</div>
+            </div>
+          </section>
+        </div>
+        </main>
+
+      <aside class="card-detail-area">
+        <div class="enlarged-card-placeholder">
+          拡大カード
+        </div>
+        <div class="card-effect">
+          <h4>カード効果</h4>
+          <p id="card-effect-text">ここに選択したカードの効果が表示されます。</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="modal-rules" class="modal"></div>
+
+  <div id="modal-game" class="modal"></div>
+
+  <div id="modal-game-result" class="modal"></div>
+
+  <div id="modal-game-middle" class="modal"></div>
+
+  <div id="modal-game-finish" class="modal"></div>
+
+  <script src="./js/top.js"></script>
+  <script src="./js/gallery.js"></script>
+</body>
+</html>
+
+
+
