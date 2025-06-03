@@ -62,56 +62,159 @@
       <div class="gallery-overlay"></div>
     </div>
     <div class="gallery-container">
-      <nav class="attribute-tabs">
-        <button class="tab-button active" data-attribute="虛">虚</button>
-        <button class="tab-button" data-attribute="霧">霧</button>
-        <button class="tab-button" data-attribute="燐">燐</button>
-        <button class="tab-button" data-attribute="暁">暁</button>
-        <button class="tab-button" data-attribute="砂">砂</button>
-      </nav>
-
-      <main class="card-list-area">
-        <div id="cards-虚" class="attribute-cards active-attribute">
-          <section class="card-type-section">
-            <h3>通常タイプ</h3>
-            <div class="cards-grid">
-              <div class="card-placeholder" data-card-id="虚-通常-1">虚 通常1</div>
-              <div class="card-placeholder" data-card-id="虚-通常-2">虚 通常2</div>
-              <div class="card-placeholder" data-card-id="虚-通常-3">虚 通常3</div>
+      <main class="gallery-card-list-area">
+        <nav class="gallery-attribute-tabs">
+          <button class="gallery-tab-button gallery-active" data-attribute-index="0">虚</button>
+          <button class="gallery-tab-button" data-attribute-index="1">霧</button>
+          <button class="gallery-tab-button" data-attribute-index="2">燐</button>
+          <button class="gallery-tab-button" data-attribute-index="3">暁</button>
+          <button class="gallery-tab-button" data-attribute-index="4">砂</button>
+        </nav>
+        <div class="gallery-attribute-content-scroll-container">
+            <div class="gallery-attribute-content-wrapper">
+              <div class="gallery-attribute-page" id="gallery-cards-虚">
+                <section class="gallery-card-type-section">
+                  <h3>通常タイプ</h3>
+                  <div class="gallery-cards-grid">
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-通常-1">虚 通常1</div>
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-通常-2">虚 通常2</div>
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-通常-3">虚 通常3</div>
+                  </div>
+                </section>
+                <section class="gallery-card-type-section">
+                  <h3>コンボタイプ</h3>
+                  <div class="gallery-cards-grid">
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-コンボ-1">虚 コンボ1</div>
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-コンボ-2">虚 コンボ2</div>
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-コンボ-3">虚 コンボ3</div>
+                  </div>
+                </section>
+                <section class="gallery-card-type-section">
+                  <h3>刻印タイプ</h3>
+                  <div class="gallery-cards-grid">
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-刻印-1">虚 刻印1</div>
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-刻印-2">虚 刻印2</div>
+                    <div class="gallery-card-placeholder" data-gallery-card-id="虚-刻印-3">虚 刻印3</div>
+                  </div>
+                </section>
+              </div>
+              <div class="gallery-attribute-page" id="gallery-cards-霧">
+                <section class="gallery-card-type-section"><h3>通常タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="霧-通常-1">霧 通常1</div><div class="gallery-card-placeholder" data-gallery-card-id="霧-通常-2">霧 通常2</div><div class="gallery-card-placeholder" data-gallery-card-id="霧-通常-3">霧 通常3</div></div></section><section class="gallery-card-type-section"><h3>コンボタイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="霧-コンボ-1">霧 コンボ1</div><div class="gallery-card-placeholder" data-gallery-card-id="霧-コンボ-2">霧 コンボ2</div><div class="gallery-card-placeholder" data-gallery-card-id="霧-コンボ-3">霧 コンボ3</div></div></section><section class="gallery-card-type-section"><h3>刻印タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="霧-刻印-1">霧 刻印1</div><div class="gallery-card-placeholder" data-gallery-card-id="霧-刻印-2">霧 刻印2</div><div class="gallery-card-placeholder" data-gallery-card-id="霧-刻印-3">霧 刻印3</div></div></section>
+              </div>
+              <div class="gallery-attribute-page" id="gallery-cards-燐">
+                <section class="gallery-card-type-section"><h3>通常タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="燐-通常-1">燐 通常1</div><div class="gallery-card-placeholder" data-gallery-card-id="燐-通常-2">燐 通常2</div><div class="gallery-card-placeholder" data-gallery-card-id="燐-通常-3">燐 通常3</div></div></section><section class="gallery-card-type-section"><h3>コンボタイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="燐-コンボ-1">燐 コンボ1</div><div class="gallery-card-placeholder" data-gallery-card-id="燐-コンボ-2">燐 コンボ2</div><div class="gallery-card-placeholder" data-gallery-card-id="燐-コンボ-3">燐 コンボ3</div></div></section><section class="gallery-card-type-section"><h3>刻印タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="燐-刻印-1">燐 刻印1</div><div class="gallery-card-placeholder" data-gallery-card-id="燐-刻印-2">燐 刻印2</div><div class="gallery-card-placeholder" data-gallery-card-id="燐-刻印-3">燐 刻印3</div></div></section>
+              </div>
+              <div class="gallery-attribute-page" id="gallery-cards-暁">
+                <section class="gallery-card-type-section"><h3>通常タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="暁-通常-1">暁 通常1</div><div class="gallery-card-placeholder" data-gallery-card-id="暁-通常-2">暁 通常2</div><div class="gallery-card-placeholder" data-gallery-card-id="暁-通常-3">暁 通常3</div></div></section><section class="gallery-card-type-section"><h3>コンボタイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="暁-コンボ-1">暁 コンボ1</div><div class="gallery-card-placeholder" data-gallery-card-id="暁-コンボ-2">暁 コンボ2</div><div class="gallery-card-placeholder" data-gallery-card-id="暁-コンボ-3">暁 コンボ3</div></div></section><section class="gallery-card-type-section"><h3>刻印タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="暁-刻印-1">暁 刻印1</div><div class="gallery-card-placeholder" data-gallery-card-id="暁-刻印-2">暁 刻印2</div><div class="gallery-card-placeholder" data-gallery-card-id="暁-刻印-3">暁 刻印3</div></div></section>
+              </div>
+              <div class="gallery-attribute-page" id="gallery-cards-砂">
+                <section class="gallery-card-type-section"><h3>通常タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="砂-通常-1">砂 通常1</div><div class="gallery-card-placeholder" data-gallery-card-id="砂-通常-2">砂 通常2</div><div class="gallery-card-placeholder" data-gallery-card-id="砂-通常-3">砂 通常3</div></div></section><section class="gallery-card-type-section"><h3>コンボタイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="砂-コンボ-1">砂 コンボ1</div><div class="gallery-card-placeholder" data-gallery-card-id="砂-コンボ-2">砂 コンボ2</div><div class="gallery-card-placeholder" data-gallery-card-id="砂-コンボ-3">砂 コンボ3</div></div></section><section class="gallery-card-type-section"><h3>刻印タイプ</h3><div class="gallery-cards-grid"><div class="gallery-card-placeholder" data-gallery-card-id="砂-刻印-1">砂 刻印1</div><div class="gallery-card-placeholder" data-gallery-card-id="砂-刻印-2">砂 刻印2</div><div class="gallery-card-placeholder" data-gallery-card-id="砂-刻印-3">砂 刻印3</div></div></section>
+              </div>
             </div>
-          </section>
-          <section class="card-type-section">
-            <h3>コンボタイプ</h3>
-            <div class="cards-grid">
-              <div class="card-placeholder" data-card-id="虚-コンボ-1">虚 コンボ1</div>
-              <div class="card-placeholder" data-card-id="虚-コンボ-2">虚 コンボ2</div>
-              <div class="card-placeholder" data-card-id="虚-コンボ-3">虚 コンボ3</div>
-            </div>
-          </section>
-          <section class="card-type-section">
-            <h3>刻印タイプ</h3>
-            <div class="cards-grid">
-              <div class="card-placeholder" data-card-id="虚-刻印-1">虚 刻印1</div>
-              <div class="card-placeholder" data-card-id="虚-刻印-2">虚 刻印2</div>
-              <div class="card-placeholder" data-card-id="虚-刻印-3">虚 刻印3</div>
-            </div>
-          </section>
         </div>
-        </main>
+      </main>
 
-      <aside class="card-detail-area">
-        <div class="enlarged-card-placeholder">
+      <aside class="gallery-card-detail-area">
+        <div class="gallery-enlarged-card-placeholder">
           拡大カード
         </div>
-        <div class="card-effect">
+        <div class="gallery-card-effect">
           <h4>カード効果</h4>
-          <p id="card-effect-text">ここに選択したカードの効果が表示されます。</p>
+          <p id="gallery-card-effect-text">ここに選択したカードの効果が表示されます。</p>
         </div>
       </aside>
     </div>
+    <button id="gallery-close-button">Topへ</button>
   </div>
 
-  <div id="modal-rules" class="modal"></div>
+  <div id="modal-rules" class="modal">
+    <div class="rules-background-wrapper">
+      <img src="./images/background_ruins.avif" alt="神秘的な背景" class="rules-background-image">
+      <div class="rules-overlay"></div>
+    </div>
+    <div class="rules-container">
+      <p class="rules-title">ルール</p>
+      <p class="rules-text">
+        <strong>勝利条件／敗北条件</strong><br>
+        敵のHPを0にすると勝利となります。プレイヤーのHPが0になると敗北となります。<br><br>
+        
+        <strong>デッキ構成とカード置き場</strong><br>
+        ・デッキ枚数は10枚です。<br>
+        ・戦闘中に手札からプレイできるカードの上限枚数を「カード置き場」と呼び、戦闘開始時は3枚です。<br>
+        ・ボスを倒すとカード置き場の上限が1増え、最終的に最大5枚まで拡張できます。<br>
+        ・カードにはレアリティ（1～3）が設定されており、再使用までのクールタイムが変動します（レアリティ1→3ターン、2→4ターン、3→5ターン）。<br><br>
+        
+        <strong>ラウンド構成</strong><br>
+        ・全15ラウンド制です。<br>
+        ・通常ラウンド：1～4、6～9、11～14の計12ラウンド。敵はラウンドが進むごとにステータスや行動パターンが強化されていきます。<br>
+        ・ボスラウンド：5、10、15の3ラウンド。ボスは強力なスキルを持ち、特定のHPトリガーやターン経過トリガーで行動が変化します。ボス戦では特殊なフィールド効果が追加され、プレイヤーと敵の両方に影響します。ボス撃破後にカード置き場が増加します。<br>
+        ・各ラウンド開始時に、プレイヤーは最大HPの20％を回復します。<br>
+        ・通常ラウンドとボスラウンドで敵の強化度合いや行動パターンが異なり、プレイヤーは戦略を変えながら攻略する必要があります。<br><br>
+        
+        <strong>エッセンス獲得と合成システム</strong><br>
+        ・敵を倒すと「エッセンス」を獲得します。<br>
+        　－獲得できるエッセンスは「自然属性エッセンス」「カード属性エッセンス」「振り分けポイント」の3種類です。<br>
+        ・ラウンド間では、獲得した3種類の要素を合成して新しいカードを生成できます。<br>
+        　－自然属性エッセンス：虚、霧、燐、暁、砂の5属性が存在し、合成時にいくつかの選択肢から好きな属性を選べます。<br>
+        　－カード属性エッセンス：通常、コンボ、刻印の3タイプがあり、合成時に選択した属性・レアリティに応じたカードが生成されます。<br>
+        　－振り分けポイント：カードの「コンボ欄」や刻印の効果範囲、レアリティの決定に使用します。<br>
+        ・合成画面でデッキ調整を行い、次ラウンドに向けてデッキの強化・最適化を行います。<br><br>
+        
+        <strong>自然属性エッセンスと特徴</strong><br>
+        ・虚（Debuff系）<br>
+        　－敵にデバフ状態を与え、刻印数に応じた追加ダメージや防御力低下などの効果を持ちます。<br>
+        ・霧（複数ヒット系）<br>
+        　－攻撃回数を増やしたり、敵の行動選択を乱す効果を持ちます。<br>
+        ・燐（持続ダメージ系）<br>
+        　－刻印数に応じたターン開始時ダメージを与える効果。爆発的ダメージを狙う連携カードと噛み合います。<br>
+        ・暁（回復系）<br>
+        　－刻印数に応じて回復量が増加し、一時的なバフ効果（攻撃力UPなど）を与えます。高い回復力を持つため、コンボ効果はやや控えめに設定されています。<br>
+        ・砂（防御系）<br>
+        　－刻印をシールド値に変換したり、刻印数に応じたカウンターダメージを与えます。<br><br>
+        
+        <strong>カード属性とその効果</strong><br>
+        ・通常カード<br>
+        　－各自然属性ごとに、単体攻撃、バフ／デバフ付与、回復といった基本効果が設定されています。<br>
+        ・コンボカード<br>
+        －同じ属性のカードを連続使用することで、効果範囲が拡大します。<br>
+        －例：同属性カードを1枚以上使用で次の同属性にボーナス、2枚以上使用で次のカード全般にボーナス、3枚以上で以降すべてのカードにボーナス。<br>
+        －レアリティが上がるほどコンボの判定範囲や効果が強化されます。<br>
+        ・刻印カード<br>
+        －使用すると、敵または自身に刻印を付与します。刻印数に応じた追加効果を発動できるカードもあります。<br>
+        －虚の刻印：Debuff刻印。刻印数分で敵の防御を減少させたり、刻印を消費して強力な一撃を放てるカードがあります。<br>
+        －霧の刻印：混乱や複数攻撃を誘発する刻印。刻印数が多いほど複数攻撃回数が増えたり、敵の次行動をランダム化します。<br>
+        －燐の刻印：持続ダメージ刻印。刻印数分のダメージをラウンド開始時に与え、一定数集めると爆発的ダメージを与える連携カードがあります。<br>
+        －暁の刻印：回復／強化刻印。刻印数に応じてターン終了時に回復量が増し、一時的な攻撃力バフを付与できます。<br>
+        －砂の刻印：防御／カウンター刻印。刻印を即座にシールドに変換したり、刻印数に応じた反撃ダメージを発動します。<br><br>
+        
+        <strong>振り分けポイントとレアリティ</strong><br>
+        ・合成時に獲得する「振り分けポイント」は、カードのコンボ効果や刻印強化、レアリティ設定に使用します。<br>
+        ・レアリティは1～3の3段階で、高いほど基本効果や追加効果が強化されます。<br><br>
+        
+        <strong>敵の行動と強化</strong><br>
+        ・敵は固定デッキを持たず、各敵ごとに用意された行動パターン（スキルセット）を繰り返します。<br>
+        ・通常ラウンドでは、1～4、6～9、11～14の各グループごとにステータス（HP、攻撃力、防御力など）が上昇し、厄介な能力を持つ敵が登場します。<br>
+        ・ボス戦ではHPトリガーやターン経過トリガーによって行動が変化し、フィールド効果が追加されます。<br><br>
+        
+        <strong>ターンの流れ</strong><br>
+        
+        1. ターン開始フェイズ<br>
+           －フィールド効果やターン持続効果（例：燐の持続ダメージ）が発動し、ターン開始時に効果を解決します。<br>
+           －プレイヤーのカード再使用クールタイムが1ターン分短縮されます。<br><br>
+        2. プレイヤーフェイズ<br>
+           －手札からカードを「カード置き場」の上限までプレイできます。<br>
+           －カードを使用すると、指定された対象にダメージやバフ・デバフ、回復、刻印付与などの効果を発揮します。<br><br>
+        3. 敵フェイズ<br>
+           －敵は固有の行動パターンに従って行動し、プレイヤーへ攻撃やデバフ付与、バフ強化などを行います。<br><br>
+        4. ターン終了フェイズ<br>
+           －フィールド効果やターン持続効果の解決を行います。<br>
+           －プレイヤーのHPまたは敵のHPが0になっていない場合、次ターンへ移行します。<br><br>
+        
+        以上がゲームのルールです。プレイ中は、エッセンスを集めて合成し、デッキを強化しながら、自然属性やカード属性の組み合わせを駆使して挑戦してください。
+      </p>
+    </div>
+    <button id="rules-close-button">Topへ</button>
+  </div>
 
   <div id="modal-game" class="modal"></div>
 

@@ -1,0 +1,114 @@
+#modal-rules {
+  display: none;
+  width: 100%;
+  height: 100%;
+  font-family: 'Zen Old Mincho', 'Noto Serif JP', serif; /* 日本語フォントを優先 */
+}
+.rules-background-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+.rules-background-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.rules-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 70%, rgba(0,0,0,0.95) 100%);
+  z-index: 2;
+}
+
+
+.rules-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 80%;
+  background-color:rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+  z-index: 3;
+}
+.rules-container::-webkit-scrollbar {
+  display: none;
+}
+.rules-container::-moz-scrollbar {
+  display: none;
+}
+
+.rules-title {
+  width: 90%;
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 10px auto;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.rules-text {
+  font-size: .8rem;
+  width: 90%;
+  margin: 10px auto 100px;
+  color: #f0ebd8;
+}
+.rules-text strong {
+  color: #ffcb97
+}
+
+#rules-close-button {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(145deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.9) 50%, rgba(210, 180, 140, 0.9) 100%);
+  border: 1px solid rgba(210, 180, 140, 0.8);
+  border-radius: 50px;
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 1rem;
+  color: var(--text-color-light);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 4;
+}
+#rules-close-button:hover {
+  transform: translateX(-50%) translateY(-2px) scale(1.05);
+  box-shadow: 
+    0 6px 16px rgba(210, 180, 140, 0.4),
+    inset 0 1px 3px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.8);
+}
+
+@media (max-width: 768px) {
+  .rules-container {
+    width: 85%;
+  }
+  .rules-title {
+    font-size: 1.2rem;
+  }
+  .rules-text {
+    font-size: .9rem;
+  }
+}
+
+
