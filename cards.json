@@ -1,0 +1,169 @@
+[
+  {
+    "id": 1,
+    "name": "つぶらな瞳",
+    "description": "ダメージ2",
+    "image": "./images/cards/hollow_nomal_1.avif",
+    "element": "hollow",
+    "type": "normal",
+    "rarity": 1,
+    "damage": [
+      {
+        "when": "now",
+        "value": 2
+      }
+    ],
+    "effect": []
+  },
+  {
+    "id": 2,
+    "name": "吸血少女",
+    "description": "ダメージ1。このターン、次の攻撃の時に追加で2ダメージ",
+    "image": "./images/cards/hollow_nomal_2.avif",
+    "element": "hollow",
+    "type": "normal",
+    "rarity": 2,
+    "damage": [
+      {
+        "when": "now",
+        "value": 1
+      }
+    ],
+    "effect": [{
+        "when": "next",
+        "requirement": "damage",
+        "type": "damage",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "執行人 ゼガ",
+    "description": "ダメージ2。このターン、攻撃の時に追加で2ダメージ",
+    "image": "./images/cards/hollow_nomal_3.avif",
+    "element": "hollow",
+    "type": "normal",
+    "rarity": 3,
+    "damage": [
+      {
+        "when": "now",
+        "value": 2
+      }
+    ],
+    "effect": [
+      {
+        "when": "nextAll",
+        "requirement": "damage",
+        "type": "damage",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "魔族令嬢",
+    "description": "このターンに発動した虚属性のカード1枚につき、デッキのすべての虚属性のカードの再使用間隔 -1",
+    "image": "./images/cards/hollow_combo_1.avif",  
+    "element": "hollow",
+    "type": "combo",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "reduceCoolTime",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "呪鳥の首領",
+    "description": "このターンに発動した虚属性のカード1枚につき、敵に直接1ダメージ",
+    "image": "./images/cards/hollow_combo_2.avif",
+    "element": "hollow",
+    "type": "combo",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "damageCombo2",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "破壊霊 メア",
+    "description": "このターンに発動した虚属性のカード1枚につき、敵に直接3ダメージ",
+    "image": "./images/cards/hollow_combo_3.avif",
+    "element": "hollow",
+    "type": "combo",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "damageCombo2",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "眠れる証",
+    "description": "敵に虚の刻印を1つ付与",
+    "image": "./images/cards/hollow_mark_1.avif",
+    "element": "hollow",
+    "type": "mark",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "祭壇跡",
+    "description": "敵に虚の刻印を2つ付与",
+    "image": "./images/cards/hollow_mark_2.avif",
+    "element": "hollow",
+    "type": "mark",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Dancing Night",
+    "description": "敵に虚の刻印を2つ付与。敵の虚の刻印を3つ消費して、敵のターンをスキップする",
+    "image": "./images/cards/hollow_mark_3.avif",
+    "element": "hollow",
+    "type": "mark",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      },
+      {
+        "when": "now",
+        "type": "HM-3"
+      }
+    ]
+  }
+]
