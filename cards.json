@@ -165,5 +165,37 @@
         "type": "HM-3"
       }
     ]
+  },
+  {
+    "id": 10,
+    "name": "aaa",
+    "description": "ダメージ1 * 2",
+    "image": "./images/cards/fog_nomal_1.avif",
+    "element": "fog",
+    "type": "normal",
+    "rarity": 1,
+    "damage": [
+      {
+        "when": "now",
+        "value": 1,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "bbb",
+    "description": "ダメージ2 * 2",
+    "image": "./images/cards/fog_nomal_2.avif",
+    "element": "fog",
+    "type": "normal",
+    "rarity": 2,
+    "damage": [
+      {
+        "when": "now",
+        "value": 2,
+        "times": 2
+      }
+    ]
   }
 ]

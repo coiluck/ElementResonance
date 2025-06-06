@@ -245,27 +245,26 @@ html, body {
 }
 
 /* レスポンシブ対応 */
-@media (max-width: 768px) {
-  html {
-    font-size: 12px;
-  }
+@media (max-width: 860px) {
   .top-button {
     padding: 12px 20px;
+    font-size: 1.3rem
   }
 }
 
 @media (max-width: 660px) {
-  html {
-    font-size: 10px;
+  .top-main-title {
+    font-size: 3rem;
   }
   .top-sub-title span {
     display: inline-block;
+    font-size: .9rem
   }
   .top-rules-button {
     margin-top: 0;
   }
   .top-rules-text {
-    font-size: 1.2em;
+    font-size: .75rem;
   }
   .top-button-group {
     flex-direction: column;
@@ -275,5 +274,6 @@ html, body {
   }
   .top-button {
     width: 70%;
+    font-size: 1rem;
   }
 }

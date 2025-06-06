@@ -136,14 +136,15 @@
 }
 
 .gallery-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  display: flex;
+  justify-content: space-between;
   gap: 30px;
 }
 
 .gallery-card-placeholder {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  max-width: 150px;
+  aspect-ratio: 5 / 7;
   border: 1px dashed #aaa;
   background-color: rgba(255, 255, 255, 0.05);
   display: flex;
@@ -151,15 +152,18 @@
   align-items: center;
   font-size: 0.75em;/*後で画像入れたら消す*/
   color: #ccc;
-  border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
 }
-
 .gallery-card-placeholder:hover {
   transform: translateY(-3px);
   box-shadow: 0 0 20px rgba(255, 127, 126, 0.5);
   border: 1px solid #fff;
+}
+.gallery-card-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* カード詳細エリア */
@@ -175,20 +179,19 @@
 
 .gallery-enlarged-card-placeholder {
   width: 80%;
-  max-width: 200px; /* 少し小さく調整 */
-  aspect-ratio: 3 / 4;
-  border: 2px solid #ddd;
+  max-width: 250px;
+  aspect-ratio: 5 / 7;
+  border: none;
   background-color: rgba(255, 255, 255, 0.1);
   margin-bottom: 15px;
-  border-radius: 10px;
   box-shadow: 0 0 25px rgba(255, 147, 125, 0.5);
-  flex-shrink: 0; /* 縮まないように */
-  /*後で消す*/
   display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.9em;
-  color: #ddd;
+  flex-shrink: 0; /* 縮まないように */
+}
+.gallery-enlarged-card-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .gallery-card-effect {
@@ -203,6 +206,14 @@
   flex-grow: 1;
   overflow-y: hidden;
 }
+h3.enlarged-card-title-js {
+  margin: -5px auto 10px;
+  padding-bottom: 5px;
+  font-size: 1.1rem;
+  color: #edd3be;
+  text-align: center;
+  border-bottom: 1px solid #aaa;
+}
 .gallery-card-effect h4 {
   margin-top: 0;
   margin-bottom: 10px;
@@ -210,6 +221,7 @@
 }
 .gallery-card-effect p {
   margin-bottom: 0;
+  font-size: .9rem;
   color: #ccc;
 }
 
@@ -236,24 +248,24 @@
     justify-content: space-between; /* スマホではタブの間隔を少し調整 */
   }
   .gallery-tab-button {
-    font-size: 0.8em; /* スマホではタブの文字を少し小さく */
+    font-size: 0.8rem; /* スマホではタブの文字を少し小さく */
     padding: 8px 5px; /* パディング調整 */
   }
 
   .gallery-enlarged-card-placeholder {
+    margin-bottom: 0;
     width: 50%;
     max-width: 180px;
   }
-  .gallery-cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  }
   .gallery-card-detail-area {
     flex-direction: row;
+    padding: 10px;
     gap: 20px;
   }
   .gallery-enlarged-card-placeholder {
     width: 40%;
     max-width: 120px;
+    box-shadow: 0 0 10px rgba(255, 147, 125, 0.6);
   }
   .gallery-card-effect {
     height: 100%;
@@ -261,13 +273,20 @@
 }
 @media (max-width: 480px) {
   .gallery-tab-button {
-    font-size: 1.1rem;
+    font-size: 1rem;
+  }
+  .gallery-cards-grid {
+    gap: 15px;
+  }
+  h3.enlarged-card-title-js {
+    font-size: 1rem;
   }
   .gallery-card-effect h4 {
-    font-size: 1.2rem;
+    font-size: .8rem;
+    margin-bottom: 5px;
   }
   #gallery-card-effect-text {
-    font-size: 1.1rem;
+    font-size: .7rem;
   }
 }
 
