@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "つぶらな瞳",
-    "description": "ダメージ2",
+    "description": "2ダメージ",
     "image": "./images/cards/hollow_nomal_1.avif",
     "element": "hollow",
     "type": "normal",
@@ -18,7 +18,7 @@
   {
     "id": 2,
     "name": "吸血少女",
-    "description": "ダメージ1。このターン、次の攻撃の時に追加で2ダメージ",
+    "description": "1ダメージ。このターン、次の攻撃の時に追加で2ダメージ",
     "image": "./images/cards/hollow_nomal_2.avif",
     "element": "hollow",
     "type": "normal",
@@ -40,7 +40,7 @@
   {
     "id": 3,
     "name": "執行人 ゼガ",
-    "description": "ダメージ2。このターン、攻撃の時に追加で2ダメージ",
+    "description": "2ダメージ。このターン、攻撃の時に追加で2ダメージ",
     "image": "./images/cards/hollow_nomal_3.avif",
     "element": "hollow",
     "type": "normal",
@@ -317,6 +317,159 @@
       {
         "when": "now",
         "type": "FM-3"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "紫晶牙獣",
+    "description": "このターンの最後に3ダメージ",
+    "image": "./images/cards/lumina_nomal_1.avif",
+    "element": "lumina",
+    "type": "normal",
+    "rarity": 1,
+    "damage": [
+      {
+        "when": "last",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "name": "宵闇妖精 ノクティア",
+    "description": "このターンの最後に5ダメージ",
+    "image": "./images/cards/lumina_nomal_2.avif",
+    "element": "lumina",
+    "type": "normal",
+    "rarity": 2,
+    "damage": [
+      {
+        "when": "last",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "煉獄妖精 ノクティア",
+    "description": "このターンの最後に4 * 2ダメージ",
+    "image": "./images/cards/lumina_nomal_3.avif",
+    "element": "lumina",
+    "type": "normal",
+    "rarity": 3,
+    "damage": [
+      {
+        "when": "last",
+        "value": 4,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "name": "無垢なる見習い竜",
+    "description": "このターンに発動した燐属性のカード1枚につき、デッキのすべての燐属性のカードの再使用間隔 -1",
+    "image": "./images/cards/lumina_combo_1.avif",
+    "element": "lumina",
+    "type": "combo",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "reduceCoolTime",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "name": "竜装王女",
+    "description": "このターンに発動した燐属性のカード1枚につき、敵に直接1ダメージ",
+    "image": "./images/cards/lumina_combo_2.avif",
+    "element": "lumina",
+    "type": "combo",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "damageCombo2",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "血染の闘華 リリス",
+    "description": "これ以降のターン中、敵に与えるダメージ +2",
+    "image": "./images/cards/lumina_combo_3.avif",
+    "element": "lumina",
+    "type": "combo",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "nextAll",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "name": "焦土の残り香",
+    "description": "敵に燐の刻印を1つ付与",
+    "image": "./images/cards/lumina_mark_1.avif",
+    "element": "lumina",
+    "type": "mark",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "name": "魔導少女",
+    "description": "敵に燐の刻印を2つ付与",
+    "image": "./images/cards/lumina_mark_2.avif",
+    "element": "lumina",
+    "type": "mark",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "name": "聖焔の再誕",
+    "description": "敵に燐の刻印を2つ付与。敵の燐の刻印を3つ消費して、敵に火傷効果（ターン開始時ダメージ4、3ターン持続）",
+    "image": "./images/cards/lumina_mark_3.avif",
+    "element": "lumina",
+    "type": "mark",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      },
+      {
+        "when": "now",
+        "type": "LM-3",
+        "value": 4
       }
     ]
   }

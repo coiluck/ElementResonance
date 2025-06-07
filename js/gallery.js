@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ATTRIBUTES = {
     'hollow': '虚',
     'fog': '霧',
-    'phosphorus': '燐',
+    'lumina': '燐',
     'daybreak': '暁',
     'sand': '砂'
   };
