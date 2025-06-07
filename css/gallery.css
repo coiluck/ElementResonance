@@ -68,6 +68,10 @@
   font-size: 0.9rem;
   flex-grow: 1; /* タブボタンが利用可能なスペースを均等に占める */
   text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 .gallery-tab-button:hover {
   background: linear-gradient(145deg, rgba(255, 148, 138, 0.3), rgba(255, 188, 112, 0.3));
