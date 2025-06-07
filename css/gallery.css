@@ -273,7 +273,7 @@ h3.enlarged-card-title-js {
 }
 @media (max-width: 480px) {
   .gallery-tab-button {
-    font-size: 1rem;
+    font-size: .9rem;
   }
   .gallery-cards-grid {
     gap: 15px;

@@ -168,8 +168,8 @@
   },
   {
     "id": 10,
-    "name": "aaa",
-    "description": "ダメージ1 * 2",
+    "name": "蒼い衝撃 シャークン",
+    "description": "1 * 2ダメージ",
     "image": "./images/cards/fog_nomal_1.avif",
     "element": "fog",
     "type": "normal",
@@ -184,8 +184,8 @@
   },
   {
     "id": 11,
-    "name": "bbb",
-    "description": "ダメージ2 * 2",
+    "name": "凍星竜",
+    "description": "2 * 2ダメージ",
     "image": "./images/cards/fog_nomal_2.avif",
     "element": "fog",
     "type": "normal",
@@ -195,6 +195,128 @@
         "when": "now",
         "value": 2,
         "times": 2
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "蒼氷覇帝",
+    "description": "2 * 3ダメージ",
+    "image": "./images/cards/fog_nomal_3.avif",
+    "element": "fog",
+    "type": "normal",
+    "rarity": 3,
+    "damage": [
+      {
+        "when": "now",
+        "value": 2,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "蒼水の大蛇",
+    "description": "このターンに発動した霧属性のカード1枚につき、デッキのすべての霧属性のカードの再使用間隔 -1",
+    "image": "./images/cards/fog_combo_1.avif",
+    "element": "fog",
+    "type": "combo",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "reduceCoolTime",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "見習い剣士",
+    "description": "このターンに発動した霧属性のカード1枚につき、敵に直接1ダメージ",
+    "image": "./images/cards/fog_combo_2.avif",
+    "element": "fog",
+    "type": "combo",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "damageCombo2",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "蒼穹竜姫 クア",
+    "description": "次の霧カードが通常カードなら2回発動",
+    "image": "./images/cards/fog_combo_3.avif",
+    "element": "fog",
+    "type": "combo",
+    "rarity": 3,  
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "FC-3",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "泡影の歌姫",
+    "description": "敵に霧の刻印を1つ付与",
+    "image": "./images/cards/fog_mark_1.avif",
+    "element": "fog",
+    "type": "mark",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "name": "月光の聖獣", 
+    "description": "敵に霧の刻印を2つ付与",
+    "image": "./images/cards/fog_mark_2.avif",
+    "element": "fog",
+    "type": "mark",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "name": "氷牙狼王 ガルム",
+    "description": "敵に霧の刻印を2つ付与。敵の霧の刻印を3つ消費して、自分のHP割合が低いほど大ダメージ（最大25）",
+    "image": "./images/cards/fog_mark_3.avif",
+    "element": "fog",
+    "type": "mark",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      },
+      {
+        "when": "now",
+        "type": "FM-3"
       }
     ]
   }

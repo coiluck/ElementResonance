@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // JSONファイルからカードデータを取得
-  fetch('../cards.json')
+  fetch('cards.json')
     .then(response => {
       if (!response.ok) {
         throw new Error(`HTTPエラー! ステータス: ${response.status}`);
