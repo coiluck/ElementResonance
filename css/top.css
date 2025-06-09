@@ -93,6 +93,7 @@ html, body {
 }
 
 .top-header {
+  width: 100%;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(var(--secondary-color), 0.7);
 }
 
@@ -167,6 +168,9 @@ html, body {
   display: flex;
   flex-direction: row;
   gap: 25px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
 }
 
 .top-button {
@@ -185,6 +189,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex: 1;
 }
 .top-button:hover {
   transform: translateY(-5px) scale(1.02);
@@ -244,11 +249,15 @@ html, body {
   box-shadow: 0 8px 20px rgba(138, 205, 138, 0.7), inset 0 0 15px rgba(var(--text-color-light), 0.3);
 }
 
-/* レスポンシブ対応 */
+@media (max-width: 925px) {
+  .top-button {
+    font-size: 1.3rem
+  }
+}
 @media (max-width: 860px) {
   .top-button {
     padding: 12px 20px;
-    font-size: 1.3rem
+    font-size: 1.2rem
   }
 }
 
