@@ -6,7 +6,7 @@ window.holdCards = [];
 window.maxDeckCards = 10;
 window.maxHoldCards = 1;
 window.round = 1;
-window.isGameStart = false;
+window.isGameStart = false; // これだけはローカルストレージに保存する必要ないかも
 window.essence = {
   attributes: [],
   cardTypes: [],

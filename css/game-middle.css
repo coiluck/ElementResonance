@@ -1,5 +1,6 @@
 #modal-game-middle {
   display: none;
+  height: 100%;
 }
 .middle-header {
   display: flex;
@@ -25,6 +26,7 @@
 #middle-round-number {
   color: #e8d9b6;
 }
+
 .middle-container {
   display: flex;
   flex-direction: column;
@@ -33,113 +35,148 @@
   width: 80%;
   padding: 10px;
   margin: 0 auto;
+  /* 子要素のabsolute配置の基準にするため */
+  position: relative; 
+  height: calc(100% - 20px - 1.2rem); 
 }
 
 .middle-game-start-container {
   position: absolute;
-  bottom: 100px;
+  bottom: 55%; 
   left: 50%;
-  transform: translateX(-50%);
-  width: 350px;
+  transform: translate(-50%, 50%);
+  z-index: 10;
 }
-
 #middle-game-start-button {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 20px 80px;
-  margin: 0 auto 30px;
-  color: rgb(66, 8, 8);
-  font-size: 2.6rem;
-  font-weight: bold;
-  font-family: serif;
-  text-shadow: 0 0 15px rgb(255, 255, 255);
-  text-align: center;
-  letter-spacing: 1rem;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
   z-index: 2;
+  width: 300px;
+  height: 90px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  color: #FFFFFF;
+  font-family: 'Garamond', serif; 
+  font-size: 2.8rem;
+  font-weight: bold;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  text-shadow: 0px 0px 15px rgba(255, 223, 158, 0.7), 0px 2px 3px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, #a83232, #6a1a1a); 
+  border: 2px solid #D4AF37; 
+  border-radius: 10px;
+  box-shadow: 
+    inset 0 0 10px rgba(255, 255, 255, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
-.middle-game-start-container img {
-  position: absolute;
-  top: calc(50% + 10px);
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  z-index: 1;
-  filter:
-    /* 黒→赤変換 */
-    brightness(0.8)
-    sepia(1)
-    hue-rotate(-40deg)
-    saturate(5)
-    /* 形に沿った発光 */
-    drop-shadow(0 0 5px rgba(255, 30, 0, 0.7))
-    drop-shadow(0 0 15px rgba(255, 0, 0, 0.5));
-  mix-blend-mode: plus-lighter;
-  animation: ink-glow 2.5s infinite alternate ease-in-out;
-}
-@keyframes ink-glow {
-  0% {
-    filter: 
-      brightness(0.7)
-      sepia(1)
-      hue-rotate(-40deg)
-      saturate(4)
-      drop-shadow(0 0 3px rgba(200, 20, 0, 0.5))
-      drop-shadow(0 0 10px rgba(180, 0, 0, 0.3));
-  }
-  100% {
-    filter: 
-      brightness(1.1)
-      sepia(1)
-      hue-rotate(-40deg)
-      saturate(6)
-      drop-shadow(0 0 8px rgba(255, 50, 0, 0.9))
-      drop-shadow(0 0 25px rgba(255, 20, 0, 0.7));
-  }
+#middle-game-start-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(145deg, #c73e3e, #8b2424);
+  border: 2px solid #F4D03F;
+  box-shadow: 
+    inset 0 0 15px rgba(255, 255, 255, 0.3),
+    0 8px 25px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(212, 175, 55, 0.4);
+  text-shadow: 
+    0px 0px 20px rgba(255, 223, 158, 0.9), 
+    0px 2px 4px rgba(0, 0, 0, 0.7),
+    0px 0px 8px rgba(244, 208, 63, 0.5);
+  color: #FFFEF7;
 }
 
 .middle-button-container {
   position: absolute;
-  bottom: 50px;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  gap: 30px;
   width: 100%;
-  margin-top: 30px;
 }
 .middle-button-container button {
   position: relative;
-  width: 150px;
-  height: 50px;
-  padding: 10px 30px;
-  font-size: 1.2rem;
-  font-family: serif;
-  background-color: transparent;
-  border: none;
+  width: 180px;
+  height: 55px;
+  padding: 10px 20px;
+  color: #e8d9b6;
+  font-family: 'Garamond', serif;
+  font-size: 1.4rem;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  background-color: rgba(30, 30, 30, 0.7); 
+  border: 1px solid #706040; 
+  border-radius: 5px;
+  box-shadow: 
+    inset 0 0 8px rgba(0, 0, 0, 0.6), 
+    1px 1px 0px rgba(255, 255, 255, 0.1);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
-.middle-button-container button::before {
-  content: '';
+.middle-button-container button:hover {
+  background-color: rgba(50, 50, 50, 0.8);
+  color: #fff;
+  border-color: #a09070;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(232, 217, 182, 0.3); 
+}
+
+.middle-deck-first {
+  position: relative;
+  border-color: #10b981 !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5) !important;
+}
+.middle-deck-first::before {
+  content: '未設定の項目があります';
   position: absolute;
-  top: 0;
+  top: -70%; /* 初期位置を固定 */
   left: 0;
-  right: 0;
-  bottom: 0;
-  border: 1px solid rgba(255, 255, 255, 0.7); /* 内側の枠線 */
-  pointer-events: none;
+  width: 100%;
+  padding: 3px 0;
+  text-align: center;
+  font-size: .7rem;
+  color: #1e1e1e;
+  border-radius: 5px;
+  background-color: #c3ffeb;
+  /* transformを使って滑らかにアニメーション */
+  animation: smoothTooltipMove 2s ease-in-out infinite;
 }
-.middle-button-container button::after {
+.middle-deck-first::after {
   content: '';
   position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border: 1px solid rgba(255, 255, 255, 0.7); /* 外側の枠線 */
-  pointer-events: none;
+  top: calc(0px - ((55px * 0.7 - 0.7rem - 6px) / 2));
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #c3ffeb transparent transparent transparent;
+  /* transformを使って滑らかにアニメーション */
+  animation: smoothArrowMove 2s ease-in-out infinite;
+}
+@keyframes smoothTooltipMove {
+  0% {
+    transform: translateY(0); /* 70%の位置 */
+  }
+  50% {
+    transform: translateY(-20%); /* 90%相当の位置 */
+  }
+  100% {
+    transform: translateY(0); /* 70%の位置に戻る */
+  }
+}
+@keyframes smoothArrowMove {
+  0% {
+    transform: translateX(-50%) translateY(0); /* 70%の位置 */
+  }
+  50% {
+    transform: translateX(-50%) translateY(-20%); /* 90%相当の位置 */
+  }
+  100% {
+    transform: translateX(-50%) translateY(0); /* 70%の位置に戻る */
+  }
 }
