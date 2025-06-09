@@ -221,11 +221,29 @@
 
   <div id="modal-game-result" class="modal"></div>
 
-  <div id="modal-game-middle" class="modal"></div>
+  <div id="modal-game-middle" class="modal">
+    <!-- 必要なのはデッキ・開始・合成だけ? -->
+    <!-- あとラウンド表示とトップへか -->
+    <div class="middle-header">
+      <button id="middle-close-button">&lt;&lt; Topへ</button>
+      <p class="middle-round-display">Round: <span id="middle-round-number">1</span> / 15</p>
+    </div>
+    <div class="middle-container">
+      <div class="middle-game-start-container">
+        <button id="middle-game-start-button">開始</button>
+        <img src="./images/ink.avif" alt="ボタン背景">
+      </div>
+      <div class="middle-button-container">
+        <button class="middle-deck">デッキ</button>
+        <button class="middle-synthesis">合成</button>
+      </div>
+    </div>
+  </div>
 
   <div id="modal-game-finish" class="modal"></div>
 
   <script src="./js/top.js"></script>
   <script src="./js/gallery.js"></script>
+  <script src="./js/start-game.js"></script>
 </body>
 </html>

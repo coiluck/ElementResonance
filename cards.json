@@ -106,7 +106,7 @@
     "effect": [
       {
         "when": "now",
-        "type": "damageCombo2",
+        "type": "HC-3",
         "value": 3
       }
     ]
@@ -412,7 +412,7 @@
     "effect": [
       {
         "when": "now",
-        "type": "nextAll",
+        "type": "LC-3",
         "value": 2
       }
     ]
@@ -470,6 +470,169 @@
         "when": "now",
         "type": "LM-3",
         "value": 4
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "name": "天啓の聖猫",
+    "description": "自分のHPを3回復",
+    "image": "./images/cards/daybreak_nomal_1.avif",
+    "element": "daybreak",
+    "type": "normal",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "heal",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "name": "光翼幼獣",
+    "description": "自分のHPを5回復",
+    "image": "./images/cards/daybreak_nomal_2.avif",
+    "element": "daybreak",
+    "type": "normal",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "heal",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "name": "幻桜騎獣 ルナ",
+    "description": "自分のHPを8回復",
+    "image": "./images/cards/daybreak_nomal_3.avif",
+    "element": "daybreak",
+    "type": "normal",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "heal",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "name": "花乙女",
+    "description": "このターンに発動した暁属性のカード1枚につき、デッキのすべての暁属性のカードの再使用間隔 -1",
+    "image": "./images/cards/daybreak_combo_1.avif",
+    "element": "daybreak",
+    "type": "combo",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "reduceCoolTime",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name": "慈愛の翼",
+    "description": "このターンに発動した暁属性のカード1枚につき、敵に直接1ダメージ",
+    "image": "./images/cards/daybreak_combo_2.avif",
+    "element": "daybreak",
+    "type": "combo",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "damageCombo2",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "name": "祈りの少女 ココネ",
+    "description": "これ以降のターン中、すべての通常カードに追加で「自分のHPを2回復」を付与",
+    "image": "./images/cards/daybreak_combo_3.avif",
+    "element": "daybreak",
+    "type": "combo",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "DC-3",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "name": "聖閃光竜",
+    "description": "自分に暁の刻印を1つ付与",
+    "image": "./images/cards/daybreak_mark_1.avif",
+    "element": "daybreak",
+    "type": "mark",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "name": "輝水の幻獣",
+    "description": "自分に暁の刻印を2つ付与。自分のHPを3回復",
+    "image": "./images/cards/daybreak_mark_2.avif",
+    "element": "daybreak",
+    "type": "mark",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      },
+      {
+        "when": "now",
+        "type": "heal",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "name": "蒼翼機竜 アーク",
+    "description": "自分に暁の刻印を2つ付与。自分についているすべての刻印を消費して、自分のHPを消費した刻印の数 × 3回復",
+    "image": "./images/cards/daybreak_mark_3.avif",
+    "element": "daybreak",
+    "type": "mark",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      },
+      {
+        "when": "now",
+        "type": "DM-3",
+        "value": 3
       }
     ]
   }

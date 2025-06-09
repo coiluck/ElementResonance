@@ -82,7 +82,8 @@
   border-color: rgba(255, 204, 204, 0.8);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   box-shadow: 0 0 15px rgba(255, 190, 125, 0.5);
-}
+} 
+
 
 .gallery-attribute-content-scroll-container {
   position: relative;
@@ -158,6 +159,7 @@
   color: #ccc;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+
 }
 .gallery-card-placeholder:hover {
   transform: translateY(-3px);
@@ -254,6 +256,7 @@ h3.enlarged-card-title-js {
   .gallery-tab-button {
     font-size: 0.8rem; /* スマホではタブの文字を少し小さく */
     padding: 8px 5px; /* パディング調整 */
+    border-bottom: none; /* 下線を削除 */
   }
 
   .gallery-enlarged-card-placeholder {
