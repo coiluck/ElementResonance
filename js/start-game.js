@@ -4,7 +4,8 @@ window.cards = [];
 window.deck = [];
 window.holdCards = [];
 window.maxDeckCards = 10;
-window.maxHoldCards = 1;
+window.maxHoldCards = 3;
+window.maxPermanentCards = 1;
 window.round = 1;
 window.isGameStart = false; // これだけはローカルストレージに保存する必要ないかも
 window.essence = {
@@ -32,7 +33,8 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
   ];
   window.round = 1;
   window.maxDeckCards = 10;
-  window.maxHoldCards = 1;
+  window.maxHoldCards = 3;
+  window.maxPermanentCards = 1;
   window.isGameStart = false;
   window.essence = {
     attributes: [],

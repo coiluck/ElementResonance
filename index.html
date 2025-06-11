@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="./css/game.css">
   <link rel="stylesheet" href="./css/game-result.css">
   <link rel="stylesheet" href="./css/game-middle.css">
+  <link rel="stylesheet" href="./css/game-middle-deck.css">
   <link rel="stylesheet" href="./css/game-finish.css">
   <link rel="icon" href="./images/favicon.ico">
 </head>
@@ -226,7 +227,7 @@
     <!-- あとラウンド表示とトップへか -->
     <div class="middle-header">
       <button id="middle-close-button">&lt;&lt; Topへ</button>
-      <p class="middle-round-display">Round: <span id="middle-round-number">1</span> / 15</p>
+      <p class="middle-round-display">Round: <span class="middle-round-number">1</span> / 15</p>
     </div>
     <div class="middle-container">
       <div class="middle-game-start-container">
@@ -239,10 +240,57 @@
     </div>
   </div>
 
+  <div id="modal-game-middle-deck" class="modal">
+    <!-- デッキの選択画面 -->
+    <div class="middleDeck-header">
+      <button id="middleDeck-close-button">&lt;&lt; 開始画面へ</button>
+      <p class="middleDeck-round-display">Round: <span class="middle-round-number">1</span> / 15</p>
+    </div>
+    <div class="middleDeck-container">
+      <div class="middleDeck-status">
+        <div class="middleDeck-info-item">
+          <div class="middleDeck-info-number" id="middleDeck-totalCards">30</div>
+          <div class="middleDeck-info-label">所持カード　</div>
+        </div>
+        <div class="middleDeck-info-item">
+          <div class="middleDeck-info-number" id="middleDeck-selectedCards">0/10</div>
+          <div class="middleDeck-info-label">選択済み</div>
+        </div>
+        <div class="middleDeck-info-item">
+          <div class="middleDeck-info-number" id="middleDeck-permanentCards">0/0</div>
+          <div class="middleDeck-info-label">永続スロット</div>
+        </div>
+      </div>
+      <div class="middleDeck-select-area">
+        <nav class="middleDeck-tabs">
+          <button class="middleDeck-tab-button middleDeck-active" data-attribute-index="0">デッキ</button>
+          <button class="middleDeck-tab-button" data-attribute-index="1">永続スロット</button>
+        </nav>
+        <div class="middleDeck-tab-content">
+          <div class="middleDeck-tab-panel">
+            <div class="middleDeck-cards-grid" id="middleDeck-deckList">
+              カードは動的に生成。この文字は見えないはず
+            </div>
+          </div>
+          <div class="middleDeck-tab-panel">
+            <div class="middleDeck-cards-grid" id="middleDeck-permanentList">
+              <div id="middleDeck-permanent-holder"></div>
+              <div id="middleDeck-permanent-cards"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="middleDeck-confirm">選択を確定</button>
+    </div>
+  </div>
+
+  <div id="modal-game-middle-synthesis" class="modal"></div>
+
   <div id="modal-game-finish" class="modal"></div>
 
   <script src="./js/top.js"></script>
   <script src="./js/gallery.js"></script>
   <script src="./js/start-game.js"></script>
+  <script src="./js/middle-deck.js"></script>
 </body>
 </html>
