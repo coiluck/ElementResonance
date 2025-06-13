@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="./css/game.css">
   <link rel="stylesheet" href="./css/game-result.css">
   <link rel="stylesheet" href="./css/game-middle.css">
-  <link rel="stylesheet" href="./css/game-middle-deck.css">
+  <link rel="stylesheet" href="./css/middle-deck.css">
+  <link rel="stylesheet" href="./css/middle-synthesis.css">
   <link rel="stylesheet" href="./css/game-finish.css">
   <link rel="icon" href="./images/favicon.ico">
 </head>
@@ -34,12 +35,12 @@
       <header class="top-header">
         <h1 class="top-main-title">自然共鳴</h1>
         <p class="top-sub-title"><span>五つの自然属性、紡がれる戦術。</span><span>運命はカードに刻まれる</span></p>
+        <!-- ルールボタン -->
+        <button class="top-rules-button">
+          <span class="top-rules-icon">📜</span>
+          <span class="top-rules-text">ルール</span>
+        </button>
       </header>
-      <!-- ルールボタン -->
-      <button class="top-rules-button">
-        <span class="top-rules-icon">📜</span>
-        <span class="top-rules-text">ルール</span>
-      </button>
       <!-- ボタン -->
       <div class="top-button-group">
         <button class="top-button top-card-list-button">
@@ -284,13 +285,65 @@
     </div>
   </div>
 
-  <div id="modal-game-middle-synthesis" class="modal"></div>
+  <div id="modal-game-middle-synthesis" class="modal">
+    <!-- 合成画面 -->
+    <div class="middleSynthesis-header">
+      <button id="middleSynthesis-close-button">&lt;&lt; 開始画面へ</button>
+      <p class="middleSynthesis-round-display">Round: <span class="middle-round-number">1</span> / 15</p>
+    </div>
+    <div class="middleSynthesis-container">
+      <p class="middleSynthesis-label">属性</p>
+      <div class="middleSynthesis-attribute">
+        <div class="middleSynthesis-attribute-item" data-attribute="虚"><img src="./images/attribute_icon/hollow.avif" alt="虚の属性"></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="霧"><img src="./images/attribute_icon/fog.avif" alt="霧の属性"></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="燐"><img src="./images/attribute_icon/lumina.avif" alt="燐の属性"></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="暁"><img src="./images/attribute_icon/daybreak.avif" alt="暁の属性"></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="砂"><img src="./images/attribute_icon/sand.avif" alt="砂の属性"></div>
+      </div>
+      <div class="middleSynthesis-content">
+        <div class="middleSynthesis-responsive-zone">
+          <div class="middleSynthesis-cardtype">
+            <p class="middleSynthesis-label">カードタイプ</p>
+            <div class="middleSynthesis-cardtype-item-container">
+              <div class="middleSynthesis-cardtype-item" style="--after-content: '初期値';">通常</div>
+              <div class="middleSynthesis-cardtype-item" style="--after-content: '初期値';">コンボ</div>
+              <div class="middleSynthesis-cardtype-item" style="--after-content: '初期値';">刻印</div>
+            </div>
+          </div>
+          <div class="middleSynthesis-rarity">
+            <p class="middleSynthesis-label" id="middleSynthesis-rarity-label" style="--after-content: '初期値';">レアリティ</p>
+            <div class="middleSynthesis-rarity-item-container">
+              <div class="middleSynthesis-rarity-item">1</div>
+              <div class="middleSynthesis-rarity-item">2</div>
+              <div class="middleSynthesis-rarity-item">3</div>
+            </div>
+          </div>
+        </div>
+        <div class="middleSynthesis-preview">
+          <p class="middleSynthesis-label">プレビュー</p>
+          <img src="./images/cards/fog_combo_1.avif" alt="カードプレビュー">
+        </div>
+      </div>
+      <button class="middleSynthesis-confirm">合成</button>
+    </div>
+  </div>
 
   <div id="modal-game-finish" class="modal"></div>
+
+  <div id="alert"></div>
 
   <script src="./js/top.js"></script>
   <script src="./js/gallery.js"></script>
   <script src="./js/start-game.js"></script>
   <script src="./js/middle-deck.js"></script>
+  <script src="./js/middle-synthesis.js"></script>
+  <script>
+    function addCardType(cardType) {
+      window.essence.cardTypes.push(cardType);
+    }
+    function addRarity(rarity) {
+      window.essence.rarity = rarity;
+    }
+  </script>
 </body>
 </html>

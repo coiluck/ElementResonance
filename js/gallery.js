@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const attributePage = document.getElementById(`gallery-cards-${japaneseName}`);
       if (!attributePage) {
         console.error(`${japaneseName}属性のページが見つかりません`);
-        return; // ループの次のイテレーションへ
+        return;
       }
 
       // 対象属性のカードデータをフィルタリング

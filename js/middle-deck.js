@@ -23,8 +23,6 @@ document.getElementById('middleDeck-close-button').addEventListener('click', fun
     modal.classList.remove('fade-in');
     modal.classList.add('fade-out')
   });
-  // 表示の更新
-  initMiddleDeck();
   setTimeout(function() {
     // middleDeckモーダルを表示
     document.querySelectorAll('.modal').forEach(function(modal) {
@@ -43,6 +41,7 @@ async function initMiddleDeck() {
   // デッキのカードを表示する要素を取得
   const deckList = document.getElementById('middleDeck-deckList');
   deckList.innerHTML = '';
+
   // window.cards 配列内の各カードIDに対して処理を行う
   for (const cardId of window.cards) {
     // cardIdに一致するカード情報をマスターデータから検索
@@ -52,15 +51,32 @@ async function initMiddleDeck() {
       // <div class="middleDeck-cards"> を作成
       const cardContainer = document.createElement('div');
       cardContainer.className = 'middleDeck-cards';
+      cardContainer.id = cardData.id; // 識別のためのID
+      // 型が違うみたい（なぜ？）なのでこんな方法に
+      if (window.deck && window.deck.some(deckId => deckId == cardId)) {
+        // 既に選択中なら'deck-deckselect'クラスを追加
+        cardContainer.classList.add('deck-deckselect');
+      }
+
       // <img src="..."> を作成
       const cardImage = document.createElement('img');
-      cardImage.src = cardData.image; 
-      // <img> を <div> の中に追加
+      cardImage.src = cardData.image;
       cardContainer.appendChild(cardImage);
+
+      cardContainer.addEventListener('click', handleCardClick);
+
       // 完成したカード要素を親要素に追加
       deckList.appendChild(cardContainer);
     }
   }
+  const confirmButton = document.getElementById('middleDeck-confirm');
+  if (confirmButton) {
+    confirmButton.addEventListener('click', handleConfirmClick);
+  }
+  // 表示はリセットされてるからheaderの表示を更新
+  document.getElementById('middleDeck-totalCards').textContent = window.cards.length;
+  document.getElementById('middleDeck-selectedCards').textContent = `${window.deck.length}/${window.maxDeckCards}`;
+  document.getElementById('middleDeck-permanentCards').textContent = `${window.holdCards.length}/${window.maxPermanentCards}`;
 }
 
 async function initMiddlePermanent() {
@@ -120,3 +136,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// カードがクリックされたときの処理
+function handleCardClick(event) {
+  // クリック対象
+  const targetCard = event.currentTarget;
+  // カードが既に選択されているかどうか
+  const isSelected = targetCard.classList.contains('deck-deckselect');
+  // 枚数制限チェック
+  let selectedCards = document.querySelectorAll('.deck-deckselect');
+  if (selectedCards.length >= window.maxDeckCards && !isSelected) {
+    return;
+  }
+  // okなら選択中にする
+  targetCard.classList.toggle('deck-deckselect');
+  selectedCards = document.querySelectorAll('.deck-deckselect');
+  // 選択中の枚数を表示
+  document.getElementById('middleDeck-selectedCards').textContent = `${selectedCards.length}/${window.maxDeckCards}`
+}
+
+// 確定ボタンがクリックされたときの処理
+function handleConfirmClick() {
+  // すべての要素を取得
+  const selectedCards = document.querySelectorAll('.deck-deckselect');
+  // 取得した要素のidを取得
+  const selectedIds = Array.from(selectedCards).map(card => card.id);
+  // window.deckをidの配列にする
+  window.deck = selectedIds;
+  console.log("現在のデッキ:", window.deck);
+  
+  // ここからはmodalの切り替え
+  document.querySelectorAll('.modal').forEach(function(modal) {
+    modal.classList.remove('fade-in');
+    modal.classList.add('fade-out')
+  });
+  setTimeout(function() {
+    // middleDeckモーダルを表示
+    document.querySelectorAll('.modal').forEach(function(modal) {
+      modal.style.display = 'none';
+    });
+    document.getElementById('modal-game-middle').classList.remove('fade-out');
+    document.getElementById('modal-game-middle').style.display = 'block';
+    document.getElementById('modal-game-middle').classList.add('fade-in');
+  }, 500);
+};

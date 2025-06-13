@@ -17,6 +17,7 @@
   font-family: serif;
   background: transparent;
   border: none;
+  cursor: pointer;
 }
 .middle-round-display {
   color:  #e8d9b6;

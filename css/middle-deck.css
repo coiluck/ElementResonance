@@ -30,6 +30,7 @@
   font-family: serif;
   background: transparent;
   border: none;
+  cursor: pointer;
 }
 .middleDeck-round-display {
   color:  #e8d9b6;
@@ -44,7 +45,7 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: 20px;
-  margin: 15px auto;
+  margin: 10px auto;
   width: 100%;
   background: rgba(0, 0, 0, 0.6);
   padding: 10px;
@@ -74,7 +75,7 @@
   padding: 10px 30px;
   border-radius: calc(0.9rem + 10px + 10px);
   cursor: pointer;
-  margin: 15px auto;
+  margin: 10px auto;
 }
 
 .middleDeck-tabs {
@@ -140,9 +141,7 @@
   display: flex;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   flex: 1;
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  overflow-y: hidden;
 }
 .middleDeck-tab-panel {
   width: 50%;
@@ -158,8 +157,12 @@
 /* デッキ */
 #middleDeck-deckList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .middleDeck-cards {
   width: 100%;
@@ -170,6 +173,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  box-sizing: border-box;
 }
 .middleDeck-cards img {
   width: 100%;
@@ -178,25 +182,27 @@
 }
 /* 永続スロット */
 #middleDeck-permanentList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
   height: 100%;
+  overflow: hidden;
+  gap: 10px;
+  padding: 0 10px;
+  width: 100%;
   box-sizing: border-box;
 }
 #middleDeck-permanent-holder {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #aaa;
 }
+
 .middleDeck-permanent-holder-slot {
   border: 1px dashed #aaa;
   aspect-ratio: 5 / 7;
-  width: 150px;
+  width: 100px;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
@@ -210,11 +216,20 @@
   color: #aaa;
   text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
 }
+
 #middleDeck-permanent-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 10px;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
+
+#middleDeck-permanent-cards::-webkit-scrollbar {
+  display: none;
+}
+
 .middleDeck-permanent-cards {
   width: 100%;
   aspect-ratio: 5 / 7;
@@ -229,4 +244,34 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* 選択中の効果 */
+.deck-deckselect {
+  position: relative;
+  border: 1px solid #00ff88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+.deck-deckselect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(17, 36, 19, 0.5);
+}
+.deck-deckselect::after {
+  content: '選択中';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #00ff88;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+  text-align: center;
+  align-items: center;
+  font-family: serif;
 }
