@@ -7,14 +7,23 @@ document.querySelector('.middle-deck').addEventListener('click', function() {
   // 表示の更新
   initMiddleDeck();
   initMiddlePermanent();
+  // タブをリセット
+  document.querySelectorAll('.middleDeck-tab-button').forEach(tab => {
+    tab.classList.remove('middleDeck-active');
+  });
+  document.querySelector('.middleDeck-tab-button[data-attribute-index="0"]').classList.add('middleDeck-active');
+  document.querySelector('.middleDeck-tab-content').style.transform = 'translateX(0%)';
+  // middleDeckモーダルを表示
   setTimeout(function() {
-    // middleDeckモーダルを表示
     document.querySelectorAll('.modal').forEach(function(modal) {
       modal.style.display = 'none';
     });
     document.getElementById('modal-game-middle-deck').classList.remove('fade-out');
     document.getElementById('modal-game-middle-deck').style.display = 'flex'; // 注意!!!
     document.getElementById('modal-game-middle-deck').classList.add('fade-in');
+    // スクロールをリセット
+    document.getElementById('middleDeck-deckList').scrollTo(0, 0);
+    document.getElementById('middleDeck-permanent-cards').scrollTo(0, 0);
   }, 500);
 });
 document.getElementById('middleDeck-close-button').addEventListener('click', function() {
@@ -164,7 +173,7 @@ function handleConfirmClick() {
   // window.deckをidの配列にする
   window.deck = selectedIds;
   console.log("現在のデッキ:", window.deck);
-  
+
   // ここからはmodalの切り替え
   document.querySelectorAll('.modal').forEach(function(modal) {
     modal.classList.remove('fade-in');
@@ -180,3 +189,38 @@ function handleConfirmClick() {
     document.getElementById('modal-game-middle').classList.add('fade-in');
   }, 500);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+const middleModal = document.getElementById('modal-game-middle');
+// 未設定表示の切り替え
+const observer = new MutationObserver(() => {
+  const display = window.getComputedStyle(middleModal).display;
+  if (display === 'block') {
+    checkUnset();
+  }
+})
+// 監視の設定
+const config = {
+  attributes: true,
+  attributeFilter: ['style']
+};
+// 監視開始
+observer.observe(middleModal, config);
+// 未設定表示の判定・反映
+function checkUnset() {
+  if (window.deck.length !== window.maxDeckCards || window.holdCards.length !== window.maxPermanentCards) {
+    document.querySelector('.middle-button-container .middle-deck').classList.add('middle-deck-first');
+  } else {
+    document.querySelector('.middle-button-container .middle-deck').classList.remove('middle-deck-first');
+  }
+}

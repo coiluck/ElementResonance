@@ -32,8 +32,32 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
   window.maxPermanentCards = 0;
   window.isGameStart = false;
   window.essence = {
-    attributes: [],
-    cardTypes: [],
+    attributes: [{
+      attribute: '虚',
+      count: 0,
+    }, {
+      attribute: '霧',
+      count: 0,
+    }, {
+      attribute: '燐',
+      count: 0,
+    }, {
+      attribute: '暁',
+      count: 0,
+    }, {
+      attribute: '砂',
+      count: 0,
+    }],
+    cardTypes: [{
+      type: '通常',
+      count: 0,
+    }, {
+      type: 'コンボ',
+      count: 0,
+    }, {
+      type: '刻印',
+      count: 0,
+    }],
     rarity: 0,
   }
 });

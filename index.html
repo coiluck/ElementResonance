@@ -294,11 +294,11 @@
     <div class="middleSynthesis-container">
       <p class="middleSynthesis-label">属性</p>
       <div class="middleSynthesis-attribute">
-        <div class="middleSynthesis-attribute-item" data-attribute="虚"><img src="./images/attribute_icon/hollow.avif" alt="虚の属性"></div>
-        <div class="middleSynthesis-attribute-item" data-attribute="霧"><img src="./images/attribute_icon/fog.avif" alt="霧の属性"></div>
-        <div class="middleSynthesis-attribute-item" data-attribute="燐"><img src="./images/attribute_icon/lumina.avif" alt="燐の属性"></div>
-        <div class="middleSynthesis-attribute-item" data-attribute="暁"><img src="./images/attribute_icon/daybreak.avif" alt="暁の属性"></div>
-        <div class="middleSynthesis-attribute-item" data-attribute="砂"><img src="./images/attribute_icon/sand.avif" alt="砂の属性"></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="虚"><img src="./images/attribute_icon/hollow.avif" alt="虚の属性"><p style="--after-content: '初期値';">虚</p></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="霧"><img src="./images/attribute_icon/fog.avif" alt="霧の属性"><p style="--after-content: '初期値';">霧</p></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="燐"><img src="./images/attribute_icon/lumina.avif" alt="燐の属性"><p style="--after-content: '初期値';">燐</p></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="暁"><img src="./images/attribute_icon/daybreak.avif" alt="暁の属性"><p style="--after-content: '初期値';">暁</p></div>
+        <div class="middleSynthesis-attribute-item" data-attribute="砂"><img src="./images/attribute_icon/sand.avif" alt="砂の属性"><p style="--after-content: '初期値';">砂</p></div>
       </div>
       <div class="middleSynthesis-content">
         <div class="middleSynthesis-responsive-zone">
@@ -321,7 +321,7 @@
         </div>
         <div class="middleSynthesis-preview">
           <p class="middleSynthesis-label">プレビュー</p>
-          <img src="./images/cards/fog_combo_1.avif" alt="カードプレビュー">
+          <img src="./images/synthesis-text-preview.avif" alt="カードプレビュー">
         </div>
       </div>
       <button class="middleSynthesis-confirm">合成</button>
@@ -338,8 +338,11 @@
   <script src="./js/middle-deck.js"></script>
   <script src="./js/middle-synthesis.js"></script>
   <script>
-    function addCardType(cardType) {
-      window.essence.cardTypes.push(cardType);
+    function addAttribute(index, count) {
+      window.essence.attributes[index].count += count;
+    }
+    function addCardType(index, count) {
+      window.essence.cardTypes[index].count += count;
     }
     function addRarity(rarity) {
       window.essence.rarity = rarity;
