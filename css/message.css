@@ -1,0 +1,51 @@
+#message-box {
+  position: fixed;
+  top: 20px;
+  right: 0;
+  width: 350px;
+  z-index: 1000;
+}
+
+.messageBox-message {
+  margin-bottom: 15px;
+  border-radius: 10px 0 0 10px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  /* 初期状態は透明で画面外に配置 */
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+/* 表示状態 */
+.messageBox-message.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* 削除アニメーション */
+.messageBox-message.is-removing {
+  transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.messageBox-content {
+  position: relative;
+  padding: 16px 20px;
+  color: white;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: none;
+}
+
+.messageBox-progress {
+  height: 3px;
+  background: rgba(55, 55, 55, 0.3);
+}
+.messageBox-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+  width: 100%;
+  transition: width 5s linear;
+}

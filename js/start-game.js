@@ -61,3 +61,27 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
     rarity: 0,
   }
 });
+
+import { message } from './message.js';
+
+document.getElementById('middle-game-start-button').addEventListener('click', function() {
+  if (document.querySelector('.middle-button-container .middle-deck').classList.contains('middle-deck-first')) {
+    message('caution', 'デッキを設定してください');
+    return;
+  }
+  window.isGameStart = true;
+  // すべてのモーダルを閉じる
+  document.querySelectorAll('.modal').forEach(function(modal) {
+    modal.classList.remove('fade-in');
+    modal.classList.add('fade-out')
+  });
+  setTimeout(function() {
+    // gameモーダルを表示
+    document.querySelectorAll('.modal').forEach(function(modal) {
+      modal.style.display = 'none';
+    });
+    document.getElementById('modal-game').classList.remove('fade-out');
+    document.getElementById('modal-game').style.display = 'block';
+    document.getElementById('modal-game').classList.add('fade-in');
+  }, 500);
+});

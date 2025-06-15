@@ -219,6 +219,8 @@ document.querySelector('.middleSynthesis-confirm').addEventListener('click', fun
   window.cards.push(previewCard.id);
   window.cards.sort((a, b) => a - b);
   console.log(`カードID: ${previewCard.id} を所持カードに追加しました。`);
+  // カードを表示
+  showCard();
   // 属性を消費
   const attrToUpdate = window.essence.attributes.find(a => a.attribute === selectedSynthesisOptions.attribute);
   if (attrToUpdate) attrToUpdate.count--;
@@ -231,3 +233,19 @@ document.querySelector('.middleSynthesis-confirm').addEventListener('click', fun
   // 表示を更新
   initMiddleSynthesis();
 });
+
+function showCard() {
+  const card = document.createElement('div');
+  card.className = 'middleSynthesis-card';
+  card.innerHTML = `<img src="${previewCard.image}">`;
+  document.getElementById('modal-game-middle-synthesis').appendChild(card);
+  setTimeout(() => {
+    card.classList.add('middleSynthesis-show');
+  }, 50);
+  setTimeout(() => {
+    card.classList.add('middleSynthesis-hide');
+    setTimeout(() => {
+      card.remove();
+    }, 800);
+  }, 2000);
+}

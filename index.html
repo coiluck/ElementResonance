@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="./css/middle-deck.css">
   <link rel="stylesheet" href="./css/middle-synthesis.css">
   <link rel="stylesheet" href="./css/game-finish.css">
+  <link rel="stylesheet" href="./css/message.css">
   <link rel="icon" href="./images/favicon.ico">
 </head>
 <body>
@@ -330,13 +331,14 @@
 
   <div id="modal-game-finish" class="modal"></div>
 
-  <div id="alert"></div>
+  <div id="message-box"></div>
 
   <script src="./js/top.js"></script>
   <script src="./js/gallery.js"></script>
-  <script src="./js/start-game.js"></script>
+  <script src="./js/start-game.js" type="module"></script>
   <script src="./js/middle-deck.js"></script>
   <script src="./js/middle-synthesis.js"></script>
+  <script src="./js/message.js" type="module"></script>
   <script>
     function addAttribute(index, count) {
       window.essence.attributes[index].count += count;
