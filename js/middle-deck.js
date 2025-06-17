@@ -44,6 +44,11 @@ document.getElementById('middleDeck-close-button').addEventListener('click', fun
 }); 
 
 async function initMiddleDeck() {
+  // window.deck に含まれる各カードIDの数をカウント
+  const deckIdCounts = window.deck.reduce((acc, id) => {
+    acc[id] = (acc[id] || 0) + 1;
+    return acc;
+  }, {});
   // データを取得
   const response = await fetch('cards.json');
   const cardsMasterData = await response.json();
@@ -62,9 +67,12 @@ async function initMiddleDeck() {
       cardContainer.className = 'middleDeck-cards';
       cardContainer.id = cardData.id; // 識別のためのID
       // 型が違うみたい（なぜ？）なのでこんな方法に
-      if (window.deck && window.deck.some(deckId => deckId == cardId)) {
+      // deckIdCountsにcardIdが存在し、かつカウントが0より大きい場合
+      if (deckIdCounts[cardId] && deckIdCounts[cardId] > 0) {
         // 既に選択中なら'deck-deckselect'クラスを追加
         cardContainer.classList.add('deck-deckselect');
+        // カウントを1減らす
+        deckIdCounts[cardId]--;
       }
 
       // <img src="..."> を作成
@@ -169,7 +177,7 @@ function handleConfirmClick() {
   // すべての要素を取得
   const selectedCards = document.querySelectorAll('.deck-deckselect');
   // 取得した要素のidを取得
-  const selectedIds = Array.from(selectedCards).map(card => card.id);
+  const selectedIds = Array.from(selectedCards).map(card => Number(card.id));
   // window.deckをidの配列にする
   window.deck = selectedIds;
   console.log("現在のデッキ:", window.deck);

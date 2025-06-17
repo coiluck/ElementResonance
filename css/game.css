@@ -1,0 +1,277 @@
+#modal-game {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.game-container {
+  display: flex;
+  width: 95vw;
+  height: 90vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.game-main {
+  flex: 2; /* game-cardsとの比率 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+}
+.game-cards {
+  flex: 1; /* game-mainとの比率 */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  align-content: start;
+  width: 100%;
+  padding: 10px;
+  margin: 10px auto 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+
+.game-main-characters {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.game-main-characters-player,
+.game-main-characters-enemy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 45%;
+}
+
+.game-main-characters-player-image,
+.game-main-characters-enemy-image {
+  width: 80%;
+  max-width: 150px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+.game-main-characters-player-image img,
+.game-main-characters-enemy-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.game-main-characters-player-name,
+.game-main-characters-enemy-name {
+  color: #e8d9b6;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 
+    1px 1px 2px #706040,
+    0 0 10px #706040;
+  margin: 0;
+  padding: 0;
+  border-radius: 5px;
+}
+
+.game-main-characters-player-status-container,
+.game-main-characters-enemy-status-container {
+  position: relative;
+  width: 80%;
+  height: 30px;
+  color: white;
+  font-weight: bold;
+}
+
+.game-main-characters-player-status-hp-bar,
+.game-main-characters-enemy-status-hp-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #444;
+  border: 2px solid #222;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.hp-bar-inner {
+  width: 100%;  /* これをjsで変更 */
+  height: 100%;
+  background: linear-gradient(to bottom, #2ecc71, #27ae60);
+  border-radius: 12px;
+  transition: width 0.5s ease-in-out;
+}
+
+.game-main-characters-player-status-hp,
+.game-main-characters-enemy-status-hp {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  text-shadow: 1px 1px 2px black;
+}
+
+/* バフ・デバフ */
+.game-main-characters-player-status-buff,
+.game-main-characters-enemy-status-buff {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 70%;
+  height: 30px;
+  margin: 0 auto;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  border: 2px solid #fff;
+}
+
+/* 選択カード */
+.game-main-HoldCards {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  width: 84%;
+  height: 60px;
+  margin: 10px auto 0;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 2px solid #fff;
+}
+.game-main-HoldCards-player,
+.game-main-HoldCards-enemy {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+.game-holder-slot {
+  width: 60px;
+  height: 60px;
+  aspect-ratio: 1 / 1;
+  background-color: #1a2531;
+  border: 1px dashed #4a627a;
+}
+.game-holder-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.game-process-turn {
+  width: 60px;
+  height: 60px;
+  aspect-ratio: 1 / 1;
+  background-color: #1a2531;
+}
+
+@media (max-width: 768px) {
+  .game-container {
+    flex-direction: column;
+    padding: 10px;
+    height: 98vh;
+  }
+
+  .game-main {
+    order: 1; /* 表示順を先にする */
+    flex: none;
+    height: auto;
+  }
+
+  .game-cards {
+    order: 2; /* 表示順を後にする */
+    margin: 10px auto 0;
+    flex: none;
+    height: 120px;
+    display: flex;
+    grid-template-columns: none;
+    align-content: normal;
+  }
+
+  .game-main-characters-player-name,
+  .game-main-characters-enemy-name {
+    font-size: 1.2rem;
+  }
+
+  .game-main-characters-player-status-hp,
+  .game-main-characters-enemy-status-hp {
+    font-size: 0.8rem;
+  }
+
+  .game-main-HoldCards {
+    gap: 10px;
+  }
+
+
+}
+
+.game-cards {
+  flex: 1; /* game-mainとの比率 */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.game-image-container {
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  border: 1px dashed #aaa;
+  background-color: rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.game-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 待機中のスロット */
+.game-holder-slot.game-stanby-slot {
+  position: relative;
+  border: 1px solid #ffc107;
+  box-shadow: 0 0 8px rgba(255, 193, 7, 0.7);
+  cursor: pointer;
+}
+.game-holder-slot.game-stanby-slot::before {
+  content: '+';
+  position: absolute;
+  top: 49%;
+  left: 49%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: #ffc107;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(255, 193, 7, 0.7);
+}
+
+/* 選択中のカード */
+.game-image-container.game-card-selected {
+  border: 1px solid #ffc107;
+  box-shadow: 0 0 18px rgba(255, 193, 7, 0.7);
+}
