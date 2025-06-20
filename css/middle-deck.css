@@ -157,7 +157,7 @@
 /* デッキ */
 #middleDeck-deckList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 10px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -219,7 +219,7 @@
 
 #middleDeck-permanent-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 10px;
   overflow-y: auto;
   -ms-overflow-style: none;
@@ -274,4 +274,13 @@
   text-align: center;
   align-items: center;
   font-family: serif;
+}
+
+@media (max-width: 768px) {
+  #middleDeck-deckList {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  #middleDeck-permanent-cards {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
 }

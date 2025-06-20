@@ -4,6 +4,23 @@
     "name": "鬼霞 アカネ",
     "image": "./images/character_enemy/2-9-6-5.webp",
     "hp": 10,
-    "useCards": [1, 2, 3, 4, 5, 6, 7]
+    "deck": [
+      [1,2],
+      [4,5]
+    ],
+    "maxHoldCards": 2,
+    "buff": null
+  },
+  {
+    "round": 2,
+    "name": "test-enemy",
+    "image": "./images/character_enemy/2-9-6-5.webp",
+    "hp": 10,
+    "deck": [
+      [1,2],
+      [4,5]
+    ],
+    "maxHoldCards": 2,
+    "buff": null
   }
 ]

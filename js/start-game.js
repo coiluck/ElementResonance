@@ -13,6 +13,7 @@ window.essence = {
   cardTypes: [],
   rarity: 0,
 }
+window.playerHp = 40;
 
 document.querySelector('.top-start-game-button').addEventListener('click', function() {
   // ゲームで使用する変数
@@ -91,24 +92,23 @@ document.getElementById('middle-game-start-button').addEventListener('click', fu
 
 async function gameInit() {
   const gameCardsContainer = document.querySelector('.game-cards');
-  // ★変更点: スロットの親要素を '.game-main-HoldCards-player' に変更
   const cardHolder = document.querySelector('.game-main-HoldCards-player');
 
-  // --- 1. デッキを反映 ---
+  // デッキを反映
   gameCardsContainer.innerHTML = '';
-
   try {
     const response = await fetch('cards.json');
     const cardsData = await response.json();
-    const cardMap = new Map(cardsData.map(card => [card.id, card.image]));
-
+    const cardMap = new Map(cardsData.map(card => [card.id, card]));
     window.deck.forEach(cardId => {
-      const imagePath = cardMap.get(cardId);
-      if (imagePath) {
+      const cardData = cardMap.get(cardId);
+      if (cardData) {
         const cardContainer = document.createElement('div');
         cardContainer.className = 'game-image-container';
-        cardContainer.dataset.cardId = cardId;
-        cardContainer.innerHTML = `<img src="${imagePath}" alt="Card">`;
+        cardContainer.dataset.cardId = cardData.id;
+        cardContainer.dataset.imageIcon = cardData.image_icon;
+        cardContainer.dataset.element = cardData.element;
+        cardContainer.innerHTML = `<img src="${cardData.image}" alt="Card">`;
         gameCardsContainer.appendChild(cardContainer);
       }
     });
@@ -117,7 +117,7 @@ async function gameInit() {
     return;
   }
 
-  // --- 2. スロットを反映 ---
+  // スロットを反映
   cardHolder.innerHTML = '';
   for (let i = 0; i < window.maxHoldCards; i++) {
     const cardContainer = document.createElement('div');
@@ -125,7 +125,31 @@ async function gameInit() {
     cardHolder.appendChild(cardContainer);
   }
 
-  // --- 3. イベントリスナのロジックを定義 ---
+  // スロットをクリア
+  const clearSlot = (slotToClear) => {
+    const cardIdToFree = slotToClear.dataset.cardId;
+    const elementToRemove = slotToClear.dataset.element;
+
+    if (!cardIdToFree) return;
+
+    // スロットをリセット
+    slotToClear.innerHTML = '';
+    delete slotToClear.dataset.cardId;
+    delete slotToClear.dataset.element;
+    if (elementToRemove) {
+      slotToClear.classList.remove(`game-${elementToRemove}`);
+    }
+
+    // 対応するgame-cardsのクラスを解除
+    const handCardToFree = document.querySelector(`.game-cards .game-image-container[data-card-id="${cardIdToFree}"]`);
+    if (handCardToFree) {
+      handCardToFree.classList.remove('game-is-used-in-slot');
+    }
+    
+    // 選択状態とターン進行チェック
+    clearAllSelectionStates();
+    checkAllSlotsFilled();
+  };
 
   const clearAllSelectionStates = () => {
     document.querySelectorAll('.game-card-selected').forEach(c => c.classList.remove('game-card-selected'));
@@ -134,11 +158,21 @@ async function gameInit() {
 
   const setupCardClickListener = (cardElement) => {
     cardElement.addEventListener('click', (event) => {
+      // game-cardsの選択中カードクリック時
+      if (cardElement.classList.contains('game-is-used-in-slot')) {
+        const cardIdToFind = cardElement.dataset.cardId;
+        // このカードIDを持つスロットを探す
+        const slotToClear = document.querySelector(`.game-holder-slot[data-card-id="${cardIdToFind}"]`);
+        if (slotToClear) {
+          clearSlot(slotToClear); // 見つけたらスロットをクリア
+        }
+        return; // 選択処理は行わない
+      }
+
+      // 通常のカード選択処理
       event.stopPropagation();
       const isAlreadySelected = cardElement.classList.contains('game-card-selected');
-      
       clearAllSelectionStates();
-      
       if (!isAlreadySelected) {
         cardElement.classList.add('game-card-selected');
         document.querySelectorAll('.game-holder-slot').forEach(slot => {
@@ -156,46 +190,44 @@ async function gameInit() {
       const isStanbySlot = slotElement.classList.contains('game-stanby-slot');
       const isFilledSlot = slotElement.dataset.cardId && !isStanbySlot;
 
-      // === ケース1: カードを選択中に、待機スロットをクリック (カードを配置) ===
       if (selectedCard && isStanbySlot) {
-        slotElement.innerHTML = selectedCard.innerHTML;
+        slotElement.innerHTML = `<img src="${selectedCard.dataset.imageIcon}" alt="Card Icon">`;
         slotElement.dataset.cardId = selectedCard.dataset.cardId;
-        // ★変更点: 手札のカードを消さないので .remove() を削除
-        // selectedCard.remove(); 
-        
+        slotElement.dataset.element = selectedCard.dataset.element;
+        slotElement.classList.add(`game-${selectedCard.dataset.element}`);
+        selectedCard.classList.add('game-is-used-in-slot');
         clearAllSelectionStates();
         checkAllSlotsFilled();
-
-      // ★変更点: ケース2: カード未選択で、使用済みスロットをクリック (スロットを空にする) ===
+      
       } else if (!selectedCard && isFilledSlot) {
-        // 手札に戻す必要がないため、スロットの中身をクリアするだけ
-        slotElement.innerHTML = '';
-        delete slotElement.dataset.cardId;
-        
-        checkAllSlotsFilled();
-
-      // ★変更点: ケース3: カードを選択中に、使用済みスロットをクリック (カードを上書き) ===
+        clearSlot(slotElement);
+      
       } else if (selectedCard && isFilledSlot) {
-        // 手札のカード情報でスロットを上書きする
-        slotElement.dataset.cardId = selectedCard.dataset.cardId;
-        slotElement.innerHTML = selectedCard.innerHTML;
+        const oldCardIdToFree = slotElement.dataset.cardId;
+        const handCardToFree = document.querySelector(`.game-cards .game-image-container[data-card-id="${oldCardIdToFree}"]`);
+        if (handCardToFree) {
+          handCardToFree.classList.remove('game-is-used-in-slot');
+        }
 
-        // 入れ替えではないので、スロットのカードを手札に戻す処理は不要
-        
+        const oldElementToRemove = slotElement.dataset.element;
+        slotElement.classList.remove(`game-${oldElementToRemove}`);
+        slotElement.innerHTML = `<img src="${selectedCard.dataset.imageIcon}" alt="Card Icon">`;
+        slotElement.dataset.cardId = selectedCard.dataset.cardId;
+        slotElement.dataset.element = selectedCard.dataset.element;
+        slotElement.classList.add(`game-${selectedCard.dataset.element}`);
+        selectedCard.classList.add('game-is-used-in-slot');
         clearAllSelectionStates();
         checkAllSlotsFilled();
       }
     });
   };
 
-  // --- 4. 作成した要素にイベントリスナを設定 ---
+  // 作成した要素にイベントリスナを設定
   document.querySelectorAll('.game-image-container').forEach(setupCardClickListener);
   document.querySelectorAll('.game-holder-slot').forEach(setupSlotClickListener);
 }
 
-/**
- * すべてのスロットが埋まっているかチェックし、埋まっていればターン処理を呼び出す関数
- */
+// すべてのスロットが埋まっているかチェック
 function checkAllSlotsFilled() {
   const allSlots = document.querySelectorAll('.game-holder-slot');
   const filledCardIds = [];
@@ -209,10 +241,36 @@ function checkAllSlotsFilled() {
   window.selectedSlotCards = filledCardIds;
 
   if (filledCardIds.length === window.maxHoldCards) {
-    processTurn(filledCardIds);
+    showButton(filledCardIds);
   }
 }
 
+// ボタンを表示
+function showButton(filledCardIds) {
+  // 親コンテナを取得
+  const container = document.querySelector('.game-main-HoldCards');
+  if (!container) return; 
+  container.style.position = 'relative';
+  // オーバーレイを作成
+  const overlay = document.createElement('div');
+  overlay.className = 'game-process-turn-overlay';
+  // ボタンを作成
+  const button = document.createElement('button');
+  button.textContent = 'ターン進行';
+  button.className = 'game-process-turn-button';
+  button.addEventListener('click', () => {
+    // 自身（オーバーレイ）を削除してからターン進行処理を呼ぶ
+    overlay.remove();
+    processTurn(filledCardIds);
+  });
+  // 要素を組み立て
+  overlay.appendChild(button);
+  container.appendChild(overlay);
+  // アニメーションのために'show'クラスを追加
+  setTimeout(() => {
+    overlay.classList.add('show');
+  }, 10);
+}
 
 // ターンが進行した際の処理
 function processTurn(cardIds) {
@@ -221,13 +279,76 @@ function processTurn(cardIds) {
   // ここに、ターンが進行した際の実際のゲームロジックを記述します。
 }
 
+
+// jsonのキャッシュ
+let cardsDataCache = null;
+async function getCardsData() {
+  if (!cardsDataCache) {
+    const response = await fetch('cards.json');
+    cardsDataCache = await response.json();
+  }
+  return cardsDataCache;
+}
+let enemyDataCache = null;
+async function getEnemyData() {
+  if (!enemyDataCache) {
+    const response = await fetch('enemy.json');
+    enemyDataCache = await response.json();
+  }
+  return enemyDataCache;
+}
+
+let enemyHp = 0;
+let enemyMaxHp = 0;
+let turn = 1;
+// 敵を設定
 async function setUpEnemy() {
-  const response = await fetch('enemy.json');
-  const enemyData = await response.json();
-  console.log(`${window.round}ラウンドの敵データを読み込みました。`);
   // 敵データを取得
+  const enemyData = await getEnemyData();
   const enemy = enemyData.find(enemy => enemy.round === window.round);
   console.log(enemy);
+  // cards.jsonを読み込む（敵の使用カードの設定で必要）
+  const cardsData = await getCardsData();
   // DOMに反映
   document.querySelector('.game-main-characters-enemy-name').textContent = enemy.name;
+  document.querySelector('.game-main-characters-enemy-image').innerHTML = `<img src="${enemy.image}" alt="Card">`;
+  document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${enemy.hp}/${enemy.hp}`;
+  // 敵のデッキを反映
+  setUpEnemyDeck(enemy.deck, cardsData);
+  // 変数に格納
+  enemyHp = enemy.hp;
+  enemyMaxHp = enemy.hp;
+}
+
+async function setUpEnemyDeck(enemyDeck, cardsMaster) {
+  // 表示先を取得
+  const container = document.querySelector('.game-main-HoldCards-enemy');
+  if (!container) {
+    console.error('game-main-HoldCards-enemyが見つかりません。');
+    return;
+  }
+  container.innerHTML = '';
+  // 使用するカード
+  const deckIndex = turn % enemyDeck.length;
+  const currentCardIds = enemyDeck[deckIndex]; // 配列の中のいずれかの配列を取得
+  // 取得した配列の画像を表示
+  currentCardIds.forEach(cardId => {
+    // カードIDに一致する情報をcards.jsonから探し出す
+    const cardData = cardsMaster.find(card => card.id === cardId);
+
+    if (cardData) {
+      // <div class="game-enemy-slot"></div> を作成
+      const slotDiv = document.createElement('div');
+      slotDiv.className = 'game-enemy-slot';
+      // <img src={image_icon}> を作成
+      const image = document.createElement('img');
+      image.src = cardData.image_icon;
+      // divの中にimgを入れる
+      slotDiv.appendChild(image);
+      // 親要素（container）に作成したdivを追加する
+      container.appendChild(slotDiv);
+    } else {
+      console.warn(`ID:${cardId} のカードがcards.jsonに見つかりませんでした。`);
+    }
+  });
 }
