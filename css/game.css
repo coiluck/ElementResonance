@@ -12,11 +12,11 @@
 
 .game-container {
   display: flex;
-  width: 100vw;
-  height: 100vh;
-  padding: 20px;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  margin: 20px;
   box-sizing: border-box;
-  gap: 10px;
+  box-shadow: 0 0 10px rgba(243, 235, 86, 0.5);
 }
 
 .game-main {
@@ -25,14 +25,14 @@
   flex-direction: column;
   justify-content: space-around;
   height: 100%;
+  padding: 10px 0;
   background-color: rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
-  box-shadow: 0 0 10px rgba(243, 235, 86, 0.5);
 }
 .game-cards {
   flex: 1; /* game-mainとの比率 */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
   align-content: start;
   width: 100%;
@@ -40,7 +40,6 @@
   margin: 0 auto;
   background-color: rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
-  box-shadow: 0 0 10px rgba(243, 235, 86, 0.5);
   overflow-y: auto;
 }
 
@@ -182,8 +181,6 @@
 @media (max-width: 768px) {
   .game-container {
     flex-direction: column;
-    padding: 10px;
-    height: 98vh;
   }
 
   .game-main {
@@ -194,7 +191,8 @@
 
   .game-cards {
     order: 2; /* 表示順を後にする */
-    margin: 10px auto 0;
+    margin: 0 auto;
+    padding: 10px 0 0;
     flex: none;
     height: 120px;
     display: flex;
@@ -215,8 +213,6 @@
   .game-main-HoldCards {
     gap: 10px;
   }
-
-
 }
 
 .game-cards {
@@ -338,7 +334,7 @@
   box-sizing: border-box;
 }
 .game-sand {
-  border: 2px solid #725407;
+  border: 2px solid #4F6B00;
   box-sizing: border-box;
 }
 
@@ -371,7 +367,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.6);
   border-radius: inherit;
   display: flex;
   align-items: center;
@@ -379,7 +375,7 @@
   opacity: 0;
   visibility: hidden;
   overflow: hidden;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
   z-index: 1000;
  }
  
@@ -495,8 +491,7 @@
     transform: translateY(0) scale(1);
   }
  }
- 
- /* レスポンシブ対応 */
+
  @media (max-width: 768px) {
   .game-process-turn-button {
     padding: 14px 28px;

@@ -64,6 +64,7 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
 });
 
 import { message } from './message.js';
+import { CharacterAnimation, characterAnim } from './game-player-animation.js';
 
 document.getElementById('middle-game-start-button').addEventListener('click', function() {
   if (document.querySelector('.middle-button-container .middle-deck').classList.contains('middle-deck-first')) {
@@ -71,6 +72,8 @@ document.getElementById('middle-game-start-button').addEventListener('click', fu
     return;
   }
   window.isGameStart = true;
+  // アニメーション開始
+  characterAnim.start();
   // すべてのモーダルを閉じる
   document.querySelectorAll('.modal').forEach(function(modal) {
     modal.classList.remove('fade-in');
@@ -240,8 +243,11 @@ function checkAllSlotsFilled() {
   
   window.selectedSlotCards = filledCardIds;
 
+  // 埋まっていたらボタンを表示し、埋まっていなかったらボタンを削除
   if (filledCardIds.length === window.maxHoldCards) {
     showButton(filledCardIds);
+  } else if (document.querySelector('.game-process-turn-overlay')) {
+    document.querySelector('.game-process-turn-overlay').remove();
   }
 }
 
@@ -259,8 +265,7 @@ function showButton(filledCardIds) {
   button.textContent = 'ターン進行';
   button.className = 'game-process-turn-button';
   button.addEventListener('click', () => {
-    // 自身（オーバーレイ）を削除してからターン進行処理を呼ぶ
-    overlay.remove();
+    // ターン進行処理を呼ぶ
     processTurn(filledCardIds);
   });
   // 要素を組み立て
@@ -272,11 +277,14 @@ function showButton(filledCardIds) {
   }, 10);
 }
 
+import { processCards } from './game-prosses-cards.js';
+
 // ターンが進行した際の処理
 function processTurn(cardIds) {
   console.log('すべてのスロットが埋まりました。選択されたカードID:', cardIds);
-  // 例: alert('Turn starts with cards: ' + cardIds.join(', '));
-  // ここに、ターンが進行した際の実際のゲームロジックを記述します。
+  // ボタンを非表示
+  document.querySelector('.game-process-turn-button').remove();
+  processCards(cardIds);
 }
 
 

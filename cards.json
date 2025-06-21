@@ -31,7 +31,8 @@
         "value": 1
       }
     ],
-    "effect": [{
+    "effect": [
+      {
         "when": "next",
         "requirement": "damage",
         "type": "damage",
@@ -668,6 +669,178 @@
       {
         "when": "now",
         "type": "DM-3",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "name": "ニャンドロイド",
+    "description": "自分にバリアを3付与",
+    "image": "./images/cards/sand_nomal_1.avif",
+    "image_icon": "./images/cards_icon/sand_nomal_1.avif",
+    "element": "sand",
+    "type": "normal",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "name": "鋼鉄機動兵器",
+    "description": "自分にバリアを5付与",
+    "image": "./images/cards/sand_nomal_2.avif",
+    "image_icon": "./images/cards_icon/sand_nomal_2.avif",
+    "element": "sand",
+    "type": "normal",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "name": "天翔ける軌跡",
+    "description": "自分にバリアを8付与",
+    "image": "./images/cards/sand_nomal_3.avif",
+    "image_icon": "./images/cards_icon/sand_nomal_3.avif",
+    "element": "sand",
+    "type": "normal",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "name": "陽光の獅子",
+    "description": "このターンに発動した砂属性のカード1枚につき、デッキのすべての砂属性のカードの再使用間隔 -1",
+    "image": "./images/cards/sand_combo_1.avif",
+    "image_icon": "./images/cards_icon/sand_combo_1.avif",
+    "element": "sand",
+    "type": "combo",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "reduceCoolTime",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "name": "大地の脈動",
+    "description": "このターンに発動した砂属性のカード1枚につき、敵に直接1ダメージ",
+    "image": "./images/cards/sand_combo_2.avif",
+    "image_icon": "./images/cards_icon/sand_combo_2.avif",
+    "element": "sand",
+    "type": "combo",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "damageCombo2",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "name": "轟閃の影 ゼラ",
+    "description": "これ以降のターン中、すべてのカードに追加で「自分にバリアを2付与」を付与",
+    "image": "./images/cards/sand_combo_3.avif",
+    "image_icon": "./images/cards_icon/sand_combo_3.avif",
+    "element": "sand",
+    "type": "combo",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "SC-3",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "name": "沈黙の砂塵",
+    "description": "自分に砂の刻印を1つ付与",
+    "image": "./images/cards/sand_mark_1.avif",
+    "image_icon": "./images/cards_icon/sand_mark_1.avif",
+    "element": "sand",
+    "type": "mark",
+    "rarity": 1,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "name": "暴食裂牙",
+    "description": "自分に砂の刻印を2つ付与。自分にバリアを3付与",
+    "image": "./images/cards/sand_mark_2.avif",
+    "image_icon": "./images/cards_icon/sand_mark_2.avif",
+    "element": "sand",
+    "type": "mark",
+    "rarity": 2,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      },
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 45,
+    "name": "蟲王",
+    "description": "自分に砂の刻印を2つ付与。自分についているすべての刻印を消費して、消費した刻印の数 × 3 のダメージを敵に与え、与えたダメージの半分のバリアを得る。",
+    "image": "./images/cards/sand_mark_3.avif",
+    "image_icon": "./images/cards_icon/sand_mark_3.avif",
+    "element": "sand",
+    "type": "mark",
+    "rarity": 3,
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      },
+      {
+        "when": "now",
+        "type": "SM-3",
         "value": 3
       }
     ]
