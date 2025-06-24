@@ -13,13 +13,6 @@ class TurnContext {
     // このターンに選択されたカード（順番も保持）
     this.playedCardsInTurn = [];
 
-    // このターンに発生する最終的な結果
-    this.results = {
-      damage: 0,
-      heal: 0,
-      shield: 0,
-    };
-
     // 次のカードに適用される一時的な効果
     this.nextCardModifiers = [];
     
@@ -29,6 +22,21 @@ class TurnContext {
     // ターン終了時に実行される効果
     this.endOfTurnEffects = [];
   }
+}
+
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// ゲームログ用の関数
+function log(message) {
+  const logContainer = document.querySelector('.game-logs-container');
+  const logElement = document.createElement('div');
+  logElement.className = 'game-log';
+  logElement.textContent = message;
+  logContainer.appendChild(logElement);
+  // ログの最後にスクロール
+  logContainer.scrollTop = logContainer.scrollHeight;
+  // gameStateのlogに追加
+  globalGameState.log.push(message);
 }
 
 export async function processCards(cards) {
@@ -41,6 +49,9 @@ export async function processCards(cards) {
     console.error('カードデータの取得に失敗しました:', error);
     return;
   }
+
+  // 待機時間
+  const WAIT_TIME_MS = 1000; 
 
   // 効果をまとめる
   const effectRegistry = {
@@ -65,25 +76,20 @@ export async function processCards(cards) {
   const context = new TurnContext(globalGameState);
   // id -> jsonデータ
   const selectedCards = allCards.filter(card => cards.includes(card.id));
+  // このターンに使用したカードとして記録
+  context.playedCardsInTurn = selectedCards;
 
   // カードを1枚ずつ処理
   for (const card of selectedCards) {
-    // このターンに使用したカードとして記録
-    context.playedCardsInTurn.push(card);
+    // DOMに召喚&エフェクト
 
-    // 即時ダメージ（damage!==null）の処理
+    // damageを持つカードの処理
     if (card.damage) {
       for (const damageInfo of card.damage) {
         // "when": "now" のものだけを処理
         if (damageInfo.when === 'now') {
-          // ダメージ計算（修飾子を適用）
-          let currentDamage = damageInfo.value * (damageInfo.times || 1);
-          
-          // ここで修飾子を適用するロジックを呼ぶ（例）
-          // currentDamage = applyModifiers(currentDamage, context);
-
-          context.results.damage += currentDamage;
-          console.log(`[Effect] 「${card.name}」の効果により、${currentDamage}の追加ダメージが発生しました。`);
+          // ダメージ計算を呼ぶ
+          effectRegistry.damage.execute(card, damageInfo, context);
         }
         // "when": "last" のものはターン終了時効果として登録
         else if (damageInfo.when === 'last') {
@@ -94,6 +100,8 @@ export async function processCards(cards) {
           });
         }
       }
+      // 待機
+      await wait(WAIT_TIME_MS);
     }
 
     // 特殊効果（effect!==null）の処理
@@ -101,88 +109,123 @@ export async function processCards(cards) {
       for (const effectInfo of card.effect) {
         const handler = effectRegistry[effectInfo.type];
         if (handler) {
-          // ハンドラにカード情報と現在のコンテキストを渡して実行
-          // ハンドラ内部でcontext.resultsやmodifiersを操作する
+          // effectRegistryの中のオブジェクトのexecute関数を実行
           handler.execute(card, effectInfo, context);
+          // 待機
+          await wait(WAIT_TIME_MS);
         }
       }
     }
-    
-    // 「次のカードに適用」の効果はここで消費する
+    // 「次のカードに適用」の効果はここでリセット
     context.nextCardModifiers = [];
   }
 
-  // --- 3. ターン終了時効果の処理 ---
-  for (const endEffect of context.endOfTurnEffects) {
-    // ターン終了時効果を実行
-    endEffect(context);
+  // ターン終了時効果の処理
+  // **効果は待機列に入れておいて相手の行動の後に解決されるべき** <- リリスの効果とかどうする
+  // そのためにはletで関数外で宣言した効果の配列を相手行動後に呼び出せばいい
+  // これは後で消す
+  if (context.endOfTurnEffects.length > 0) {
+    await wait(WAIT_TIME_MS);
+    for (const endEffect of context.endOfTurnEffects) {
+      endEffect(context);
+    }
   }
 
-  // --- 4. 最終結果の適用 ---
-  const logEntry = {
-    turn: globalGameState.turn,
-    playedCards: selectedCards.map(c => c.name),
-    damageDealt: context.results.damage,
-    healed: context.results.heal,
-    shieldGained: context.results.shield,
-    playerHpBefore: globalGameState.player.hp,
-    enemyHpBefore: globalGameState.enemy.hp,
-  };
-
-  // 敵にダメージを適用
-  globalGameState.enemy.hp -= context.results.damage;
-
-  // プレイヤーのHPを回復（最大HPを超えない）
-  globalGameState.player.hp = Math.min(
-    globalGameState.player.maxHp,
-    globalGameState.player.hp + context.results.heal
-  );
-
-  // シールドを加算（これは単純加算か、上書きか、ゲームの仕様による）
-  // 例: globalGameState.player.shield += context.results.shield;
-  globalGameState.player.shield += context.results.shield;
-
-  // --- 5. 状態の更新 ---
-  logEntry.playerHpAfter = globalGameState.player.hp;
-  logEntry.enemyHpAfter = globalGameState.enemy.hp;
-  globalGameState.log.push(logEntry);
-  globalGameState.turn += 1;
-
+  // おしまい
   console.log('--- Turn End ---');
-  console.log('Final Results:', context.results);
-  console.log('New Game State:', globalGameState);
 
   // 更新されたゲーム状態を返す
   return globalGameState;
 }
 
-
 // 処理用
 class DamageEffect {
   execute(card, effectInfo, context) {
-    const damageValue = effectInfo.value || 0;
-    context.results.damage += damageValue;
-    console.log(`[Effect] 「${card.name}」の効果により、${damageValue}の追加ダメージが発生しました。`);
+    const damage = effectInfo.value || 0;
+    const damageValue = damage + 0; // 最終的なダメージ **あとでここの処理にaddAllなどを反映**
+    const times = effectInfo.times || 1;
+    const timesValue = times * 1; // 最終的な発動回数 **あとでここの処理にaddAllなどを反映**
+    for (let i = 0; i < timesValue; i++) {
+      if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield > damageValue) {
+        // バリアがあってダメージで割れない
+        context.globalState.enemy.buff.shield -= damageValue;
+      } else if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield <= damageValue) {
+        // バリアがあってダメージで割れる
+        context.globalState.enemy.buff.shield = 0;
+      } else {
+        // バリアがない
+        context.globalState.enemy.hp -= damageValue;
+      }
+      // 最終HPの表示更新
+      document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.enemy.hp} / ${context.globalState.enemy.maxHp})`;
+      document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${context.globalState.enemy.hp}/${context.globalState.enemy.maxHp}`;
+      log(`${card.name}のダメージ効果が発動！`);
+    }
   }
 }
-
+class HealEffect {
+  execute(card, effectInfo, context) {
+    const healValue = effectInfo.value || 3;
+    if (context.globalState.player.hp + healValue > context.globalState.player.maxHp) {
+      context.globalState.player.hp = context.globalState.player.maxHp;
+    } else {
+      context.globalState.player.hp += healValue;
+    }
+    // 最終HPの表示更新
+    document.querySelector('.game-main-characters-player-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.player.hp} / ${context.globalState.player.maxHp})`;
+    document.querySelector('.game-main-characters-player-status-hp').textContent = `HP: ${context.globalState.player.hp}/${context.globalState.player.maxHp}`;
+    log(`${card.name}の回復効果が発動！`);
+  }
+}
+class ShieldEffect {
+  execute(card, effectInfo, context) {
+    const shieldValue = effectInfo.value || 3;
+    context.globalState.player.buff.shield += shieldValue;
+    log(`${card.name}のバリア効果が発動！`);
+  }
+}
+class ReduceCoolTimeEffect {
+  execute(card, effectInfo, context) {
+    const coolTimeValue = effectInfo.value || 1;
+    // クールタイムは後で実装
+  }
+}
 class DamageCombo2Effect {
   execute(card, effectInfo, context) {
-    const targetElement = card.element;
-
-    const playedCards = context.playedCardsInTurn;
-
-    const comboCount = playedCards.filter(
-      playedCard => playedCard.element === targetElement
-    ).length;
-
-    const damagePerCard = effectInfo.value || 0;
-
-    const totalComboDamage = comboCount * damagePerCard;
-    
-    context.results.damage += totalComboDamage;
-
-    console.log(`[Effect] 「${card.name}」のコンボ効果が発動！`);
-    console.log(`         -> ${targetElement}属性${comboCount}枚 × ${damagePerCard}ダメージ = ${totalComboDamage}の追加ダメージ！`);
+    // 同じ属性であるカードのid
+    const attributeCount = Array.from({length: 9}, (_, i) => card.id - 4 + i);
+    const ratio = context.playedCardsInTurn.filter(playedCard => attributeCount.includes(playedCard.id)).length;
+    const basicDamage = effectInfo.value || 1;
+    const damageValue = basicDamage * ratio;
+    const times = effectInfo.times || 1;
+    const timesValue = times * 1; // 最終的な発動回数 **あとでここの処理にaddAllなどを反映**
+    for (let i = 0; i < timesValue; i++) {
+      if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield > damageValue) {
+        // バリアがあってダメージで割れない
+        context.globalState.enemy.buff.shield -= damageValue;
+      } else if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield <= damageValue) {
+        // バリアがあってダメージで割れる
+        context.globalState.enemy.buff.shield = 0;
+      } else {
+        // バリアがない
+        context.globalState.enemy.hp -= damageValue;
+      }
+      // 最終HPの表示更新
+      document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.enemy.hp} / ${context.globalState.enemy.maxHp})`;
+      document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${context.globalState.enemy.hp}/${context.globalState.enemy.maxHp}`;
+      log(`${card.name}のダメージ効果が発動！`);
+    }
+  }
+}
+class AddMarkEffect {
+  execute(card, effectInfo, context) {
+    const markValue = effectInfo.value || 1;
+    context.globalState.player.buff.mark += markValue;
+    log(`${card.name}の刻印効果が発動！`);
+  }
+}
+class HollowCombo3Effect {
+  execute(card, effectInfo, context) {
+    // ええ困った...
   }
 }

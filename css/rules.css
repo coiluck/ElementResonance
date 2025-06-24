@@ -55,6 +55,7 @@
   margin: 10px auto;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  text-shadow: 0 0px 10px rgba(255, 203, 151, 0.7);
 }
 .rules-text {
   font-size: .8rem;
