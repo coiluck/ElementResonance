@@ -13,7 +13,7 @@ window.essence = {
   cardTypes: [],
   rarity: 0,
 }
-window.playerHp = 40;
+window.playerHp = 30;
 
 document.querySelector('.top-start-game-button').addEventListener('click', function() {
   // ゲームで使用する変数
@@ -65,6 +65,7 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
 
 import { message } from './message.js';
 import { CharacterAnimation, characterAnim } from './game-player-animation.js';
+import { globalGameState, resetGlobalState } from './game-status.js';
 
 document.getElementById('middle-game-start-button').addEventListener('click', function() {
   if (document.querySelector('.middle-button-container .middle-deck').classList.contains('middle-deck-first')) {
@@ -81,6 +82,7 @@ document.getElementById('middle-game-start-button').addEventListener('click', fu
   });
   gameInit();
   setUpEnemy();
+  resetGlobalState();
   setTimeout(function() {
     // gameモーダルを表示
     document.querySelectorAll('.modal').forEach(function(modal) {
@@ -306,9 +308,6 @@ async function getEnemyData() {
   return enemyDataCache;
 }
 
-let enemyHp = 0;
-let enemyMaxHp = 0;
-let turn = 1;
 // 敵を設定
 async function setUpEnemy() {
   // 敵データを取得
@@ -324,8 +323,8 @@ async function setUpEnemy() {
   // 敵のデッキを反映
   setUpEnemyDeck(enemy.deck, cardsData);
   // 変数に格納
-  enemyHp = enemy.hp;
-  enemyMaxHp = enemy.hp;
+  globalGameState.enemy.hp = enemy.hp;
+  globalGameState.enemy.maxHp = enemy.hp;
 }
 
 async function setUpEnemyDeck(enemyDeck, cardsMaster) {
@@ -337,7 +336,7 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
   }
   container.innerHTML = '';
   // 使用するカード
-  const deckIndex = turn % enemyDeck.length;
+  const deckIndex = globalGameState.turn % enemyDeck.length;
   const currentCardIds = enemyDeck[deckIndex]; // 配列の中のいずれかの配列を取得
   // 取得した配列の画像を表示
   currentCardIds.forEach(cardId => {
