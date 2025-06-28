@@ -32,6 +32,7 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
   window.maxHoldCards = 3;
   window.maxPermanentCards = 0;
   window.isGameStart = false;
+  window.playerHp = 30;
   window.essence = {
     attributes: [{
       attribute: '虚',
@@ -83,6 +84,7 @@ document.getElementById('middle-game-start-button').addEventListener('click', fu
   gameInit();
   setUpEnemy();
   resetGlobalState();
+  globalGameState.player.hp = window.playerHp;
   setTimeout(function() {
     // gameモーダルを表示
     document.querySelectorAll('.modal').forEach(function(modal) {
@@ -266,9 +268,15 @@ function showButton(filledCardIds) {
   const button = document.createElement('button');
   button.textContent = 'ターン進行';
   button.className = 'game-process-turn-button';
-  button.addEventListener('click', () => {
+  button.addEventListener('click', async () => {
     // ターン進行処理を呼ぶ
-    processTurn(filledCardIds);
+    await processTurn(filledCardIds);
+    if (!window.isSkipEnemyTurn) {
+      // 敵のターン進行処理を呼ぶ
+      await processEnemyTurn();
+    }
+    window.isSkipEnemyTurn = false;
+    setUpNextTurn();
   });
   // 要素を組み立て
   overlay.appendChild(button);
@@ -280,13 +288,14 @@ function showButton(filledCardIds) {
 }
 
 import { processCards } from './game-prosses-cards.js';
+import { processEnemyTurn } from './game-process-enemy.js';
 
 // ターンが進行した際の処理
-function processTurn(cardIds) {
+async function processTurn(cardIds) {
   console.log('すべてのスロットが埋まりました。選択されたカードID:', cardIds);
   // ボタンを非表示
   document.querySelector('.game-process-turn-button').remove();
-  processCards(cardIds);
+  await processCards(cardIds);
 }
 
 
@@ -323,10 +332,11 @@ async function setUpEnemy() {
   // 敵のデッキを反映
   setUpEnemyDeck(enemy.deck, cardsData);
   // 変数に格納
-  globalGameState.enemy.hp = enemy.hp;
-  globalGameState.enemy.maxHp = enemy.hp;
+  if (globalGameState.turn === 1) {
+    globalGameState.enemy.hp = enemy.hp;
+    globalGameState.enemy.maxHp = enemy.hp;
+  }
 }
-
 async function setUpEnemyDeck(enemyDeck, cardsMaster) {
   // 表示先を取得
   const container = document.querySelector('.game-main-HoldCards-enemy');
@@ -337,6 +347,7 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
   container.innerHTML = '';
   // 使用するカード
   const deckIndex = globalGameState.turn % enemyDeck.length;
+  console.log(`${globalGameState.turn}用のデッキを用意しました`);
   const currentCardIds = enemyDeck[deckIndex]; // 配列の中のいずれかの配列を取得
   // 取得した配列の画像を表示
   currentCardIds.forEach(cardId => {
@@ -358,4 +369,26 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
       console.warn(`ID:${cardId} のカードがcards.jsonに見つかりませんでした。`);
     }
   });
+}
+
+async function setUpNextTurn() {
+  globalGameState.turn++;
+  setUpEnemy();
+  // ログをクリア
+  const logContainer = document.querySelector('.game-logs-container');
+  if (logContainer) {
+    logContainer.innerHTML = '';
+    logContainer.style.display = 'none';
+  } else {
+    console.error('ログのクリアに失敗しました');
+  }
+  // スロットをクリア
+  document.querySelectorAll('.game-holder-slot').forEach(slot => {
+    slot.innerHTML = '';
+  });
+  // オーバーレイを非表示
+  const overlay = document.querySelector('.game-process-turn-overlay.show');
+  if (overlay) {
+    overlay.remove();
+  }
 }

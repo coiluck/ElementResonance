@@ -3,12 +3,27 @@ const initialState = {
   player: {
     hp: 0,
     maxHp: 30,
-    buff: [],
+    buff: {
+      "daybreak-mark": 0,
+      "sand-mark": 0,
+      "shield": 0,
+      "burn-turn": 0
+    },
   },
   enemy: {
     hp: 0,
     maxHp: 0,
-    buff: [],
+    buff: {
+      "hollow-mark": 0,
+      "fog-mark": 0,
+      "lumina-mark": 0,
+      "shield": 0,
+      "trigger": {
+        value: 0,
+        discription: "HPが50%以下になったターンに強力な攻撃を放つ"
+      },
+      "burn-turn": 0
+    },
   },
   turn: 1,
   log: [],

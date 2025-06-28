@@ -28,7 +28,18 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // ゲームログ用の関数
 function log(message) {
-  const logContainer = document.querySelector('.game-logs-container');
+  const logParent = document.querySelector('.game-cards');
+  // .game-logs-container が存在するか確認。なければ作成して追加
+  let logContainer = logParent.querySelector('.game-logs-container');
+  if (!logContainer) {
+    logContainer = document.createElement('div');
+    logContainer.className = 'game-logs-container';
+    logParent.appendChild(logContainer);
+  }
+  if (logContainer.style.display === 'none') {
+    logContainer.style.display = 'block';
+  }
+  // ログ要素を作成して追加
   const logElement = document.createElement('div');
   logElement.className = 'game-log';
   logElement.textContent = message;
@@ -37,7 +48,18 @@ function log(message) {
   logContainer.scrollTop = logContainer.scrollHeight;
   // gameStateのlogに追加
   globalGameState.log.push(message);
+  // ログの高さを調整
+  adjustOverlayHeight();
 }
+// ログの高さを調整
+function adjustOverlayHeight() {
+  const parent = document.querySelector('.game-cards');
+  const overlay = document.querySelector('.game-logs-container');
+  if (parent && overlay) {
+    overlay.style.height = `${parent.scrollHeight}px`;
+  }
+}
+
 
 export async function processCards(cards) {
   // カードデータを取得
@@ -75,7 +97,7 @@ export async function processCards(cards) {
   // ターン進行処理の初期化
   const context = new TurnContext(globalGameState);
   // id -> jsonデータ
-  const selectedCards = allCards.filter(card => cards.includes(card.id));
+  const selectedCards = cards.map(id => allCards.find(card => card.id === id))
   // このターンに使用したカードとして記録
   context.playedCardsInTurn = selectedCards;
 
@@ -138,7 +160,7 @@ export async function processCards(cards) {
   return globalGameState;
 }
 
-// 処理用
+// 個別の処理用クラス
 class DamageEffect {
   execute(card, effectInfo, context) {
     const damage = effectInfo.value || 0;
@@ -168,13 +190,14 @@ class HealEffect {
     const healValue = effectInfo.value || 3;
     if (context.globalState.player.hp + healValue > context.globalState.player.maxHp) {
       context.globalState.player.hp = context.globalState.player.maxHp;
+      log(`${card.name}の回復効果が発動！ 最大HPに回復しました`);
     } else {
       context.globalState.player.hp += healValue;
+      log(`${card.name}の回復効果が発動！`);
     }
     // 最終HPの表示更新
     document.querySelector('.game-main-characters-player-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.player.hp} / ${context.globalState.player.maxHp})`;
     document.querySelector('.game-main-characters-player-status-hp').textContent = `HP: ${context.globalState.player.hp}/${context.globalState.player.maxHp}`;
-    log(`${card.name}の回復効果が発動！`);
   }
 }
 class ShieldEffect {
@@ -227,5 +250,54 @@ class AddMarkEffect {
 class HollowCombo3Effect {
   execute(card, effectInfo, context) {
     // ええ困った...
+  }
+}
+class HollowMark3Effect {
+  execute(card, effectInfo, context) {
+    window.isSkipEnemyTurn = true;
+    // 減らす処理
+  }
+}
+class FogCombo3Effect {
+  execute(card, effectInfo, context) {
+    // 面倒
+  }
+}
+class FogMark3Effect {
+  execute(card, effectInfo, context) {
+    const hp = context.globalState.player.hp;
+    const maxHp = context.globalState.player.maxHp;
+    const damage = Math.floor(25 * (1 - Math.pow(hp / maxHp, 2)));
+    // 減らす処理
+  }
+}
+class LuminaCombo3Effect {
+  execute(card, effectInfo, context) {
+    // 面倒
+  }
+}
+class LuminaMark3Effect {
+  execute(card, effectInfo, context) {
+    // 面倒
+  }
+}
+class DaybreakCombo3Effect {
+  execute(card, effectInfo, context) {
+    // 面倒
+  }
+}
+class DaybreakMark3Effect {
+  execute(card, effectInfo, context) {
+    // 面倒
+  }
+}
+class SandCombo3Effect {
+  execute(card, effectInfo, context) {
+    // 面倒
+  }
+}
+class SandMark3Effect {
+  execute(card, effectInfo, context) {
+    // 面倒
   }
 }
