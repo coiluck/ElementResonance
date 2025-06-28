@@ -322,19 +322,21 @@ async function setUpEnemy() {
   // 敵データを取得
   const enemyData = await getEnemyData();
   const enemy = enemyData.find(enemy => enemy.round === window.round);
-  console.log(enemy);
+  if (globalGameState.turn === 1) {
+    console.log(enemy);
+  }
   // cards.jsonを読み込む（敵の使用カードの設定で必要）
   const cardsData = await getCardsData();
   // DOMに反映
   document.querySelector('.game-main-characters-enemy-name').textContent = enemy.name;
   document.querySelector('.game-main-characters-enemy-image').innerHTML = `<img src="${enemy.image}" alt="Card">`;
-  document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${enemy.hp}/${enemy.hp}`;
   // 敵のデッキを反映
   setUpEnemyDeck(enemy.deck, cardsData);
-  // 変数に格納
+  // HPのセットアップは最初のターンだけ
   if (globalGameState.turn === 1) {
     globalGameState.enemy.hp = enemy.hp;
     globalGameState.enemy.maxHp = enemy.hp;
+    document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${enemy.hp}/${enemy.hp}`;
   }
 }
 async function setUpEnemyDeck(enemyDeck, cardsMaster) {
@@ -347,7 +349,7 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
   container.innerHTML = '';
   // 使用するカード
   const deckIndex = globalGameState.turn % enemyDeck.length;
-  console.log(`${globalGameState.turn}用のデッキを用意しました`);
+  console.log(`${globalGameState.turn}ターン目用のデッキを用意しました`);
   const currentCardIds = enemyDeck[deckIndex]; // 配列の中のいずれかの配列を取得
   // 取得した配列の画像を表示
   currentCardIds.forEach(cardId => {
@@ -383,8 +385,23 @@ async function setUpNextTurn() {
     console.error('ログのクリアに失敗しました');
   }
   // スロットをクリア
+  const gameAttributes = ['daybreak', 'sand', 'lumina', 'fog', 'hollow'];
   document.querySelectorAll('.game-holder-slot').forEach(slot => {
     slot.innerHTML = '';
+    // data-* 属性を削除
+    Array.from(slot.attributes).forEach(attribute => {
+      if (attribute.name.startsWith('data-')) {
+        slot.removeAttribute(attribute.name);
+      }
+    });
+    // game-${属性} クラスを削除
+    gameAttributes.forEach(attr => {
+      slot.classList.remove(`game-${attr}`);
+    });
+  });
+  // 選択中のカードをクリア
+  document.querySelectorAll('.game-image-container').forEach(card => {
+    card.classList.remove('game-is-used-in-slot');
   });
   // オーバーレイを非表示
   const overlay = document.querySelector('.game-process-turn-overlay.show');

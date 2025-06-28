@@ -20,7 +20,7 @@ const initialState = {
       "shield": 0,
       "trigger": {
         value: 0,
-        discription: "HPが50%以下になったターンに強力な攻撃を放つ"
+        discription: "ここはenemy.jsonから読み込む"
       },
       "burn-turn": 0
     },
@@ -39,12 +39,3 @@ function resetGlobalState() {
 }
 
 export { globalGameState, resetGlobalState };
-
-/* 使用例
-
-resetGlobalState(); // ← ゲーム開始時に呼ぶ
-
-console.log(globalGameState.turn); // 1
-globalGameState.turn += 1;
-globalGameState.player.hp -= 10;
-*/

@@ -160,6 +160,8 @@ export async function processCards(cards) {
   return globalGameState;
 }
 
+import { updateBuff } from './game-buff-update.js';
+
 // 個別の処理用クラス
 class DamageEffect {
   execute(card, effectInfo, context) {
@@ -243,8 +245,17 @@ class DamageCombo2Effect {
 class AddMarkEffect {
   execute(card, effectInfo, context) {
     const markValue = effectInfo.value || 1;
-    context.globalState.player.buff.mark += markValue;
-    log(`${card.name}の刻印効果が発動！`);
+    const buffName = card.element + "-mark";
+    const elementTargetMap = {
+      'daybreak': 'player',
+      'sand':     'player',
+      'hollow':   'enemy',
+      'fog':      'enemy',
+      'lumina':   'enemy'
+    };
+    // buff対象を取得
+    const target = elementTargetMap[card.element];
+    updateBuff(target, buffName, markValue);
   }
 }
 class HollowCombo3Effect {
