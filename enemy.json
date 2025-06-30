@@ -2,14 +2,25 @@
   {
     "round": 1,
     "name": "鬼霞 アカネ",
-    "image": "./images/character_enemy/2-9-6-5.webp",
+    "image": "./images/character_enemy/akane.webp",
     "hp": 10,
     "deck": [
       [1,2],
       [4,5]
     ],
     "maxHoldCards": 2,
-    "buff": null
+    "triggers": [
+      {
+        "hp": 50,
+        "description": "HPが50%を下回ったターン、を与える状態",
+        "card": "FC-3"
+      },
+      {
+        "hp": 20,
+        "description": "HP20以下で発動",
+        "card": "BC-1"
+      }
+    ]
   },
   {
     "round": 2,
@@ -21,6 +32,53 @@
       [4,5]
     ],
     "maxHoldCards": 2,
-    "buff": null
-  }
+    "triggers": null
+  },
+  {
+    "round": 3,
+    "name": "test-enemy",
+    "image": "./images/character_enemy/2-9-6-5.webp",
+    "hp": 10,
+    "deck": [
+      [1,2],
+      [4,5]
+    ],
+    "maxHoldCards": 2,
+    "triggers": null
+  },
+  {
+    "round": 4,
+    "name": "test-enemy",
+    "image": "./images/character_enemy/2-9-6-5.webp",
+    "hp": 10,
+    "deck": [
+      [1,2],
+      [4,5]
+    ],
+    "maxHoldCards": 2,
+    "triggers": null
+  },
+  {
+    "round": 5,
+    "name": "鬼閃 オグレイネ",
+    "image": "./images/character_enemy/ogre.webp",
+    "hp": 10,
+    "deck": [
+      [1, 2],
+      [4, 5]
+    ],
+    "maxHoldCards": 2,
+    "triggers": [
+      {
+        "hp": 50,
+        "description": "HPが50%を下回ったターン、を与える状態",
+        "card": "FC-3"
+      },
+      {
+        "hp": 20,
+        "description": "HP20以下で発動",
+        "card": "BC-1"
+      }
+    ]
+  }  
 ]

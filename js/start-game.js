@@ -317,19 +317,32 @@ async function getEnemyData() {
   return enemyDataCache;
 }
 
+import { renderBuffs } from './game-buff-update.js';
+
 // 敵を設定
 async function setUpEnemy() {
   // 敵データを取得
   const enemyData = await getEnemyData();
   const enemy = enemyData.find(enemy => enemy.round === window.round);
   if (globalGameState.turn === 1) {
-    console.log(enemy);
+    console.log("敵情報:", enemy);
+    // トリガー情報を設定
+    if (enemy.triggers && Array.isArray(enemy.triggers)) {
+      globalGameState.enemy.triggers = enemy.triggers;
+      globalGameState.enemy.buff.trigger = enemy.triggers.length;
+    } else {
+      // トリガーがない場合
+      globalGameState.enemy.triggers = [];
+      globalGameState.enemy.buff.trigger = 0;
+    }
+    console.log("敵のトリガー情報:", globalGameState.enemy.triggers);
   }
   // cards.jsonを読み込む（敵の使用カードの設定で必要）
   const cardsData = await getCardsData();
   // DOMに反映
   document.querySelector('.game-main-characters-enemy-name').textContent = enemy.name;
   document.querySelector('.game-main-characters-enemy-image').innerHTML = `<img src="${enemy.image}" alt="Card">`;
+  renderBuffs();
   // 敵のデッキを反映
   setUpEnemyDeck(enemy.deck, cardsData);
   // HPのセットアップは最初のターンだけ

@@ -18,12 +18,9 @@ const initialState = {
       "fog-mark": 0,
       "lumina-mark": 0,
       "shield": 0,
-      "trigger": {
-        value: 0,
-        discription: "ここはenemy.jsonから読み込む"
-      },
       "burn-turn": 0
     },
+    triggers: null,
   },
   turn: 1,
   log: [],

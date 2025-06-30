@@ -1,12 +1,12 @@
 // buff-descriptions.js
 
-export const buffDescriptions = {
-  "shield": "受けるダメージをこの値だけ肩代わりする。ターン終了時に消滅する。",
-  "burn-turn": "ターン終了時に、この値ぶんの継続ダメージを受ける。",
-  "hollow-mark": "【虚の刻印】。3つ溜まると強大な力を発揮する。",
-  "fog-mark": "【霧の刻印】。3つ溜まると強大な力を発揮する。",
-  "lumina-mark": "【燐の刻印】。3つ溜まると強大な力を発揮する。",
-  "daybreak-mark": "【暁の刻印】。3つ溜まると強大な力を発揮する。",
-  "sand-mark": "【砂の刻印】。3つ溜まると強大な力を発揮する。",
-  "trigger": "",
+export let buffDescriptions = {
+  "shield": "シールドを消費して受けるダメージを無効化する。",
+  "burn-turn": "ターン開始時に4ダメージを受ける。値の数値ターン持続する。",
+  "hollow-mark": "虚の刻印。最大3つまで付与可能。",
+  "fog-mark": "霧の刻印。最大3つまで付与可能。",
+  "lumina-mark": "燐の刻印。最大3つまで付与可能。",
+  "daybreak-mark": "暁の刻印。最大3つまで付与可能。",
+  "sand-mark": "砂の刻印。最大3つまで付与可能。",
+  "trigger": ""
 };

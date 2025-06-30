@@ -52,8 +52,17 @@ export function renderBuffs() {
   const tooltip = document.getElementById('game-buff-tooltip') || createTooltipElement();
 
   const targets = [
-    { selector: '.game-main-characters-player-status-buff', buffs: globalGameState.player.buff },
-    { selector: '.game-main-characters-enemy-status-buff', buffs: globalGameState.enemy.buff },
+    // プレイヤーと敵の情報
+    {
+      selector: '.game-main-characters-player-status-buff',
+      buffs: globalGameState.player.buff,
+      triggers: null
+    },
+    {
+      selector: '.game-main-characters-enemy-status-buff',
+      buffs: globalGameState.enemy.buff,
+      triggers: globalGameState.enemy.triggers
+    }
   ];
 
   for (const target of targets) {
@@ -67,37 +76,48 @@ export function renderBuffs() {
 
     for (const [buffName, buffValue] of Object.entries(target.buffs)) {
       let icon = null;
-
-      // 要件2: 'trigger'バフの特別処理
+      // triggerは後で
       if (buffName === 'trigger') {
-        // triggerはvalueが0でも表示することがあるため、存在自体で判定
-        icon = document.createElement('div');
-        icon.className = 'game-buff-trigger';
+        continue;
       }
-      // 通常の数値バフの処理
+      // 通常のバフ
       else if (typeof buffValue === 'number' && buffValue > 0) {
         icon = document.createElement('div');
         icon.className = `game-buff-${buffName}`;
-        
-        // 要件1: "-mark"で終わる場合、追加クラスを付与
+        // "-mark"で終わる場合
         if (buffName.endsWith('-mark')) {
           icon.classList.add('game-buff-mark-icon');
         }
-        
-        // 数値を表示するためのスタイルを設定
-        icon.style.setProperty('--after-content', `'${buffValue}'`);
+        // 数値を表示するためのスタイル
+        const number = document.createElement('div');
+        number.className = 'game-buff-number';
+        number.textContent = buffValue;
+        icon.appendChild(number);
       }
-
       // アイコンが生成された場合のみ、DOMへの追加とイベントリスナーの設定を行う
       if (icon) {
-        // 要件3: ツールチップのイベントリスナーを設定
+        // 説明文のイベントリスナー
         addTooltipEventListeners(icon, buffName, tooltip);
+        buffContainer.appendChild(icon);
+      }
+    }
+
+    // triggerはここで
+    if (target.triggers && Array.isArray(target.triggers)) {
+      for (const trigger of target.triggers) {
+        const icon = document.createElement('div');
+        icon.className = 'game-buff-trigger';
+
+        // データ属性に個別の説明文を設定
+        icon.dataset.description = trigger.description;
+
+        // イベントリスナー
+        addTooltipEventListeners(icon, 'trigger', tooltip);
         buffContainer.appendChild(icon);
       }
     }
   }
 }
-
 
 
 // ページに説明枠を追加
@@ -112,11 +132,11 @@ function addTooltipEventListeners(iconElement, buffName, tooltipElement) {
   const showTooltip = (event) => {
     // アイコンの位置を基準に
     const iconRect = iconElement.getBoundingClientRect();
-    const description = buffDescriptions[buffName] || '説明が見つかりません。';
-    
+    // 説明文を取得
+    const description = iconElement.dataset.description || buffDescriptions[buffName] || '説明が見つかりません。';
+    // 説明文を表示
     tooltipElement.textContent = description;
     tooltipElement.style.display = 'block';
-
     // 説明をアイコンの上に配置
     const topPos = iconRect.top - tooltipElement.offsetHeight - 5; // 5pxのマージン
     const leftPos = iconRect.left + (iconRect.width / 2) - (tooltipElement.offsetWidth / 2);

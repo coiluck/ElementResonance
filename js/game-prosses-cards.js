@@ -204,8 +204,7 @@ class HealEffect {
 }
 class ShieldEffect {
   execute(card, effectInfo, context) {
-    const shieldValue = effectInfo.value || 3;
-    context.globalState.player.buff.shield += shieldValue;
+    updateBuff('player', 'shield', effectInfo.value || 3);
     log(`${card.name}のバリア効果が発動！`);
   }
 }
@@ -290,6 +289,7 @@ class LuminaCombo3Effect {
 class LuminaMark3Effect {
   execute(card, effectInfo, context) {
     // 面倒
+    updateBuff('enemy', 'burn-turn', 3);
   }
 }
 class DaybreakCombo3Effect {
