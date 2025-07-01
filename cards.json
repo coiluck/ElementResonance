@@ -33,9 +33,7 @@
     ],
     "effect": [
       {
-        "when": "next",
-        "requirement": "damage",
-        "type": "damage",
+        "type": "addNextDamage",
         "value": 2
       }
     ]
@@ -57,9 +55,7 @@
     ],
     "effect": [
       {
-        "when": "nextAll",
-        "requirement": "damage",
-        "type": "damage",
+        "type": "addTurnDamage",
         "value": 2
       }
     ]

@@ -121,14 +121,14 @@ export function renderBuffs() {
 
 
 // ページに説明枠を追加
-function createTooltipElement() {
+export function createTooltipElement() {
   const tooltip = document.createElement('div');
   tooltip.id = 'game-buff-tooltip';
   tooltip.className = 'buff-tooltip';
   document.body.appendChild(tooltip);
   return tooltip;
 }
-function addTooltipEventListeners(iconElement, buffName, tooltipElement) {
+export function addTooltipEventListeners(iconElement, buffName, tooltipElement) {
   const showTooltip = (event) => {
     // アイコンの位置を基準に
     const iconRect = iconElement.getBoundingClientRect();

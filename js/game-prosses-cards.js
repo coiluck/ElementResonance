@@ -28,6 +28,7 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // ゲームログ用の関数
 function log(message) {
+  console.log(message);  // 後で消して（さすがにうるさい）
   const logParent = document.querySelector('.game-cards');
   // .game-logs-container が存在するか確認。なければ作成して追加
   let logContainer = logParent.querySelector('.game-logs-container');
@@ -72,6 +73,7 @@ export async function processCards(cards) {
     return;
   }
 
+  log(`=== プレイヤーのターン ===`);
   // 待機時間
   const WAIT_TIME_MS = 1000; 
 
@@ -83,6 +85,8 @@ export async function processCards(cards) {
     "reduceCoolTime": new ReduceCoolTimeEffect(), // コンボタイプのレアリティ1
     "damageCombo2": new DamageCombo2Effect(), // コンボタイプのレアリティ2
     "addMark": new AddMarkEffect(),           // 刻印タイプ
+    "addNextDamage": new AddNextDamageEffect(),// 吸血少女
+    "addTurnDamage": new AddTurnDamageEffect(), // 執行人 ゼガ
     "HC-3": new HollowCombo3Effect(),         // 破壊霊 メア
     "HM-3": new HollowMark3Effect(),          // Dancing Night
     "FC-3": new FogCombo3Effect(),            // 蒼穹竜姫 クア
@@ -103,6 +107,7 @@ export async function processCards(cards) {
 
   // カードを1枚ずつ処理
   for (const card of selectedCards) {
+    log(`--${card.name}の効果が発動！--`);
     // DOMに召喚&エフェクト
 
     // damageを持つカードの処理
@@ -129,32 +134,18 @@ export async function processCards(cards) {
     // 特殊効果（effect!==null）の処理
     if (card.effect) {
       for (const effectInfo of card.effect) {
+        // jsonで定義したtypeに基づいて、対応するクラスのインスタンスを取得
         const handler = effectRegistry[effectInfo.type];
         if (handler) {
-          // effectRegistryの中のオブジェクトのexecute関数を実行
           handler.execute(card, effectInfo, context);
-          // 待機
           await wait(WAIT_TIME_MS);
         }
       }
     }
-    // 「次のカードに適用」の効果はここでリセット
-    context.nextCardModifiers = [];
   }
 
   // ターン終了時効果の処理
-  // **効果は待機列に入れておいて相手の行動の後に解決されるべき** <- リリスの効果とかどうする
-  // そのためにはletで関数外で宣言した効果の配列を相手行動後に呼び出せばいい
-  // これは後で消す
-  if (context.endOfTurnEffects.length > 0) {
-    await wait(WAIT_TIME_MS);
-    for (const endEffect of context.endOfTurnEffects) {
-      endEffect(context);
-    }
-  }
-
-  // おしまい
-  console.log('--- Turn End ---');
+  // 後で書く
 
   // 更新されたゲーム状態を返す
   return globalGameState;
@@ -163,6 +154,7 @@ export async function processCards(cards) {
 import { updateBuff } from './game-buff-update.js';
 
 // 個別の処理用クラス
+/*
 class DamageEffect {
   execute(card, effectInfo, context) {
     const damage = effectInfo.value || 0;
@@ -180,22 +172,111 @@ class DamageEffect {
         // バリアがない
         context.globalState.enemy.hp -= damageValue;
       }
-      // 最終HPの表示更新
+      // HPの表示更新
       document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.enemy.hp} / ${context.globalState.enemy.maxHp})`;
       document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${context.globalState.enemy.hp}/${context.globalState.enemy.maxHp}`;
-      log(`${card.name}のダメージ効果が発動！`);
+      log(`敵に${damageValue}ダメージ`);
     }
   }
 }
+*/
+
+class DamageEffect {
+  execute(card, effectInfo, context) {
+    // 適用されるバフ
+    let totalBuffValue = 0;
+    const buffLogParts = [];
+    // ターン中の永続バフ（リリスや執行者ゼガなど）
+    context.turnModifiers
+      .filter(m => m.modifierType === 'buff' && m.type === 'damage')
+      .forEach(buff => {
+        totalBuffValue += buff.value;
+        buffLogParts.push(`${buff.source}+${buff.value}`);
+      });
+    // 次のカードへのバフ（吸血少女）
+    context.nextCardModifiers
+      .filter(m => m.modifierType === 'buff' && m.type === 'damage')
+      .forEach(buff => {
+        totalBuffValue += buff.value;
+        buffLogParts.push(`${buff.source}+${buff.value}`);
+      });
+    const buffDetailLog = buffLogParts.length > 0 ? ` (バフ内訳: ${buffLogParts.join(', ')})` : '';
+
+    // ダメージ処理
+    const dealDamage = (baseValue, sourceName) => {
+      // ダメージ値にバフを乗せる
+      const finalDamage = baseValue + totalBuffValue;
+      if (finalDamage <= 0) return;
+
+      // HP減少と表示更新
+      if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield > finalDamage) {
+        context.globalState.enemy.buff.shield -= finalDamage;
+      } else if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield <= finalDamage) {
+        context.globalState.enemy.buff.shield = 0;
+      } else {
+        context.globalState.enemy.hp -= finalDamage;
+      }
+      document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.enemy.hp} / ${context.globalState.enemy.maxHp})`;
+      document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${context.globalState.enemy.hp}/${context.globalState.enemy.maxHp}`;
+      
+      // ログ出力
+      log(`${finalDamage}ダメージ (基本値:${baseValue} + バフ:${totalBuffValue}${buffDetailLog})`);
+    };
+
+    const times = effectInfo.times || 1;
+    for (let i = 0; i < times; i++) {
+      // カード自身の基本ダメージ
+      dealDamage(effectInfo.value, card.name);
+      // 追加ダメージ
+      context.turnModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, added.source));
+
+      // 次のカードへの追加ダメージ
+      context.nextCardModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, added.source));
+    }
+    // 次のカードへの効果をリセット
+    context.nextCardModifiers = [];
+  }
+}
+  
+  
+class AddTurnDamageEffect {
+  execute(card, effectInfo, context) {
+    const modifier = {
+      modifierType: 'addedDamage', 
+      type: 'damage',
+      value: effectInfo.value,
+      source: card.name
+    };
+    context.turnModifiers.push(modifier);
+    log(`このターンの全ての攻撃時に ${effectInfo.value} の追加ダメージ`);
+  }
+}
+class AddNextDamageEffect {
+  execute(card, effectInfo, context) {
+    const modifier = {
+      modifierType: 'addedDamage',
+      type: 'damage',
+      value: effectInfo.value,
+      source: card.name
+    };
+    context.nextCardModifiers.push(modifier);
+    log(`次の攻撃時に ${effectInfo.value} の追加ダメージ`);
+  }
+}
+
 class HealEffect {
   execute(card, effectInfo, context) {
     const healValue = effectInfo.value || 3;
     if (context.globalState.player.hp + healValue > context.globalState.player.maxHp) {
       context.globalState.player.hp = context.globalState.player.maxHp;
-      log(`${card.name}の回復効果が発動！ 最大HPに回復しました`);
+      log(`プレイヤーを最大HPに回復しました`);
     } else {
       context.globalState.player.hp += healValue;
-      log(`${card.name}の回復効果が発動！`);
+      log(`プレイヤーを${healValue}回復しました`);
     }
     // 最終HPの表示更新
     document.querySelector('.game-main-characters-player-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.player.hp} / ${context.globalState.player.maxHp})`;
@@ -205,13 +286,21 @@ class HealEffect {
 class ShieldEffect {
   execute(card, effectInfo, context) {
     updateBuff('player', 'shield', effectInfo.value || 3);
-    log(`${card.name}のバリア効果が発動！`);
+    log(`プレイヤーに${effectInfo.value}バリア`);
   }
 }
 class ReduceCoolTimeEffect {
   execute(card, effectInfo, context) {
     const coolTimeValue = effectInfo.value || 1;
-    // クールタイムは後で実装
+    // contextからカード取得しておいて
+    document.querySelectorAll('.game-cards .game-image-container.game-card-recast').forEach(slot => {
+      let recastTime = slot.dataset.recastTime;
+      recastTime -= coolTimeValue;
+      slot.dataset.recastTime = recastTime;
+      if (recastTime <= 0) {
+        slot.classList.remove('game-card-recast');
+      }
+    });
   }
 }
 class DamageCombo2Effect {
@@ -237,7 +326,7 @@ class DamageCombo2Effect {
       // 最終HPの表示更新
       document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.enemy.hp} / ${context.globalState.enemy.maxHp})`;
       document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${context.globalState.enemy.hp}/${context.globalState.enemy.maxHp}`;
-      log(`${card.name}のダメージ効果が発動！`);
+      log(`敵に${damageValue}ダメージ`);
     }
   }
 }
@@ -255,6 +344,15 @@ class AddMarkEffect {
     // buff対象を取得
     const target = elementTargetMap[card.element];
     updateBuff(target, buffName, markValue);
+    // ログ用
+    const ATTRIBUTES = {
+      'hollow': '虚',
+      'fog': '霧',
+      'lumina': '燐',
+      'daybreak': '暁',
+      'sand': '砂'
+    };
+    log(`${ATTRIBUTES[card.element]}の刻印を${markValue}追加`);
   }
 }
 class HollowCombo3Effect {
@@ -264,8 +362,14 @@ class HollowCombo3Effect {
 }
 class HollowMark3Effect {
   execute(card, effectInfo, context) {
-    window.isSkipEnemyTurn = true;
-    // 減らす処理
+    updateBuff('enemy', 'hollow-mark', 2);
+    log(`虚の刻印を2追加`);
+    if (context.globalState.enemy.buff.hollowMark === 3) {
+      log(`虚の刻印を3消費`);
+      updateBuff('enemy', 'hollow-mark', -3);
+      log(`敵のターンをスキップ`);
+      window.isSkipEnemyTurn = true;
+    }
   }
 }
 class FogCombo3Effect {
@@ -275,21 +379,41 @@ class FogCombo3Effect {
 }
 class FogMark3Effect {
   execute(card, effectInfo, context) {
-    const hp = context.globalState.player.hp;
-    const maxHp = context.globalState.player.maxHp;
-    const damage = Math.floor(25 * (1 - Math.pow(hp / maxHp, 2)));
-    // 減らす処理
+    updateBuff('enemy', 'fog-mark', 2);
+    log(`霧の刻印を2追加`);
+    if (context.globalState.enemy.buff.fogMark === 3) {
+      log(`霧の刻印を3消費`);
+      const hp = context.globalState.player.hp;
+      const maxHp = context.globalState.player.maxHp;
+      const damage = Math.floor(25 * (1 - Math.pow(hp / maxHp, 2)));
+      // 減らす処理
+      updateBuff('enemy', 'fog-mark', -3);
+      log(`敵に${damage}ダメージ`);
+    }
   }
 }
 class LuminaCombo3Effect {
   execute(card, effectInfo, context) {
-    // 面倒
+    const modifier = {
+      modifierType: 'buff',
+      type: 'damage',
+      value: effectInfo.value,
+      source: card.name
+    };
+    context.turnModifiers.push(modifier);
+    log(`このターン、与えるダメージが${effectInfo.value}増加`);
   }
 }
 class LuminaMark3Effect {
   execute(card, effectInfo, context) {
-    // 面倒
-    updateBuff('enemy', 'burn-turn', 3);
+    updateBuff('enemy', 'lumina-mark', 2);
+    log(`燐の刻印を2追加`);
+    if (context.globalState.enemy.buff.luminaMark === 3) {
+      log(`燐の刻印を3消費`);
+      updateBuff('enemy', 'lumina-mark', -3);
+      updateBuff('enemy', 'burn-turn', 3);
+      log(`敵に火傷効果`);
+    }
   }
 }
 class DaybreakCombo3Effect {
@@ -299,7 +423,28 @@ class DaybreakCombo3Effect {
 }
 class DaybreakMark3Effect {
   execute(card, effectInfo, context) {
-    // 面倒
+    updateBuff('player', 'daybreak-mark', 2);
+    log(`暁の刻印を2追加`);
+    const daybreak = context.globalState.player.buff['daybreak-mark'] || 0;
+    const sand = context.globalState.player.buff['sand-mark'] || 0;
+    const mark = daybreak + sand;
+    log(`暁の刻印: ${daybreak}、砂の刻印: ${sand}、合計: ${mark}`);
+    if (mark !== 0) {
+      updateBuff('player', 'daybreak-mark', -3);
+      updateBuff('player', 'sand-mark', -3);
+      log(`暁の刻印と砂の刻印をすべて消費`);
+      const healValue = mark * 3;
+      context.globalState.player.hp += healValue;
+      if (context.globalState.player.hp + healValue > context.globalState.player.maxHp) {
+        context.globalState.player.hp = context.globalState.player.maxHp;
+      } else {
+        context.globalState.player.hp += healValue;
+      }
+      // 最終HPの表示更新
+      document.querySelector('.game-main-characters-player-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.player.hp} / ${context.globalState.player.maxHp})`;
+      document.querySelector('.game-main-characters-player-status-hp').textContent = `HP: ${context.globalState.player.hp}/${context.globalState.player.maxHp}`;
+      log(`プレイヤーを${healValue}回復`);
+    }
   }
 }
 class SandCombo3Effect {
@@ -309,6 +454,34 @@ class SandCombo3Effect {
 }
 class SandMark3Effect {
   execute(card, effectInfo, context) {
-    // 面倒
+    updateBuff('player', 'sand-mark', 2);
+    log(`砂の刻印を2追加`);
+    const daybreak = context.globalState.player.buff['daybreak-mark'] || 0;
+    const sand = context.globalState.player.buff['sand-mark'] || 0;
+    const mark = daybreak + sand;
+    log(`暁の刻印: ${daybreak}、砂の刻印: ${sand}、合計: ${mark}`);
+    if (mark !== 0) {
+      updateBuff('player', 'daybreak-mark', -3);
+      updateBuff('player', 'sand-mark', -3);
+      log(`暁の刻印と砂の刻印をすべて消費`);
+      const damage = mark * 3;
+      // ダメージ処理
+
+      // バリア処理
+      const shield = Math.floor(damage * 0.5);
+      updateBuff('player', 'shield', shield);
+      log(`${shield}バリアを獲得`);
+    }
+  }
+}
+
+// ダメージを与える関数
+function dealDamage(damage, times, context) {
+  if (target.buff.shield > 0 && target.buff.shield > damage) {
+    target.buff.shield -= damage;
+  } else if (target.buff.shield > 0 && target.buff.shield <= damage) {
+    target.buff.shield = 0;
+  } else {
+    target.hp -= damage;
   }
 }

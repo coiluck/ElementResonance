@@ -44,6 +44,8 @@ document.getElementById('middleDeck-close-button').addEventListener('click', fun
 }); 
 
 async function initMiddleDeck() {
+  // デッキを整列
+  window.cards.sort((a, b) => a - b);
   // window.deck に含まれる各カードIDの数をカウント
   const deckIdCounts = window.deck.reduce((acc, id) => {
     acc[id] = (acc[id] || 0) + 1;

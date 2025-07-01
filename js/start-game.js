@@ -342,7 +342,6 @@ async function setUpEnemy() {
   // DOMに反映
   document.querySelector('.game-main-characters-enemy-name').textContent = enemy.name;
   document.querySelector('.game-main-characters-enemy-image').innerHTML = `<img src="${enemy.image}" alt="Card">`;
-  renderBuffs();
   // 敵のデッキを反映
   setUpEnemyDeck(enemy.deck, cardsData);
   // HPのセットアップは最初のターンだけ
@@ -351,8 +350,15 @@ async function setUpEnemy() {
     globalGameState.enemy.maxHp = enemy.hp;
     document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${enemy.hp}/${enemy.hp}`;
   }
+  // triggeerとdeckのホバーの反映
+  renderBuffs();
 }
+
+import { createTooltipElement, addTooltipEventListeners } from './game-buff-update.js';
+
 async function setUpEnemyDeck(enemyDeck, cardsMaster) {
+  // 説明文を作成
+  const tooltip = document.getElementById('game-buff-tooltip') || createTooltipElement();
   // 表示先を取得
   const container = document.querySelector('.game-main-HoldCards-enemy');
   if (!container) {
@@ -373,6 +379,7 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
       // <div class="game-enemy-slot"></div> を作成
       const slotDiv = document.createElement('div');
       slotDiv.className = 'game-enemy-slot';
+      slotDiv.dataset.description = cardData.description;
       // <img src={image_icon}> を作成
       const image = document.createElement('img');
       image.src = cardData.image_icon;
@@ -380,6 +387,8 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
       slotDiv.appendChild(image);
       // 親要素（container）に作成したdivを追加する
       container.appendChild(slotDiv);
+      // ホバーのイベントリスナを設定
+      addTooltipEventListeners(slotDiv, null, tooltip);
     } else {
       console.warn(`ID:${cardId} のカードがcards.jsonに見つかりませんでした。`);
     }
@@ -392,6 +401,7 @@ async function setUpNextTurn() {
   // ログをクリア
   const logContainer = document.querySelector('.game-logs-container');
   if (logContainer) {
+    logContainer.scrollTop = 0;
     logContainer.innerHTML = '';
     logContainer.style.display = 'none';
   } else {
