@@ -109,7 +109,7 @@
     "effect": [
       {
         "when": "now",
-        "type": "HC-3",
+        "type": "damageCombo2",
         "value": 3
       }
     ]
@@ -161,11 +161,6 @@
     "rarity": 3,
     "damage": null,
     "effect": [
-      {
-        "when": "now",
-        "type": "addMark",
-        "value": 2
-      },
       {
         "when": "now",
         "type": "HM-3"
@@ -326,11 +321,6 @@
     "effect": [
       {
         "when": "now",
-        "type": "addMark",
-        "value": 2
-      },
-      {
-        "when": "now",
         "type": "FM-3"
       }
     ]
@@ -485,11 +475,6 @@
     "rarity": 3,
     "damage": null,
     "effect": [
-      {
-        "when": "now",
-        "type": "addMark",
-        "value": 2
-      },
       {
         "when": "now",
         "type": "LM-3",
@@ -659,11 +644,6 @@
     "effect": [
       {
         "when": "now",
-        "type": "addMark",
-        "value": 2
-      },
-      {
-        "when": "now",
         "type": "DM-3",
         "value": 3
       }
@@ -831,12 +811,19 @@
     "effect": [
       {
         "when": "now",
-        "type": "addMark",
-        "value": 2
-      },
+        "type": "SM-3",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 46,
+    "name": "マグマの刻印",
+    "description": "自分に燐の刻印を1つ付与",
+    "image_icon": "./images/cards_icon/lumina_mark_1.avif",
+    "damage": [
       {
         "when": "now",
-        "type": "SM-3",
         "value": 3
       }
     ]

@@ -6,7 +6,7 @@
     "hp": 10,
     "deck": [
       [1,2],
-      [4,5]
+      [46,5]
     ],
     "maxHoldCards": 2,
     "triggers": [
