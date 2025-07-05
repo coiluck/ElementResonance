@@ -1,3 +1,5 @@
+import { playSoundEffect } from './music.js';
+
 let allCardsData = []; // 全カードデータを格納するグローバル変数
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -94,7 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // イベントリスナーの重複を避けるため、プレースホルダーをクローンして置き換える
             const newPlaceholder = placeholder.cloneNode(false);
             newPlaceholder.appendChild(img);
-            newPlaceholder.addEventListener('click', () => displayEnlargedCard(cardData));
+            newPlaceholder.addEventListener('click', () => {
+              playSoundEffect("click1");
+              displayEnlargedCard(cardData);
+            });
             placeholder.parentNode.replaceChild(newPlaceholder, placeholder);
 
           } else {

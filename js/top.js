@@ -85,3 +85,37 @@ function toTop() {
     document.getElementById('modal-top').classList.add('fade-in');
   }, 500);
 };
+
+
+import { playMusic, stopMusic, playSoundEffect } from './music.js';
+
+// クリック音
+const buttons = document.querySelectorAll('button');
+// 各ボタンにイベントリスナーを追加
+buttons.forEach(button => {
+  const isExcluded =
+    button.classList.contains('top-start-game-button') ||
+    button.classList.contains('top-continue-game-button') ||
+    button.id === 'middle-close-button' ||
+    button.id === 'middle-game-start-button';
+  if (!isExcluded) {
+    button.addEventListener('click', () => {
+      playSoundEffect("switch");
+    });
+  } else if (button.id === 'middle-game-start-button'){
+    return; // ここはstart-game.jsで処理
+  } else if (button.id === 'middle-close-button') {
+    button.addEventListener('click', () => {
+      playSoundEffect("back");
+      stopMusic();
+    });
+  } else {
+    // 豪華な音
+    button.addEventListener('click', () => {
+      playSoundEffect("metallic");
+      setTimeout(() => {
+        playMusic("theme1");
+      }, 300);
+    });
+  }
+});

@@ -1,12 +1,12 @@
 [
   {
     "round": 1,
-    "name": "鬼霞 アカネ",
-    "image": "./images/character_enemy/akane.webp",
+    "name": "さまよえる者",
+    "image": "./images/character_enemy/1.webp",
     "hp": 10,
     "deck": [
       [1,2],
-      [46,5]
+      [46,52]
     ],
     "maxHoldCards": 2,
     "triggers": [
@@ -24,8 +24,8 @@
   },
   {
     "round": 2,
-    "name": "test-enemy",
-    "image": "./images/character_enemy/2-9-6-5.webp",
+    "name": "鬼霞 アカネ",
+    "image": "./images/character_enemy/2.webp",
     "hp": 10,
     "deck": [
       [1,2],
@@ -70,13 +70,13 @@
     "maxHoldCards": 2,
     "triggers": [
       {
-        "hp": 50,
-        "description": "HPが50%を下回ったターン、を与える状態",
+        "hp": 60,
+        "description": "HPが60%を下回ったターンに、2回の5ダメージを与える状態",
         "card": "FC-3"
       },
       {
-        "hp": 20,
-        "description": "HP20以下で発動",
+        "hp": 15,
+        "description": "HPが15%を下回ったターンに、2回の10ダメージを与える状態",
         "card": "BC-1"
       }
     ]

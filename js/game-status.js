@@ -24,6 +24,7 @@ const initialState = {
   },
   turn: 1,
   log: [],
+  wasTurnSkippedLastTurn: false,
 };
 
 const globalGameState = structuredClone(initialState); // 初期状態でスタート

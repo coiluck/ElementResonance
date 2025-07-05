@@ -7,7 +7,7 @@ window.maxDeckCards = 10; // デッキの最大枚数
 window.maxHoldCards = 3; // スロットの最大枚数
 window.maxPermanentCards = 0; // 永続スロットの最大枚数
 window.round = 1; // 現在のラウンド
-window.isGameStart = false; // これだけはローカルストレージに保存する必要ないかも
+window.isGameStart = false; // これがtrueなら続き殻からを表示しない
 window.essence = {
   attributes: [],
   cardTypes: [],
@@ -34,32 +34,42 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
   window.isGameStart = false;
   window.playerHp = 30;
   window.essence = {
-    attributes: [{
-      attribute: '虚',
-      count: 0,
-    }, {
-      attribute: '霧',
-      count: 0,
-    }, {
-      attribute: '燐',
-      count: 0,
-    }, {
-      attribute: '暁',
-      count: 0,
-    }, {
-      attribute: '砂',
-      count: 0,
-    }],
-    cardTypes: [{
-      type: '通常',
-      count: 0,
-    }, {
-      type: 'コンボ',
-      count: 0,
-    }, {
-      type: '刻印',
-      count: 0,
-    }],
+    attributes: [
+      {
+        attribute: '虚',
+        count: 0,
+      },
+      {
+        attribute: '霧',
+        count: 0,
+      },
+      {
+        attribute: '燐',
+        count: 0,
+      },
+      {
+        attribute: '暁',
+        count: 0,
+      },
+      {
+        attribute: '砂',
+        count: 0,
+      }
+    ],
+    cardTypes: [
+      {
+        type: '通常',
+        count: 0,
+      },
+      {
+        type: 'コンボ',
+        count: 0,
+      },
+      {
+        type: '刻印',
+        count: 0,
+      }
+    ],
     rarity: 0,
   }
 });
@@ -67,10 +77,12 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
 import { message } from './message.js';
 import { CharacterAnimation, characterAnim } from './game-player-animation.js';
 import { globalGameState, resetGlobalState } from './game-status.js';
+import { playSoundEffect } from './music.js';
 
 document.getElementById('middle-game-start-button').addEventListener('click', function() {
   if (document.querySelector('.middle-button-container .middle-deck').classList.contains('middle-deck-first')) {
     message('caution', 'デッキを設定してください');
+    playSoundEffect("disable");
     return;
   }
   window.isGameStart = true;
@@ -96,8 +108,16 @@ document.getElementById('middle-game-start-button').addEventListener('click', fu
   }, 500);
 });
 
+import { playMusic, stopMusic } from './music.js';
+
+async function changeMusic() {
+  await stopMusic();
+  playMusic("theme2");
+}
 
 async function gameInit() {
+  changeMusic();
+
   const gameCardsContainer = document.querySelector('.game-cards');
   const cardHolder = document.querySelector('.game-main-HoldCards-player');
 
@@ -167,6 +187,7 @@ async function gameInit() {
     cardElement.addEventListener('click', (event) => {
       // game-cardsの選択中カードクリック時
       if (cardElement.classList.contains('game-is-used-in-slot')) {
+        playSoundEffect("back");
         const cardIdToFind = cardElement.dataset.cardId;
         // このカードIDを持つスロットを探す
         const slotToClear = document.querySelector(`.game-holder-slot[data-card-id="${cardIdToFind}"]`);
@@ -177,6 +198,7 @@ async function gameInit() {
       }
 
       // 通常のカード選択処理
+      playSoundEffect("click1");
       event.stopPropagation();
       const isAlreadySelected = cardElement.classList.contains('game-card-selected');
       clearAllSelectionStates();
@@ -198,6 +220,8 @@ async function gameInit() {
       const isFilledSlot = slotElement.dataset.cardId && !isStanbySlot;
 
       if (selectedCard && isStanbySlot) {
+        // スロットにカードを配置
+        playSoundEffect("click2");
         slotElement.innerHTML = `<img src="${selectedCard.dataset.imageIcon}" alt="Card Icon">`;
         slotElement.dataset.cardId = selectedCard.dataset.cardId;
         slotElement.dataset.element = selectedCard.dataset.element;
@@ -207,9 +231,13 @@ async function gameInit() {
         checkAllSlotsFilled();
       
       } else if (!selectedCard && isFilledSlot) {
+        // 手札のカードを選択せずに、既にカードがセットされているスロットをクリックした場合、そのスロットのカードを手札に戻す
+        playSoundEffect("back");
         clearSlot(slotElement);
       
       } else if (selectedCard && isFilledSlot) {
+        // 手札のカードを選択した状態で、既にカードがセットされているスロットをクリックした場合、カードを入れ替える
+        playSoundEffect("click2");
         const oldCardIdToFree = slotElement.dataset.cardId;
         const handCardToFree = document.querySelector(`.game-cards .game-image-container[data-card-id="${oldCardIdToFree}"]`);
         if (handCardToFree) {
@@ -269,13 +297,17 @@ function showButton(filledCardIds) {
   button.textContent = 'ターン進行';
   button.className = 'game-process-turn-button';
   button.addEventListener('click', async () => {
+    // 敵のHPを記憶
+    setEnemyHpNow(globalGameState.enemy.hp);
+    // 前のターンにスキップしたかどうか
+    globalGameState.wasTurnSkippedLastTurn = window.isSkipEnemyTurn;
+    window.isSkipEnemyTurn = false;
     // ターン進行処理を呼ぶ
     await processTurn(filledCardIds);
     if (!window.isSkipEnemyTurn) {
       // 敵のターン進行処理を呼ぶ
       await processEnemyTurn();
     }
-    window.isSkipEnemyTurn = false;
     setUpNextTurn();
   });
   // 要素を組み立て
@@ -289,6 +321,7 @@ function showButton(filledCardIds) {
 
 import { processCards } from './game-prosses-cards.js';
 import { processEnemyTurn } from './game-process-enemy.js';
+import { setEnemyHpNow } from './game-process-enemy.js';
 
 // ターンが進行した際の処理
 async function processTurn(cardIds) {

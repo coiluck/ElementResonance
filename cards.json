@@ -818,13 +818,84 @@
   },
   {
     "id": 46,
-    "name": "マグマの刻印",
-    "description": "自分に燐の刻印を1つ付与",
-    "image_icon": "./images/cards_icon/lumina_mark_1.avif",
+    "name": "妖しい剣",
+    "description": "1ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/46.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "name": "妖しい剣",
+    "description": "2ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/47.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "name": "妖しい剣",
+    "description": "3ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/48.avif",
     "damage": [
       {
         "when": "now",
         "value": 3
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "name": "妖しい剣",
+    "description": "4ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/49.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "name": "妖しい剣",
+    "description": "5ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/50.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 5
+      }
+    ]
+  },  {
+    "id": 51,
+    "name": "妖しい剣",
+    "description": "6ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/51.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 6
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "name": "妖しい剣",
+    "description": "7ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/52.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 7
       }
     ]
   }

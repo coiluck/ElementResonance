@@ -156,8 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+import { playSoundEffect } from './music.js';
+
 // カードがクリックされたときの処理
 function handleCardClick(event) {
+  // クリック音
+  playSoundEffect("click1");
   // クリック対象
   const targetCard = event.currentTarget;
   // カードが既に選択されているかどうか

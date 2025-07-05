@@ -76,18 +76,3 @@ export class CharacterAnimation {
 
 // 使用
 export const characterAnim = new CharacterAnimation();
-
-// window.isGameStartの監視
-/*  exportして任意のタイミングで呼び出すのでこれは不必要になった
-let previousGameState = window.isGameStart;
-setInterval(() => {
-  if (window.isGameStart !== previousGameState) {
-    if (window.isGameStart) {
-      characterAnim.start();
-    } else {
-      characterAnim.stop();
-    }
-    previousGameState = window.isGameStart;
-  }
-}, 1000); // 1sごとにチェック
-*/

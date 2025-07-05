@@ -27,7 +27,9 @@ class TurnContext {
   }
 }
 
+// 待機時間
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const WAIT_TIME_MS = 1000; 
 
 // ゲームログ用の関数
 function log(message) {
@@ -77,8 +79,6 @@ export async function processCards(cards) {
   }
 
   log(`=== プレイヤーのターン ===`);
-  // 待機時間
-  const WAIT_TIME_MS = 1000; 
 
   // 効果をまとめる
   const effectRegistry = {
@@ -118,7 +118,7 @@ export async function processCards(cards) {
         // "when": "now" のものだけを処理
         if (damageInfo.when === 'now') {
           // ダメージ計算を呼ぶ
-          effectRegistry.damage.execute(card, damageInfo, context);
+          await effectRegistry.damage.execute(card, damageInfo, context);
         }
         // "when": "last" のものはターン終了時効果として登録
         else if (damageInfo.when === 'last') {
@@ -139,7 +139,7 @@ export async function processCards(cards) {
         // jsonで定義したtypeに基づいて、対応するクラスのインスタンスを取得
         const handler = effectRegistry[effectInfo.type];
         if (handler) {
-          handler.execute(card, effectInfo, context);
+          await handler.execute(card, effectInfo, context);
           await wait(WAIT_TIME_MS);
         }
       }
@@ -149,59 +149,38 @@ export async function processCards(cards) {
   // ターン終了時効果の処理
   // 後で書く
 
-  // 更新されたゲーム状態を返す
+  // 更新されたゲーム状態を返す <- いる？
   return globalGameState;
 }
 
 import { updateBuff } from './game-buff-update.js';
+import { playSoundEffect } from './music.js';
 
 // 個別の処理用クラス
-/*
 class DamageEffect {
-  execute(card, effectInfo, context) {
-    const damage = effectInfo.value || 0;
-    const damageValue = damage + 0; // 最終的なダメージ **あとでここの処理にaddAllなどを反映**
-    const times = effectInfo.times || 1;
-    const timesValue = times * 1; // 最終的な発動回数 **あとでここの処理にaddAllなどを反映**
-    for (let i = 0; i < timesValue; i++) {
-      if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield > damageValue) {
-        // バリアがあってダメージで割れない
-        context.globalState.enemy.buff.shield -= damageValue;
-      } else if (context.globalState.enemy.buff.shield > 0 && context.globalState.enemy.buff.shield <= damageValue) {
-        // バリアがあってダメージで割れる
-        context.globalState.enemy.buff.shield = 0;
-      } else {
-        // バリアがない
-        context.globalState.enemy.hp -= damageValue;
-      }
-      // HPの表示更新
-      document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${context.globalState.enemy.hp} / ${context.globalState.enemy.maxHp})`;
-      document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${context.globalState.enemy.hp}/${context.globalState.enemy.maxHp}`;
-      log(`敵に${damageValue}ダメージ`);
-    }
-  }
-}
-*/
-
-class DamageEffect {
-  execute(card, effectInfo, context) {
+  async execute(card, effectInfo, context) {
     const times = effectInfo.times || 1;
 
     // 攻撃回数繰り返す
     for (let i = 0; i < times; i++) {
 
       // カード自身の基本ダメージを処理
-      dealDamage(effectInfo.value, 1, context, card.name, canIgnoreBarrier = false);
+      await dealDamage(effectInfo.value, 1, context, card.name, false);
 
       // ターン中の追加ダメージ
       context.turnModifiers
         .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, canIgnoreBarrier = false));
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
 
       // 次のカードへの追加ダメージ
       context.nextCardModifiers
         .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, canIgnoreBarrier = false));
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+
+      // 待機
+      if (i < times - 1) {
+        await wait(WAIT_TIME_MS);
+      }
     }
 
     // 「次のカードへの効果」は全て消費されたのでリセット
@@ -237,6 +216,7 @@ class AddNextDamageEffect {
 
 class HealEffect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
     const healValue = effectInfo.value || 3;
     if (globalGameState.player.hp + healValue > globalGameState.player.maxHp) {
       globalGameState.player.hp = globalGameState.player.maxHp;
@@ -252,12 +232,14 @@ class HealEffect {
 }
 class ShieldEffect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
     updateBuff('player', 'shield', effectInfo.value || 3);
     log(`プレイヤーに${effectInfo.value}バリア`);
   }
 }
 class ReduceCoolTimeEffect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
     const coolTimeValue = effectInfo.value || 1;
     // contextからカード取得しておいて
     document.querySelectorAll('.game-cards .game-image-container.game-card-recast').forEach(slot => {
@@ -278,27 +260,22 @@ class DamageCombo2Effect {
     const basicDamage = effectInfo.value || 1;
     const damageValue = basicDamage * ratio;
     const times = effectInfo.times || 1;
-    const timesValue = times * 1; // 最終的な発動回数 **あとでここの処理にaddAllなどを反映**
-    for (let i = 0; i < timesValue; i++) {
-      if (globalGameState.enemy.buff.shield > 0 && globalGameState.enemy.buff.shield > damageValue) {
-        // バリアがあってダメージで割れない
-        globalGameState.enemy.buff.shield -= damageValue;
-      } else if (globalGameState.enemy.buff.shield > 0 && globalGameState.enemy.buff.shield <= damageValue) {
-        // バリアがあってダメージで割れる
-        globalGameState.enemy.buff.shield = 0;
-      } else {
-        // バリアがない
-        globalGameState.enemy.hp -= damageValue;
-      }
-      // 最終HPの表示更新
-      document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.enemy.hp} / ${globalGameState.enemy.maxHp})`;
-      document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${globalGameState.enemy.hp}/${globalGameState.enemy.maxHp}`;
-      log(`敵に${damageValue}ダメージ`);
-    }
+    const timesValue = times * 1;
+    dealDamage(damageValue, timesValue, context, card.name, true);
+    // ターン中の追加ダメージ
+    context.turnModifiers
+      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+    // 次のカードへの追加ダメージ
+    context.nextCardModifiers
+      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
   }
 }
 class AddMarkEffect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
+
     const markValue = effectInfo.value || 1;
     const buffName = card.element + "-mark";
     const elementTargetMap = {
@@ -319,14 +296,22 @@ class AddMarkEffect {
       'daybreak': '暁',
       'sand': '砂'
     };
+    log(`${ATTRIBUTES[card.element]}の刻印を${markValue}追加`);
   }
 }
 // HollowCombo3Effect は DamageCombo2Effect で処理
 class HollowMark3Effect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
     updateBuff('enemy', 'hollow-mark', 2);
     log(`虚の刻印を2追加`);
     if (globalGameState.enemy.buff['hollow-mark'] === 3) {
+      // 前のターンにスキップしていたかチェック
+      if (globalGameState.wasTurnSkippedLastTurn) {
+        log(`しかし、連続してターンをスキップすることはできない！`);
+        return; 
+      }
+      // スキップ
       log(`虚の刻印を3消費`);
       updateBuff('enemy', 'hollow-mark', -3);
       log(`敵のターンをスキップ`);
@@ -336,7 +321,16 @@ class HollowMark3Effect {
 }
 class FogCombo3Effect {
   execute(card, effectInfo, context) {
-    // 面倒
+    // ダメージ処理
+    dealDamage(context.turnHitCount, 2, context, card.name, false);
+    // ターン中の追加ダメージ
+    context.turnModifiers
+      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+    // 次のカードへの追加ダメージ
+    context.nextCardModifiers
+      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
   }
 }
 class FogMark3Effect {
@@ -348,6 +342,15 @@ class FogMark3Effect {
       const hp = globalGameState.player.hp;
       const maxHp = globalGameState.player.maxHp;
       const damage = Math.floor(25 * (1 - Math.pow(hp / maxHp, 2)));
+      dealDamage(damage, 1, context, card.name, false);
+      // ターン中の追加ダメージ
+      context.turnModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      // 次のカードへの追加ダメージ
+        context.nextCardModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
       // 減らす処理
       updateBuff('enemy', 'fog-mark', -3);
       log(`敵に${damage}ダメージ`);
@@ -356,6 +359,7 @@ class FogMark3Effect {
 }
 class LuminaCombo3Effect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
     const modifier = {
       modifierType: 'buff',
       type: 'damage',
@@ -368,6 +372,7 @@ class LuminaCombo3Effect {
 }
 class LuminaMark3Effect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
     updateBuff('enemy', 'lumina-mark', 2);
     log(`燐の刻印を2追加`);
     if (globalGameState.enemy.buff['lumina-mark'] === 3) {
@@ -380,11 +385,20 @@ class LuminaMark3Effect {
 }
 class DaybreakCombo3Effect {
   execute(card, effectInfo, context) {
-    // 面倒
+    playSoundEffect("buff");
+    const modifier = {
+      modifierType: 'addedEffectOnCardPlay',
+      type: 'heal',
+      value: 2,
+      source: card.name
+    };
+    context.turnModifiers.push(modifier);
+    log(`このターン、すべてのカードに追加で「HPを2回復」の効果が付与`);
   }
 }
 class DaybreakMark3Effect {
   execute(card, effectInfo, context) {
+    playSoundEffect("buff");
     updateBuff('player', 'daybreak-mark', 2);
     log(`暁の刻印を2追加`);
     const daybreak = globalGameState.player.buff['daybreak-mark'] || 0;
@@ -411,7 +425,15 @@ class DaybreakMark3Effect {
 }
 class SandCombo3Effect {
   execute(card, effectInfo, context) {
-    // 面倒
+    playSoundEffect("buff");
+    const modifier = {
+      modifierType: 'addedEffectOnCardPlay',
+      type: 'shield',
+      value: 2,
+      source: card.name
+    };
+    context.turnModifiers.push(modifier);
+    log(`このターン、すべてのカードに追加で「バリアを2付与」の効果が付与`);
   }
 }
 class SandMark3Effect {
@@ -428,7 +450,15 @@ class SandMark3Effect {
       log(`暁の刻印と砂の刻印をすべて消費`);
       const damage = mark * 3;
       // ダメージ処理
-
+      dealDamage(damage, 1, context, card.name, false);
+      // ターン中の追加ダメージ
+      context.turnModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      // 次のカードへの追加ダメージ
+      context.nextCardModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
       // バリア処理
       const shield = Math.floor(damage * 0.5);
       updateBuff('player', 'shield', shield);
@@ -438,7 +468,7 @@ class SandMark3Effect {
 }
 
 // ダメージを与える関数
-function dealDamage(baseDamage, times, context, sourceName = 'error name', canIgnoreBarrier = false) {
+async function dealDamage(baseDamage, times, context, sourceName = 'error name', canIgnoreBarrier) {
   let totalBuffValue = 0;
   const buffLogParts = [];
   // ターン中の永続バフ（リリスなど）
@@ -484,6 +514,7 @@ function dealDamage(baseDamage, times, context, sourceName = 'error name', canIg
         globalGameState.enemy.buff.shield -= damageToShield;
           
         if (damageToHp > 0) {
+          // バリアが割れる場合
           globalGameState.enemy.hp -= damageToHp;
         }
       } else {
@@ -491,10 +522,16 @@ function dealDamage(baseDamage, times, context, sourceName = 'error name', canIg
         globalGameState.enemy.hp -= finalDamage;
       }
     }
+    // 音
+    playSoundEffect("attack");
     // 表示更新
     document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.enemy.hp} / ${globalGameState.enemy.maxHp})`;
     document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${globalGameState.enemy.hp}/${globalGameState.enemy.maxHp}`;
     // ログ出力
     log(`${finalDamage}ダメージ (基本値:${baseDamage} + バフ:${totalBuffValue}${buffDetailLog})`);
+    // 待機
+    if (i < times - 1) {
+      await wait(WAIT_TIME_MS);
+    }
   }
 }

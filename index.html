@@ -341,17 +341,19 @@
 
   <div id="message-box"></div>
 
-  <script src="./js/top.js"></script>
-  <script src="./js/gallery.js"></script>
+  <script src="./js/top.js" type="module"></script>
+  <script src="./js/gallery.js" type="module"></script>
   <script src="./js/start-game.js" type="module"></script>
-  <script src="./js/finish-game.js" type="module"></script>
-  <script src="./js/middle-deck.js"></script>
+  <script src="./js/middle-deck.js" type="module"></script>
   <script src="./js/middle-synthesis.js"></script>
+  <!-- この下のやつはexport用だから書かなくていいのか？（よくわからんから残しておくが...） -->
+  <script src="./js/finish-game.js" type="module"></script>
   <script src="./js/message.js" type="module"></script>
   <script src="./js/game-player-animation.js" type="module"></script>
   <script src="./js/game-prosses-cards.js" type="module"></script>
   <script src="./js/game-process-enemy.js" type="module"></script>
   <script src="./js/game-buff-update.js" type="module"></script>
+  <script src="./js/music.js" type="module"></script>
   <script>
     function addAttribute(index, count) {
       window.essence.attributes[index].count += count;
