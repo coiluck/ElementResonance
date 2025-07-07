@@ -61,5 +61,8 @@ export function playSoundEffect(sound) {
   if (sound === "buff") {
     se.playbackRate = 2.0;
   }
+  if (sound === "metallic") {
+    se.playbackRate = 0.7;
+  }
   se.play();
 }

@@ -32,7 +32,7 @@ const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const WAIT_TIME_MS = 1000; 
 
 // ゲームログ用の関数
-function log(message) {
+export function log(message) {
   console.log(message);  // 後で消して（さすがにうるさい）
   const logParent = document.querySelector('.game-cards');
   // .game-logs-container が存在するか確認。なければ作成して追加
@@ -41,17 +41,19 @@ function log(message) {
     logContainer = document.createElement('div');
     logContainer.className = 'game-logs-container';
     logParent.appendChild(logContainer);
+    // ログの先頭にスクロール
+    logContainer.scrollTop = 0;
   }
   if (logContainer.style.display === 'none') {
     logContainer.style.display = 'block';
+    // ログの先頭にスクロール
+    logContainer.scrollTop = 0;
   }
   // ログ要素を作成して追加
   const logElement = document.createElement('div');
   logElement.className = 'game-log';
   logElement.textContent = message;
   logContainer.appendChild(logElement);
-  // ログの最後にスクロール
-  logContainer.scrollTop = logContainer.scrollHeight;
   // gameStateのlogに追加
   globalGameState.log.push(message);
   // ログの高さを調整
@@ -143,6 +145,43 @@ export async function processCards(cards) {
           await wait(WAIT_TIME_MS);
         }
       }
+    }
+
+    // DC3やSC3の、これ以降のカードに付与する効果
+    const addedTurnEffects = context.turnModifiers.filter(
+      m => m.modifierType === 'addedEffectOnCardPlay'
+    );
+
+    if (addedTurnEffects.length > 0) {
+      log(`--ターン中持続効果が発動--`);
+      for (const effect of addedTurnEffects) {
+        switch (effect.type) {
+          case 'heal':
+            playSoundEffect("buff");
+            const healValue = effect.value;
+            // HPが最大値を超えないように回復
+            const newHp = Math.min(globalGameState.player.maxHp, globalGameState.player.hp + healValue);
+            const actualHeal = newHp - globalGameState.player.hp;
+            if (actualHeal > 0) {
+                log(`[${effect.source}の効果] プレイヤーのHPが${actualHeal}回復`);
+                globalGameState.player.hp = newHp;
+            }
+            
+            // HPバーの表示更新
+            document.querySelector('.game-main-characters-player-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.player.hp} / ${globalGameState.player.maxHp})`;
+            document.querySelector('.game-main-characters-player-status-hp').textContent = `HP: ${globalGameState.player.hp}/${globalGameState.player.maxHp}`;
+            break;
+
+          case 'shield':
+            playSoundEffect("buff");
+            const shieldValue = effect.value;
+            log(`[${effect.source}の効果] プレイヤーが${shieldValue}のバリアを獲得`);
+            updateBuff('player', 'shield', shieldValue);
+            break;
+        }
+      }
+      // 追加効果が発動したので待機
+      await wait(WAIT_TIME_MS);
     }
   }
 

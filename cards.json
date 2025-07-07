@@ -135,13 +135,18 @@
   {
     "id": 8,
     "name": "祭壇跡",
-    "description": "敵に虚の刻印を2つ付与",
+    "description": "敵に虚の刻印を2つ付与。敵に2ダメージ",
     "image": "./images/cards/hollow_mark_2.avif",
     "image_icon": "./images/cards_icon/hollow_mark_2.avif",
     "element": "hollow",
     "type": "mark",
     "rarity": 2,
-    "damage": null,
+    "damage": [
+      {
+        "when": "now",
+        "value": 2
+      }
+    ],
     "effect": [
       {
         "when": "now",
@@ -153,7 +158,7 @@
   {
     "id": 9,
     "name": "Dancing Night",
-    "description": "敵に虚の刻印を2つ付与。敵の虚の刻印を3つ消費して、敵のターンをスキップする",
+    "description": "敵に虚の刻印を2つ付与。敵の虚の刻印を3つ消費して、敵のターンをスキップする（ただし2ターン連続での発動は不可）",
     "image": "./images/cards/hollow_mark_3.avif",
     "image_icon": "./images/cards_icon/hollow_mark_3.avif",
     "element": "hollow",
@@ -257,7 +262,7 @@
   {
     "id": 15,
     "name": "蒼穹竜姫 クア",
-    "description": "次の霧カードが通常カードなら2回発動",
+    "description": "このターンに敵にダメージを与えた回数 * 2ダメージ",
     "image": "./images/cards/fog_combo_3.avif",
     "image_icon": "./images/cards_icon/fog_combo_3.avif",
     "element": "fog",
@@ -293,13 +298,18 @@
   {
     "id": 17,
     "name": "月光の聖獣", 
-    "description": "敵に霧の刻印を2つ付与",
+    "description": "敵に霧の刻印を2つ付与。敵に2ダメージ",
     "image": "./images/cards/fog_mark_2.avif",
     "image_icon": "./images/cards_icon/fog_mark_2.avif",
     "element": "fog",
     "type": "mark",
     "rarity": 2,
-    "damage": null,
+    "damage": [
+      {
+        "when": "now",
+        "value": 2
+      }
+    ],
     "effect": [
       {
         "when": "now",
@@ -449,13 +459,18 @@
   {
     "id": 26,
     "name": "魔導少女",
-    "description": "敵に燐の刻印を2つ付与",
+    "description": "敵に燐の刻印を2つ付与。敵に2ダメージ",
     "image": "./images/cards/lumina_mark_2.avif",
     "image_icon": "./images/cards_icon/lumina_mark_2.avif",
     "element": "lumina",
     "type": "mark",
     "rarity": 2,
-    "damage": null,
+    "damage": [
+      {
+        "when": "now",
+        "value": 2
+      }
+    ],
     "effect": [
       {
         "when": "now",
@@ -634,7 +649,7 @@
   {
     "id": 36,
     "name": "蒼翼機竜 アーク",
-    "description": "自分に暁の刻印を2つ付与。自分についているすべての刻印を消費して、自分のHPを消費した刻印の数 × 3回復",
+    "description": "自分に暁の刻印を2つ付与。自分についているすべての刻印を消費して、自分のHPを消費した刻印の数 × 3 回復",
     "image": "./images/cards/daybreak_mark_3.avif",
     "image_icon": "./images/cards_icon/daybreak_mark_3.avif",
     "element": "daybreak",

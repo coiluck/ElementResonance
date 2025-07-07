@@ -85,6 +85,7 @@ document.getElementById('middle-game-start-button').addEventListener('click', fu
     playSoundEffect("disable");
     return;
   }
+  playSoundEffect("metallic");
   window.isGameStart = true;
   // アニメーション開始
   characterAnim.start();
@@ -117,6 +118,9 @@ async function changeMusic() {
 
 async function gameInit() {
   changeMusic();
+
+  // HPを反映（敵はsetUpEnemy関数で設定）
+  document.querySelector('.game-main-characters-player-status-hp').textContent = `HP: ${window.playerHp}/30`;
 
   const gameCardsContainer = document.querySelector('.game-cards');
   const cardHolder = document.querySelector('.game-main-HoldCards-player');
@@ -413,6 +417,7 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
       const slotDiv = document.createElement('div');
       slotDiv.className = 'game-enemy-slot';
       slotDiv.dataset.description = cardData.description;
+      slotDiv.dataset.cardId = cardData.id;
       // <img src={image_icon}> を作成
       const image = document.createElement('img');
       image.src = cardData.image_icon;

@@ -1,7 +1,7 @@
 [
   {
     "round": 1,
-    "name": "さまよえる者",
+    "name": "鬼霞 アカネ",
     "image": "./images/character_enemy/1.webp",
     "hp": 10,
     "deck": [
@@ -12,19 +12,14 @@
     "triggers": [
       {
         "hp": 50,
-        "description": "HPが50%を下回ったターン、を与える状態",
-        "card": "FC-3"
-      },
-      {
-        "hp": 20,
-        "description": "HP20以下で発動",
-        "card": "BC-1"
+        "description": "HPが50%を下回ったターン、2ダメージを与える状態",
+        "card": 47
       }
     ]
   },
   {
     "round": 2,
-    "name": "鬼霞 アカネ",
+    "name": "重剣士 ヴァレリア",
     "image": "./images/character_enemy/2.webp",
     "hp": 10,
     "deck": [
@@ -36,8 +31,8 @@
   },
   {
     "round": 3,
-    "name": "test-enemy",
-    "image": "./images/character_enemy/2-9-6-5.webp",
+    "name": "剣聖 レオ",
+    "image": "./images/character_enemy/3.avif",
     "hp": 10,
     "deck": [
       [1,2],
@@ -48,8 +43,8 @@
   },
   {
     "round": 4,
-    "name": "test-enemy",
-    "image": "./images/character_enemy/2-9-6-5.webp",
+    "name": "百花剣姫 サヤ",
+    "image": "./images/character_enemy/4.avif",
     "hp": 10,
     "deck": [
       [1,2],
@@ -60,25 +55,54 @@
   },
   {
     "round": 5,
-    "name": "鬼閃 オグレイネ",
-    "image": "./images/character_enemy/ogre.webp",
+    "name": "豪傑 ペトラ",
+    "image": "./images/character_enemy/5.webp",
     "hp": 10,
     "deck": [
       [1, 2],
       [4, 5]
     ],
     "maxHoldCards": 2,
+    "triggers": null
+  },
+  {
+    "round": 6,
+    "name": "狐王 フェン",
+    "image": "./images/character_enemy/6.avif",
+    "hp": 20,
+    "deck": [
+      [1,2],
+      [4,5]
+    ],
+    "maxHoldCards": 2,
     "triggers": [
       {
         "hp": 60,
-        "description": "HPが60%を下回ったターンに、2回の5ダメージを与える状態",
+        "description": "HPが60%を下回ったターン、自分に20バリアを付与",
         "card": "FC-3"
       },
       {
-        "hp": 15,
-        "description": "HPが15%を下回ったターンに、2回の10ダメージを与える状態",
+        "hp": 30,
+        "description": "HPが30%を下回ったターン、自分に10バリアを付与",
+        "card": "BC-1"
+      },
+      {
+        "hp": 10,
+        "description": "HPが10%を下回ったターン、自分に10バリアを付与",
         "card": "BC-1"
       }
     ]
-  }  
+  },
+  {
+    "round": 7,
+    "name": "鬼閃 オグレイネ",
+    "image": "./images/character_enemy/7.webp",
+    "hp": 10,
+    "deck": [
+      [1,2],
+      [4,5]
+    ],
+    "maxHoldCards": 2,
+    "triggers": null
+  }
 ]
