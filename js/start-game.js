@@ -301,6 +301,8 @@ function showButton(filledCardIds) {
   button.textContent = 'ターン進行';
   button.className = 'game-process-turn-button';
   button.addEventListener('click', async () => {
+    // 再キャスト時間を更新
+    setUpRecastTime();
     // 敵のHPを記憶
     setEnemyHpNow(globalGameState.enemy.hp);
     // 前のターンにスキップしたかどうか
@@ -460,6 +462,8 @@ async function setUpNextTurn() {
       slot.classList.remove(`game-${attr}`);
     });
   });
+  // 再キャスト時間を更新
+  updateRecastTime();
   // 選択中のカードをクリア
   document.querySelectorAll('.game-image-container').forEach(card => {
     card.classList.remove('game-is-used-in-slot');
@@ -469,4 +473,29 @@ async function setUpNextTurn() {
   if (overlay) {
     overlay.remove();
   }
+}
+
+function setUpRecastTime() {
+  const usingCards = document.querySelectorAll('.game-image-container.game-is-used-in-slot');
+  usingCards.forEach(card => {
+    const cardId = Number(card.dataset.cardId);
+    const cardRarity = cardId % 3 === 0 ? 3 : cardId % 3;
+    const recastTime = cardRarity + 2;
+    card.dataset.recastTime = recastTime;
+  });
+}
+function updateRecastTime() {
+  const usingCards = document.querySelectorAll('.game-image-container[data-recast-time]');
+  usingCards.forEach(card => {
+    card.classList.add('game-card-recast');
+    let recastTime = Number(card.dataset.recastTime);
+    if (recastTime > 0) {
+      recastTime -= 1;
+      card.dataset.recastTime = recastTime
+      if (recastTime <= 0) {
+        card.classList.remove('game-card-recast');
+        card.removeAttribute('data-recast-time');
+      }
+    }
+  });
 }

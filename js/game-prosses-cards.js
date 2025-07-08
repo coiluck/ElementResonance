@@ -279,14 +279,28 @@ class ShieldEffect {
 class ReduceCoolTimeEffect {
   execute(card, effectInfo, context) {
     playSoundEffect("buff");
-    const coolTimeValue = effectInfo.value || 1;
+    const coolTime = effectInfo.value || 1;
+    let sameElementCount = null;
     // contextからカード取得しておいて
-    document.querySelectorAll('.game-cards .game-image-container.game-card-recast').forEach(slot => {
-      let recastTime = slot.dataset.recastTime;
-      recastTime -= coolTimeValue;
+    context.playedCardsInTurn.forEach(playedCard => {
+      // 同じ属性のカードをカウント
+      if (playedCard.id >= card.id - 3 && playedCard.id <= card.id + 5) {
+        sameElementCount++;
+      }
+    });
+    // 再使用間隔を減算
+    document.querySelectorAll('.game-cards .game-image-container[data-recast-time]').forEach(slot => {
+      const cardIdInDeck = Number(slot.dataset.cardId);
+      if (cardIdInDeck < card.id - 3 || cardIdInDeck > card.id + 5) {
+        // 他属性のリキャストは減算しない
+        return;
+      }
+      let recastTime = Number(slot.dataset.recastTime);
+      recastTime -= coolTime * sameElementCount;
       slot.dataset.recastTime = recastTime;
       if (recastTime <= 0) {
         slot.classList.remove('game-card-recast');
+        slot.removeAttribute('data-recast-time');
       }
     });
   }
