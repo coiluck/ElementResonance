@@ -68,6 +68,7 @@ function adjustOverlayHeight() {
   }
 }
 
+import { finishGame } from './result-reward.js';
 
 export async function processCards(cards) {
   // カードデータを取得
@@ -182,6 +183,12 @@ export async function processCards(cards) {
       }
       // 追加効果が発動したので待機
       await wait(WAIT_TIME_MS);
+    }
+    
+    // ゲーム終了処理
+    if (globalGameState.enemy.hp <= 6) {
+      finishGame();
+      return;
     }
   }
 

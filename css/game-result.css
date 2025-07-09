@@ -1,0 +1,58 @@
+#modal-game-middle-deck {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+}
+@media (min-width: 768px) {
+  .result-title,
+  .reward-container {
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+.result-title {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 1.2rem;
+  font-weight: 100;
+  font-family: 'Zen Old Mincho', 'Noto Sans JP', sans-serif;
+  color: #e8d9b6;
+  text-align: center;
+  filter: 
+    drop-shadow(1px 1px 1px rgba(255, 193, 7, 0.7))
+    drop-shadow(0 0 1px rgba(255, 193, 7, 0.7));
+  border-bottom: 1px solid #e8d9b6;
+}
+
+.reward-container {
+  display: flex;
+  align-items: center;
+  height: calc(100vh - 10px - 5px - 1.2rem - 5px); 
+  padding: 16px;
+  gap: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.reward-container::-webkit-scrollbar {
+  display: none;
+}
+
+.reward-container .reward-item-container {
+  flex: 0 0 auto;
+  width: 150px;
+  aspect-ratio: 5 / 7;
+  padding: 20px;
+  color: #e8d9b6;
+  background-color: #333;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.reward-container .reward-item-container .reward-item-icon img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}

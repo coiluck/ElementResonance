@@ -230,7 +230,10 @@
     </div>
   </div>
 
-  <div id="modal-game-result" class="modal"></div>
+  <div id="modal-result" class="modal">
+    <div class="result-title">Stage Clear</div>
+    <div class="reward-container"></div>
+  </div>
 
   <div id="modal-game-middle" class="modal">
     <!-- 必要なのはデッキ・開始・合成だけ? -->
@@ -347,13 +350,14 @@
   <script src="./js/middle-deck.js" type="module"></script>
   <script src="./js/middle-synthesis.js"></script>
   <!-- この下のやつはexport用だから書かなくていいのか？（よくわからんから残しておくが...） -->
-  <script src="./js/finish-game.js" type="module"></script>
+  <script src="./js/end-game.js" type="module"></script>
   <script src="./js/message.js" type="module"></script>
   <script src="./js/game-player-animation.js" type="module"></script>
   <script src="./js/game-prosses-cards.js" type="module"></script>
   <script src="./js/game-process-enemy.js" type="module"></script>
   <script src="./js/game-buff-update.js" type="module"></script>
   <script src="./js/music.js" type="module"></script>
+  <script src="./js/result-reward.js" type="module"></script>
   <script>
     function addAttribute(index, count) {
       window.essence.attributes[index].count += count;
