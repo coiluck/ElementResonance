@@ -74,8 +74,8 @@ async function resultReward() {
   }
   // HPがMAXでないなら回復
   let rewardHp = null;
-  if (globalGameState.player.hp < globalGameState.player.hpMax) {
-    rewardHp = globalGameState.player.hpMax / 100 * 10; // 10%の回復
+  if (globalGameState.player.hp < globalGameState.player.maxHp) {
+    rewardHp = globalGameState.player.maxHp / 100 * 10; // 10%の回復
   }
 
   // すべてを同じ配列にまとめる
@@ -143,18 +143,19 @@ async function processRewards(rewards) {
     el.classList.add('reward-item-container');
     document.querySelector('.reward-container').appendChild(el);
 
+    // タイトル
+    const textTitle = document.createElement('div');
+    textTitle.classList.add('reward-item-text-title');
+    el.appendChild(textTitle);
+
     // アイコン
     const iconEl = document.createElement('div');
     iconEl.classList.add('reward-item-icon');
     el.appendChild(iconEl);
 
-    // テキスト
-    const textTitle = document.createElement('div');
-    textTitle.classList.add('reward-item-text-title');
-    el.appendChild(textTitle);
-
+    // 効果値
     const textValue = document.createElement('div');
-    textValue.classList.add('reward-item-value-text');
+    textValue.classList.add('reward-item-text-value');
     el.appendChild(textValue);
 
     // 場合分け（全部一気にやる）
@@ -172,23 +173,98 @@ async function processRewards(rewards) {
     };
     switch (reward.type) {
       case 'point':
+        el.classList.add('reward-item-point');
         textTitle.textContent = 'レアリティ';
-        textValue.textContent = reward.value;
+        iconEl.innerHTML = `<img src="./images/rarity.avif">`;
+        textValue.textContent = `+${reward.value}`;
         break;
       case 'attribute':
+        el.classList.add('reward-item-attribute');
         textTitle.textContent = '自然属性';
-        textValue.textContent = reward.value.map(attr => attributeMapToJp[attr]).join(' ');
-        iconEl.innerHTML = `<img src="./images/attribute_icon/${reward.value[0]}.avif" alt="${reward.value[0]}">`;
+        iconEl.remove(); // アイコンは二つを専用のクラスで表示する
+        textValue.remove(); // テキストは不要、ボタンにする
+        // アイコン
+        const iconContainer = document.createElement('div');
+        iconContainer.classList.add('reward-item-icon-attribute');
+        el.appendChild(iconContainer);
+        const icon1 = document.createElement('div');
+        icon1.classList.add('reward-item-icon-attribute-1');
+        icon1.dataset.attribute = reward.value[0];
+        icon1.innerHTML = `<img src="./images/attribute_icon/${reward.value[0]}.avif" alt="${reward.value[0]}">`;
+        iconContainer.appendChild(icon1);
+        const icon2 = document.createElement('div');
+        icon2.classList.add('reward-item-icon-attribute-2');
+        icon2.dataset.attribute = reward.value[1];
+        icon2.innerHTML = `<img src="./images/attribute_icon/${reward.value[1]}.avif" alt="${reward.value[1]}">`;
+        iconContainer.appendChild(icon2);
+        // 選択肢ボタン
+        const choiceContainer = document.createElement('div');
+        choiceContainer.classList.add('reward-item-attribute-option-container');
+        el.appendChild(choiceContainer);
+        const button1 = document.createElement('div');
+        button1.classList.add('reward-item-attribute-option');
+        button1.textContent = `${attributeMapToJp[reward.value[0]]}属性`;
+        choiceContainer.appendChild(button1);
+        const button2 = document.createElement('div');
+        button2.classList.add('reward-item-attribute-option');
+        button2.textContent = `${attributeMapToJp[reward.value[1]]}属性`;
+        choiceContainer.appendChild(button2);
+        button1.addEventListener('click', () => {
+          if (button2.classList.contains('reward-item-attribute-option-selected')) {
+            button2.classList.remove('reward-item-attribute-option-selected');
+          }
+          button1.classList.add('reward-item-attribute-option-selected');
+        });
+        button2.addEventListener('click', () => {
+          if (button1.classList.contains('reward-item-attribute-option-selected')) {
+            button1.classList.remove('reward-item-attribute-option-selected');
+          }
+          button2.classList.add('reward-item-attribute-option-selected');
+        });
         break;
       case 'cardType':
+        el.classList.add('reward-item-cardType');
         textTitle.textContent = 'カードタイプ';
-        textValue.textContent = cardTypeMapToJp[reward.value];
+        iconEl.innerHTML = `<img src="./images/cardtype.avif">`;
+        textValue.textContent = `${cardTypeMapToJp[reward.value]}カード`;
         break;
       case 'hp':
+        el.classList.add('reward-item-hp');
         textTitle.textContent = '回復';
-        textValue.textContent = reward.value;
+        iconEl.innerHTML = `<img src="./images/hp.avif">`;
+        textValue.textContent = `HP +${reward.value}`;
         break;
     }
+
+    // ボタン（属性選択のボタンより下にするために最後につける）
+    const button = document.createElement('button');
+    button.classList.add('reward-item-button');
+    button.textContent = '獲得';
+    el.appendChild(button);
+
+    // イベントリスナー
+    button.addEventListener('click', () => {
+      // 獲得&消去
+
+      // 次がないならmodalを遷移
+      const allRewardItems = document.querySelectorAll('.reward-item-container');
+      if (allRewardItems.length === 0) {
+        // すべてのモーダルを閉じる
+        document.querySelectorAll('.modal').forEach(function(modal) {
+          modal.classList.remove('fade-in');
+          modal.classList.add('fade-out')
+      });
+        setTimeout(function() {
+          // Topモーダルを表示
+          document.querySelectorAll('.modal').forEach(function(modal) {
+            modal.style.display = 'none';
+          });
+          document.getElementById('modal-game-middle').classList.remove('fade-out');
+          document.getElementById('modal-game-middle').style.display = 'block';
+          document.getElementById('modal-game-middle').classList.add('fade-in');
+        }, 500);
+      }
+    });
 
     // 次がまだあるなら待機時間
     if (rewards.indexOf(reward) < rewards.length - 1) {
