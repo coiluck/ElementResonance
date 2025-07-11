@@ -133,7 +133,7 @@ button {
 .top-rules-button {
   position: relative;
   background: linear-gradient(145deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.9) 50%, rgba(210, 180, 140, 0.9) 100%);
-  border: 2px solid rgba(210, 180, 140, 0.8);
+  border: 1px solid rgba(210, 180, 140, 0.8);
   border-radius: 50px;
   margin: 20px auto 0;
   padding: 12px 20px;

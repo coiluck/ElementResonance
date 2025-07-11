@@ -47,6 +47,10 @@ export function finishGame() {
 }
 
 import { globalGameState } from './game-status.js';
+import { message } from './message.js';
+import { playSoundEffect } from './music.js';
+
+let isRewardProcessing = false;
 
 async function resultReward() {
   // 振り分けポイント
@@ -99,7 +103,9 @@ async function resultReward() {
   // modalの表示を待つ
   await new Promise(resolve => setTimeout(resolve, 800));
   // DOMに追加 & 表示
+  isRewardProcessing = true;
   await processRewards(allRewards);
+  isRewardProcessing = false;
 }
 
 /* allRewardsの中はこんな感じ
@@ -141,6 +147,7 @@ async function processRewards(rewards) {
     // コンテナ
     const el = document.createElement('div');
     el.classList.add('reward-item-container');
+    el.classList.add('fade-in');
     document.querySelector('.reward-container').appendChild(el);
 
     // タイトル
@@ -244,26 +251,75 @@ async function processRewards(rewards) {
 
     // イベントリスナー
     button.addEventListener('click', () => {
-      // 獲得&消去
+      // 獲得
+      switch (reward.type) {
+        case 'point':
+          window.essence.rarity += reward.value;
+          break;
 
-      // 次がないならmodalを遷移
-      const allRewardItems = document.querySelectorAll('.reward-item-container');
-      if (allRewardItems.length === 0) {
-        // すべてのモーダルを閉じる
-        document.querySelectorAll('.modal').forEach(function(modal) {
-          modal.classList.remove('fade-in');
-          modal.classList.add('fade-out')
-      });
-        setTimeout(function() {
-          // Topモーダルを表示
-          document.querySelectorAll('.modal').forEach(function(modal) {
-            modal.style.display = 'none';
-          });
-          document.getElementById('modal-game-middle').classList.remove('fade-out');
-          document.getElementById('modal-game-middle').style.display = 'block';
-          document.getElementById('modal-game-middle').classList.add('fade-in');
-        }, 500);
+        case 'attribute':
+          // 選択された属性の要素を取得
+          const selectedButton = el.querySelector('.reward-item-attribute-option-selected');
+          if (selectedButton) {
+            const selectedAttributeJp = selectedButton.textContent.replace('属性', '');
+            // window.essence.attributes内の対応するオブジェクトを探す
+            const attributeToUpdate = window.essence.attributes.find(a => a.attribute === selectedAttributeJp);
+            if (attributeToUpdate) {
+              attributeToUpdate.count++;
+            }
+          } else {
+            // どちらも選択されていない
+            message('warning', '属性を選択してください');
+            playSoundEffect("disable");
+            return;
+          }
+          break;
+
+        case 'cardType':
+          const cardTypeJp = cardTypeMapToJp[reward.value];
+          // window.essence.cardTypes内の対応するオブジェクトを探す
+          const cardTypeToUpdate = window.essence.cardTypes.find(c => c.type === cardTypeJp);
+          if (cardTypeToUpdate) {
+            cardTypeToUpdate.count++;
+          }
+          break;
+
+        case 'hp':
+          window.playerHp += reward.value;
+          console.log(`HP updated: ${window.playerHp}`);
+          break;
       }
+
+      // 消去
+      el.classList.remove('fade-in');
+      el.classList.add('fade-out');
+      el.style.transition = 'transform 0.4s ease';
+      el.style.transform = 'scale(0.9)';
+      // 消えてから実行
+      setTimeout(() => {
+        el.remove();
+        // 追加アニメーション中は実行しない
+        if (isRewardProcessing) {
+          return;
+        }
+        const allRewardItems = document.querySelectorAll('.reward-item-container');
+        if (allRewardItems.length === 0) {
+          // すべてのモーダルを閉じる
+          document.querySelectorAll('.modal').forEach(function(modal) {
+            modal.classList.remove('fade-in');
+            modal.classList.add('fade-out')
+          });
+          setTimeout(function() {
+            // middleモーダルを表示
+            document.querySelectorAll('.modal').forEach(function(modal) {
+              modal.style.display = 'none';
+            });
+            document.getElementById('modal-game-middle').classList.remove('fade-out');
+            document.getElementById('modal-game-middle').style.display = 'block';
+            document.getElementById('modal-game-middle').classList.add('fade-in');
+          }, 500);
+        }
+      }, 400);
     });
 
     // 次がまだあるなら待機時間

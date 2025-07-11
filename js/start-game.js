@@ -35,43 +35,19 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
   window.playerHp = 30;
   window.essence = {
     attributes: [
-      {
-        attribute: '虚',
-        count: 0,
-      },
-      {
-        attribute: '霧',
-        count: 0,
-      },
-      {
-        attribute: '燐',
-        count: 0,
-      },
-      {
-        attribute: '暁',
-        count: 0,
-      },
-      {
-        attribute: '砂',
-        count: 0,
-      }
+      { attribute: '虚', count: 0 },
+      { attribute: '霧', count: 0 },
+      { attribute: '燐', count: 0 },
+      { attribute: '暁', count: 0 },
+      { attribute: '砂', count: 0 }
     ],
     cardTypes: [
-      {
-        type: '通常',
-        count: 0,
-      },
-      {
-        type: 'コンボ',
-        count: 0,
-      },
-      {
-        type: '刻印',
-        count: 0,
-      }
+      { type: '通常', count: 0 },
+      { type: 'コンボ', count: 0 },
+      { type: '刻印', count: 0 }
     ],
     rarity: 0,
-  }
+  };
 });
 
 import { message } from './message.js';
@@ -121,6 +97,7 @@ async function gameInit() {
 
   // HPを反映（敵はsetUpEnemy関数で設定）
   document.querySelector('.game-main-characters-player-status-hp').textContent = `HP: ${window.playerHp}/30`;
+  document.querySelector('.game-main-characters-player-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${window.playerHp} / ${globalGameState.player.maxHp})`;
 
   const gameCardsContainer = document.querySelector('.game-cards');
   const cardHolder = document.querySelector('.game-main-HoldCards-player');
@@ -182,6 +159,12 @@ async function gameInit() {
     checkAllSlotsFilled();
   };
 
+  // スロットのオーバーレイをクリア
+  const overlay = document.querySelector('.game-process-turn-overlay.show');
+  if (overlay) {
+    overlay.remove();
+  }
+
   const clearAllSelectionStates = () => {
     document.querySelectorAll('.game-card-selected').forEach(c => c.classList.remove('game-card-selected'));
     document.querySelectorAll('.game-stanby-slot').forEach(s => s.classList.remove('game-stanby-slot'));
@@ -236,7 +219,7 @@ async function gameInit() {
       
       } else if (!selectedCard && isFilledSlot) {
         // 手札のカードを選択せずに、既にカードがセットされているスロットをクリックした場合、そのスロットのカードを手札に戻す
-        playSoundEffect("back");
+        playSoundEffect("disable");
         clearSlot(slotElement);
       
       } else if (selectedCard && isFilledSlot) {
@@ -309,7 +292,11 @@ function showButton(filledCardIds) {
     globalGameState.wasTurnSkippedLastTurn = window.isSkipEnemyTurn;
     window.isSkipEnemyTurn = false;
     // ターン進行処理を呼ぶ
-    await processTurn(filledCardIds);
+    const isGameFinished = await processTurn(filledCardIds);
+    // ゲームが終了していたら処理を中断
+    if (isGameFinished) {
+      return; 
+    }
     if (!window.isSkipEnemyTurn) {
       // 敵のターン進行処理を呼ぶ
       await processEnemyTurn();
@@ -334,7 +321,8 @@ async function processTurn(cardIds) {
   console.log('すべてのスロットが埋まりました。選択されたカードID:', cardIds);
   // ボタンを非表示
   document.querySelector('.game-process-turn-button').remove();
-  await processCards(cardIds);
+  const isGameFinished = await processCards(cardIds);
+  return isGameFinished;
 }
 
 
@@ -388,6 +376,7 @@ async function setUpEnemy() {
     globalGameState.enemy.hp = enemy.hp;
     globalGameState.enemy.maxHp = enemy.hp;
     document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${enemy.hp}/${enemy.hp}`;
+    document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.enemy.hp} / ${globalGameState.enemy.maxHp})`;
   }
   // triggeerとdeckのホバーの反映
   renderBuffs();

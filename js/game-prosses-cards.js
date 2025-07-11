@@ -188,15 +188,15 @@ export async function processCards(cards) {
     // ゲーム終了処理
     if (globalGameState.enemy.hp <= 6) {
       finishGame();
-      return;
+      return true;
     }
   }
 
   // ターン終了時効果の処理
   // 後で書く
 
-  // 更新されたゲーム状態を返す <- いる？
-  return globalGameState;
+  // ゲームが終了していないことを伝える
+  return false;
 }
 
 import { updateBuff } from './game-buff-update.js';
