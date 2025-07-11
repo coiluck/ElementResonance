@@ -5,23 +5,16 @@
     "image": "./images/character_enemy/1.webp",
     "hp": 10,
     "deck": [
-      [1,2],
-      [46,52]
+      [46,47],
+      [46,60]
     ],
-    "maxHoldCards": 2,
-    "triggers": [
-      {
-        "hp": 50,
-        "description": "HPが50%を下回ったターン、2ダメージを与える状態",
-        "card": 47
-      }
-    ]
+    "maxHoldCards": 2
   },
   {
     "round": 2,
     "name": "重剣士 ヴァレリア",
     "image": "./images/character_enemy/2.webp",
-    "hp": 10,
+    "hp": 15,
     "deck": [
       [1,2],
       [4,5]
@@ -33,19 +26,30 @@
     "round": 3,
     "name": "剣聖 レオ",
     "image": "./images/character_enemy/3.avif",
-    "hp": 10,
+    "hp": 25,
     "deck": [
       [1,2],
       [4,5]
     ],
     "maxHoldCards": 2,
-    "triggers": null
+    "triggers": [
+      {
+        "hp": 60,
+        "description": "HPが60%を下回ったターン、5ダメージ * 2",
+        "card": 57
+      },
+      {
+        "hp": 10,
+        "description": "HPが10%を下回ったターン、10ダメージ * 2",
+        "card": 58
+      }
+    ]
   },
   {
     "round": 4,
     "name": "百花剣姫 サヤ",
     "image": "./images/character_enemy/4.avif",
-    "hp": 10,
+    "hp": 20,
     "deck": [
       [1,2],
       [4,5]
@@ -57,7 +61,7 @@
     "round": 5,
     "name": "豪傑 ペトラ",
     "image": "./images/character_enemy/5.webp",
-    "hp": 10,
+    "hp": 25,
     "deck": [
       [1, 2],
       [4, 5]
@@ -69,7 +73,7 @@
     "round": 6,
     "name": "狐王 フェン",
     "image": "./images/character_enemy/6.avif",
-    "hp": 20,
+    "hp": 30,
     "deck": [
       [1,2],
       [4,5]
@@ -79,17 +83,17 @@
       {
         "hp": 60,
         "description": "HPが60%を下回ったターン、自分に20バリアを付与",
-        "card": "FC-3"
+        "card": 66
       },
       {
         "hp": 30,
         "description": "HPが30%を下回ったターン、自分に10バリアを付与",
-        "card": "BC-1"
+        "card": 65
       },
       {
         "hp": 10,
         "description": "HPが10%を下回ったターン、自分に10バリアを付与",
-        "card": "BC-1"
+        "card": 65
       }
     ]
   },
@@ -97,12 +101,48 @@
     "round": 7,
     "name": "鬼閃 オグレイネ",
     "image": "./images/character_enemy/7.webp",
-    "hp": 10,
+    "hp": 30,
     "deck": [
       [1,2],
       [4,5]
     ],
     "maxHoldCards": 2,
     "triggers": null
+  },
+  {
+    "round": 8,
+    "name": "鬼閃 オグレイネ",
+    "image": "./images/character_enemy/8.webp",
+    "hp": 30,
+    "deck": [
+      [1,2],
+      [4,5]
+    ],
+    "maxHoldCards": 2,
+    "triggers": null
+  },
+  {
+    "round": 9,
+    "name": "共鳴する混沌",
+    "image": "./images/character_enemy/9.webp",
+    "hp": 40,
+    "deck": [
+      [1,2],
+      [4,5],
+      [7,8]
+    ],
+    "maxHoldCards": 2,
+    "triggers": [
+      {
+        "hp": 60,
+        "description": "HPが60%を下回ったターン以降、ダメージを1軽減",
+        "card": 73
+      },
+      {
+        "hp": 20,
+        "description": "HPが20%を下回ったターン、20ダメージ * 2",
+        "card": 59
+      }
+    ]
   }
 ]

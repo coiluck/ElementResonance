@@ -550,7 +550,8 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
 
   // ダメージ処理ループ
   for (let i = 0; i < times; i++) {
-    const finalDamage = baseDamage + totalBuffValue;
+    const reduction = globalGameState.enemy.damageReduction || 0;
+    const finalDamage = Math.max(0, (baseDamage + totalBuffValue) - reduction);
   
     if (finalDamage <= 0) {
       console.log(`[${sourceName}]の攻撃はダメージが0以下のためスキップされました。`);
@@ -587,8 +588,10 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
     // 表示更新
     document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.enemy.hp} / ${globalGameState.enemy.maxHp})`;
     document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${globalGameState.enemy.hp}/${globalGameState.enemy.maxHp}`;
-    // ログ出力
-    log(`${finalDamage}ダメージ (基本値:${baseDamage} + バフ:${totalBuffValue}${buffDetailLog})`);
+    // ログ
+    const reductionLog = globalGameState.enemy.damageReduction > 0 ? ` - 軽減:${globalGameState.enemy.damageReduction}` : '';
+    log(`${finalDamage}ダメージ (基本値:${baseDamage} + バフ:${totalBuffValue}${reductionLog}${buffDetailLog})`);
+
     // 待機
     if (i < times - 1) {
       await wait(WAIT_TIME_MS);

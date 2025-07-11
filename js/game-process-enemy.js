@@ -86,7 +86,11 @@ async function useCard(cardsIdText) {
     "addTurnDamage": new AddTurnDamageEffect(), // 執行人 ゼガ
     "LC-3": new LuminaCombo3Effect(),         // 血染の闘華 リリス
     "LM-3": new LuminaMark3Effect(),          // 聖焔の再誕
-    "Six": new SixEffect(),                   // ラウンド6の敵の「バリアの半分を消費して、消費の3倍ダメージ」
+    "Six": new SixEffect(),                   // 反撃の狼煙（6）
+    "N-collapse": new NCollapseEffect(),       // 万象崩落・極（9）
+    "N-echo": new NEchoEffect(),               // 幽魂の残響（9）
+    "N-order": new NOrderEffect(),             // 秩序への断罪（9）
+    "N-sync": new NSyncEffect(),               // 共鳴との同調（9）
   };
   // ターン進行処理の初期化
   const context = new EnemyTurnContext(globalGameState);
@@ -201,6 +205,11 @@ class ShieldEffect {
 class AddMarkEffect {
   execute(card, effectInfo, context) {
     // ここで行うことなのか？？
+    const markArray = ['daybreak-mark', 'sand-mark', 'hollow-mark', 'fog-mark', 'lumina-mark'];
+    for (let i = 0; i < effectInfo.value; i++) {
+      const randomMark = markArray[Math.floor(Math.random() * markArray.length)];
+      updateBuff('enemy', randomMark, 1);
+    }
   }
 }
 
@@ -226,8 +235,68 @@ class LuminaMark3Effect {
 }
 
 class SixEffect {
+  async execute(card, effectInfo, context) {
+    // バリアの半分を消費して、消費の3倍ダメージ
+    const halfShield = Math.floor(globalGameState.enemy.buff.shield / 2);
+    const damage = halfShield * 3;
+    // バリアを消費
+    globalGameState.enemy.buff.shield -= halfShield;
+    await dealDamage(damage, 1, context, card.name, false);
+  }
+}
+
+class NCollapseEffect {
+  async execute(card, effectInfo, context) {
+    // すべての刻印を消費
+    const playerMark = globalGameState.player.buff['daybreak-mark'] + globalGameState.player.buff['sand-mark'];
+    const enemyMark = globalGameState.enemy.buff['hollow-mark'] + globalGameState.enemy.buff['fog-mark'] + globalGameState.enemy.buff['lumina-mark'];
+    const damage = (playerMark + enemyMark) * 2;
+    updateBuff('enemy', 'hollow-mark', -3);
+    updateBuff('enemy', 'fog-mark', -3);
+    updateBuff('enemy', 'lumina-mark', -3);
+    updateBuff('enemy', 'daybreak-mark', -3);
+    updateBuff('enemy', 'sand-mark', -3);
+    // ダメージ計算
+    await dealDamage(2, damage, context, card.name, false);
+  }
+}
+class NEchoEffect {
+  async execute(card, effectInfo, context) {
+    // 刻印を消費しない
+    const playerMark = globalGameState.player.buff['daybreak-mark'] + globalGameState.player.buff['sand-mark'];
+    const enemyMark = globalGameState.enemy.buff['hollow-mark'] + globalGameState.enemy.buff['fog-mark'] + globalGameState.enemy.buff['lumina-mark'];
+    const damage = (playerMark + enemyMark) * 2;
+    // ダメージ計算
+    await dealDamage(damage, 1, context, card.name, false);
+  }
+}
+class NOrderEffect {
+  async execute(card, effectInfo, context) {
+    const playerDeck = window.deck;
+    let normalCount = 0;
+    let comboCount = 0;
+    let markCount = 0;
+    // デッキのカードを判定
+    for (const card of playerDeck) {
+      if (card % 9 === 1 || card % 9 === 2 || card % 9 === 3) {
+        normalCount++;
+      } else if (card % 9 === 4 || card % 9 === 5 || card % 9 === 6) {
+        comboCount++;
+      } else if (card % 9 === 7 || card % 9 === 8 || card % 9 === 9 || card % 9 === 0) {
+        markCount++;
+      }
+    }
+    // ダメージ計算
+    const damage = 20 - Math.min(normalCount, comboCount, markCount) * 4;
+    await dealDamage(damage, 1, context, card.name, false);
+  }
+}
+class NSyncEffect {
   execute(card, effectInfo, context) {
-    // 後で書く
+    // ダメージを1軽減（計算処理はgame-process-cards.jsのdealDamage関数で行う）
+    playSoundEffect("buff");
+    globalGameState.enemy.damageReduction = 1;
+    log(`これ以降、ダメージを1軽減`);
   }
 }
 

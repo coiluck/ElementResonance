@@ -913,5 +913,287 @@
         "value": 7
       }
     ]
+  },
+  {
+    "id": 53,
+    "name": "呪われた刀",
+    "description": "1 * 2ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/53.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 1,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "name": "呪われた刀",
+    "description": "1 * 3ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/54.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 1,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 55,
+    "name": "呪われた刀",
+    "description": "1 * 4ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/55.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 1,
+        "times": 4
+      }
+    ]
+  },
+  {
+    "id": 56,
+    "name": "呪われた刀",
+    "description": "1 * 5ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/56.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 1,
+        "times": 5
+      }
+    ]
+  },
+  {
+    "id": 57,
+    "name": "呪われた刀",
+    "description": "5 * 2ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/57.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 5,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 58,
+    "name": "呪われた刀",
+    "description": "10 * 2ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/58.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 10,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "name": "呪われた刀",
+    "description": "20 * 2ダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/59.avif",
+    "damage": [
+      {
+        "when": "now",
+        "value": 20,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "name": "朽ちた盾",
+    "description": "自分にバリアを1付与",
+    "image_icon": "./images/cards_icon/enemy_cards/60.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 61,
+    "name": "朽ちた盾",
+    "description": "自分にバリアを2付与",
+    "image_icon": "./images/cards_icon/enemy_cards/61.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "name": "朽ちた盾",
+    "description": "自分にバリアを3付与",
+    "image_icon": "./images/cards_icon/enemy_cards/62.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "name": "朽ちた盾",
+    "description": "自分にバリアを4付与",
+    "image_icon": "./images/cards_icon/enemy_cards/63.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 4
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "name": "朽ちた盾",
+    "description": "自分にバリアを5付与",
+    "image_icon": "./images/cards_icon/enemy_cards/64.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": 65,
+    "name": "朽ちた盾",
+    "description": "自分にバリアを10付与",
+    "image_icon": "./images/cards_icon/enemy_cards/65.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 10
+      }
+    ]
+  },
+  {
+    "id": 66,
+    "name": "朽ちた盾",
+    "description": "自分にバリアを20付与",
+    "image_icon": "./images/cards_icon/enemy_cards/66.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "shield",
+        "value": 20
+      }
+    ]
+  },
+  {
+    "id": 67,
+    "name": "反撃の狼煙",
+    "description": "バリアの半分を消費して、消費の3倍ダメージ",
+    "image_icon": "./images/cards_icon/",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "Six",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": 68,
+    "name": "自然共鳴",
+    "description": "ランダムな属性2つの刻印を1追加",
+    "image_icon": "./images/cards_icon",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "addMark",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": 69,
+    "name": "聖焔の再誕",
+    "description": "火傷効果（ターン開始時ダメージ3、3ターン持続）",
+    "image_icon": "./images/cards_icon/lumina_mark_3.avif",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "LM-3"
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "name": "万象崩落・極",
+    "description": "場のすべての刻印を消費して、2 * 消費した刻印の数のダメージ",
+    "image_icon": "./images/cards_icon/",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "N-collapse"
+      }
+    ]
+  },
+  {
+    "id": 71,
+    "name": "幽魂の残響",
+    "description": "場のすべての刻印1つにつき2ダメージ（この効果では刻印は消費しない）",
+    "image_icon": "./images/cards_icon/",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "N-echo"
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "name": "秩序への断罪",
+    "description": "プレイヤーのデッキの通常・コンボ・刻印の偏りでダメージ 20-(デッキ内の最少カードタイプの枚数×4) ",
+    "image_icon": "./images/cards_icon/",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "N-order"
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "name": "共鳴との同調",
+    "description": "これ以降、ダメージを1軽減",
+    "image_icon": "./images/cards_icon/",
+    "damage": null,
+    "effect": [
+      {
+        "when": "now",
+        "type": "N-sync"
+      }
+    ]
   }
 ]

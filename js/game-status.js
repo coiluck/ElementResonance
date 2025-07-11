@@ -21,6 +21,7 @@ const initialState = {
       "burn-turn": 0
     },
     triggers: null,
+    damageReduction: 0,
   },
   turn: 1,
   log: [],

@@ -53,13 +53,15 @@ import { playSoundEffect } from './music.js';
 let isRewardProcessing = false;
 
 async function resultReward() {
+  // 怖いから一応保存しておく
+  const round = window.round;
   // 振り分けポイント
   const rewardPointArray = [2, 2, 5, 4, 4, 6, 5, 5];
-  const rewardPoint = rewardPointArray[window.round - 1];
+  const rewardPoint = rewardPointArray[round - 1];
   // 自然属性
   const naturalAttribute = ['hollow', 'fog', 'lumina', 'daybreak', 'sand'];
   let rewardAttributeArray = [];
-  for (let i = 0; i < parseInt(window.round / 6 + 2); i++) {
+  for (let i = 0; i < parseInt(round / 6 + 2); i++) {
     // 2から3個
     const attribute1 = naturalAttribute[Math.floor(Math.random() * naturalAttribute.length)];
     let attribute2 = naturalAttribute[Math.floor(Math.random() * naturalAttribute.length)];
@@ -82,6 +84,18 @@ async function resultReward() {
     rewardHp = globalGameState.player.maxHp / 100 * 10; // 10%の回復
   }
 
+  // ボスラウンドの場合の特殊報酬
+  let deckLimitUp = 0;
+  let maxHoldCardsUp = 0;
+  if (round === 3) {
+    // これでデッキ12、スロット3
+    deckLimitUp = 2;
+  } else if (round === 6) {
+    // これでデッキ15、スロット4
+    deckLimitUp = 3;
+    maxHoldCardsUp = 1;
+  }
+
   // すべてを同じ配列にまとめる
   const allRewards = [];
 
@@ -98,6 +112,14 @@ async function resultReward() {
   // HP回復を追加
   if (rewardHp !== null) {
     allRewards.push({ type: 'hp', value: rewardHp });
+  }
+
+  // ボスラウンドなら特殊報酬を追加
+  if (round === 3) {
+    allRewards.push({ type: 'deckLimitUp', value: deckLimitUp });
+  } else if (round === 6) {
+    allRewards.push({ type: 'deckLimitUp', value: deckLimitUp });
+    allRewards.push({ type: 'maxHoldCardsUp', value: maxHoldCardsUp });
   }
 
   // modalの表示を待つ
@@ -241,6 +263,18 @@ async function processRewards(rewards) {
         iconEl.innerHTML = `<img src="./images/hp.avif">`;
         textValue.textContent = `HP +${reward.value}`;
         break;
+      case 'deckLimitUp':
+        el.classList.add('reward-item-deckLimitUp');
+        textTitle.textContent = 'デッキ上限';
+        iconEl.innerHTML = `<img src="./images/deck_limit.avif">`;
+        textValue.textContent = `+${reward.value}`;
+        break;
+      case 'maxHoldCardsUp':
+        el.classList.add('reward-item-maxHoldCardsUp');
+        textTitle.textContent = 'スロット上限';
+        iconEl.innerHTML = `<img src="./images/max_hold_cards.avif">`;
+        textValue.textContent = `+${reward.value}`;
+        break;
     }
 
     // ボタン（属性選択のボタンより下にするために最後につける）
@@ -287,6 +321,13 @@ async function processRewards(rewards) {
         case 'hp':
           window.playerHp += reward.value;
           console.log(`HP updated: ${window.playerHp}`);
+          break;
+
+        case 'deckLimitUp':
+          window.maxDeckCards += reward.value;
+          break;
+        case 'maxHoldCardsUp':
+          window.maxHoldCards += reward.value;
           break;
       }
 
