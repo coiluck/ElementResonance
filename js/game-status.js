@@ -18,10 +18,10 @@ const initialState = {
       "fog-mark": 0,
       "lumina-mark": 0,
       "shield": 0,
-      "burn-turn": 0
+      "burn-turn": 0,
+      "damage-reduction": 0
     },
-    triggers: null,
-    damageReduction: 0,
+    triggers: null
   },
   turn: 1,
   log: [],

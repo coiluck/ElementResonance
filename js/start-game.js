@@ -174,7 +174,7 @@ async function gameInit() {
     cardElement.addEventListener('click', (event) => {
       // game-cardsの選択中カードクリック時
       if (cardElement.classList.contains('game-is-used-in-slot')) {
-        playSoundEffect("back");
+        playSoundEffect("disable");
         const cardIdToFind = cardElement.dataset.cardId;
         // このカードIDを持つスロットを探す
         const slotToClear = document.querySelector(`.game-holder-slot[data-card-id="${cardIdToFind}"]`);
@@ -363,6 +363,10 @@ async function setUpEnemy() {
       globalGameState.enemy.buff.trigger = 0;
     }
     console.log("敵のトリガー情報:", globalGameState.enemy.triggers);
+    // ダメージ軽減の設定
+    if(enemy.damageReduction) {
+      globalGameState.enemy.buff['damage-reduction'] = enemy.damageReduction;
+    }
   }
   // cards.jsonを読み込む（敵の使用カードの設定で必要）
   const cardsData = await getCardsData();

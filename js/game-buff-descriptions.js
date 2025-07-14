@@ -8,5 +8,6 @@ export let buffDescriptions = {
   "lumina-mark": "燐の刻印。最大3つまで付与可能。",
   "daybreak-mark": "暁の刻印。最大3つまで付与可能。",
   "sand-mark": "砂の刻印。最大3つまで付与可能。",
+  "damage-reduction": "受けるダメージを値の数値軽減する。",
   "trigger": ""
 };

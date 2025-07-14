@@ -295,7 +295,7 @@ class NSyncEffect {
   execute(card, effectInfo, context) {
     // ダメージを1軽減（計算処理はgame-process-cards.jsのdealDamage関数で行う）
     playSoundEffect("buff");
-    globalGameState.enemy.damageReduction = 1;
+    updateBuff('enemy', 'damage-reduction', 1);
     log(`これ以降、ダメージを1軽減`);
   }
 }

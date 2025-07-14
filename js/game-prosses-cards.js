@@ -550,11 +550,11 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
 
   // ダメージ処理ループ
   for (let i = 0; i < times; i++) {
-    const reduction = globalGameState.enemy.damageReduction || 0;
+    const reduction = globalGameState.enemy.buff['damage-reduction'] || 0;
     const finalDamage = Math.max(0, (baseDamage + totalBuffValue) - reduction);
   
     if (finalDamage <= 0) {
-      console.log(`[${sourceName}]の攻撃はダメージが0以下のためスキップされました。`);
+      log(`ダメージが通らない！`);
       continue;
     }
 

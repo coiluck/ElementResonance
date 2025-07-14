@@ -30,6 +30,9 @@ export function updateBuff(target, buffName, value) {
           globalGameState[target].buff[buffName] = 0;
         }
       }
+    } else if (buffName === "damage-reduction") {
+      // ここはダメージ軽減
+      globalGameState[target].buff[buffName] += value;
     } else {
       // ここはshield
       globalGameState[target].buff[buffName] += value;
