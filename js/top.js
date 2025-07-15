@@ -106,7 +106,7 @@ buttons.forEach(button => {
     return; // ここはstart-game.jsで処理
   } else if (button.id === 'middle-close-button') {
     button.addEventListener('click', () => {
-      playSoundEffect("back");
+      playSoundEffect("disable");
       stopMusic();
     });
   } else {

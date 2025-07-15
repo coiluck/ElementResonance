@@ -2,17 +2,21 @@
 import { stopMusic } from './music.js';
 import { playMusic } from './music.js';
 import { characterAnim } from './game-player-animation.js';
+import { playVictoryAnimation } from './win-animation.js';
 
 async function changeMusic() {
   await stopMusic();
   playMusic("theme1");
 }
 
-export function finishGame() {
+export async function finishGame() {
   console.log('finishGame');
   window.isGameStart = false;
 
-  // 勝利アニメーションつけるべき？（面倒）
+  // 勝利アニメーション
+  playVictoryAnimation();
+  // 勝利アニメーションが終わるまで待つ
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
   // 背景音楽を停止
   changeMusic();

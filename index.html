@@ -13,8 +13,9 @@
   <link rel="stylesheet" href="./css/game-middle.css">
   <link rel="stylesheet" href="./css/middle-deck.css">
   <link rel="stylesheet" href="./css/middle-synthesis.css">
-  <link rel="stylesheet" href="./css/game-finish.css">
+  <link rel="stylesheet" href="./css/end-game.css">
   <link rel="stylesheet" href="./css/message.css">
+  <link rel="stylesheet" href="./css/win-animation.css">
   <link rel="icon" href="./images/favicon.ico">
 </head>
 <body>
@@ -269,28 +270,10 @@
           <div class="middleDeck-info-number" id="middleDeck-selectedCards">0/10</div>
           <div class="middleDeck-info-label">選択済み</div>
         </div>
-        <div class="middleDeck-info-item">
-          <div class="middleDeck-info-number" id="middleDeck-permanentCards">0/0</div>
-          <div class="middleDeck-info-label">永続スロット</div>
-        </div>
       </div>
       <div class="middleDeck-select-area">
-        <nav class="middleDeck-tabs">
-          <button class="middleDeck-tab-button middleDeck-active" data-attribute-index="0">デッキ</button>
-          <button class="middleDeck-tab-button" data-attribute-index="1">永続スロット</button>
-        </nav>
-        <div class="middleDeck-tab-content">
-          <div class="middleDeck-tab-panel">
-            <div class="middleDeck-cards-grid" id="middleDeck-deckList">
-              カードは動的に生成。この文字は見えないはず
-            </div>
-          </div>
-          <div class="middleDeck-tab-panel">
-            <div class="middleDeck-cards-grid" id="middleDeck-permanentList">
-              <div id="middleDeck-permanent-holder"></div>
-              <div id="middleDeck-permanent-cards"></div>
-            </div>
-          </div>
+        <div class="middleDeck-cards-grid" id="middleDeck-deckList">
+          カードは動的に生成。この文字は見えないはず
         </div>
       </div>
       <button id="middleDeck-confirm">選択を確定</button>
@@ -340,7 +323,19 @@
     </div>
   </div>
 
-  <div id="modal-game-finish" class="modal"></div>
+  <div id="modal-end" class="modal">
+    <div class="img-wrap no-display">
+      <img src="./images/favicon.avif">
+    </div>
+    <div class="line-container">
+      <div class="line left"></div>
+      <div class="line right"></div>
+    </div>
+    <div id="end-title" class="no-display">分岐タイトル（jsで変更）</div>
+    <div id="end-subtext" class="no-display"></div>
+    <div id="end-deck-list-container" class="no-display"></div>
+    <button id="end-button" class="no-display">Topへ</button>
+  </div>
 
   <div id="message-box"></div>
 

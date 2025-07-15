@@ -1,4 +1,3 @@
-
 #modal-game-middle-deck {
   display: none;
   flex-direction: column;
@@ -42,10 +41,10 @@
 }
 
 .middleDeck-status {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 20px;
+  display: flex;
+  justify-content: space-between;
   margin: 10px auto;
+  padding: 0 15px;
   width: 100%;
   background: rgba(0, 0, 0, 0.6);
   padding: 10px;
@@ -128,7 +127,6 @@
 
 .middleDeck-select-area {
   width: 100%;
-  background: rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   flex: 1;

@@ -186,8 +186,9 @@ export async function processCards(cards) {
     }
     
     // ゲーム終了処理
-    if (globalGameState.enemy.hp <= 6) {
-      finishGame();
+    if (globalGameState.enemy.hp <= 0) {
+      // finishGame();
+      endGame(true);
       return true;
     }
   }
@@ -198,6 +199,10 @@ export async function processCards(cards) {
   // ゲームが終了していないことを伝える
   return false;
 }
+
+// 後で消す（ここから）
+import { endGame } from './end-game.js';
+// ここまで
 
 import { updateBuff } from './game-buff-update.js';
 import { playSoundEffect } from './music.js';
