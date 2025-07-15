@@ -1,4 +1,9 @@
+import { stopMusic } from './music.js';
+
 export function endGame(isClear) {
+  // 背景音楽を停止
+  stopMusic(3);
+  // ゲーム終了
   if (isClear) {
     console.log("clear");
     // localstorageをクリア
@@ -22,6 +27,25 @@ export function endGame(isClear) {
     console.log("fail");
     // localstorageをクリア
     localStorage.clear();
+    // 背景を赤黒い色に
+    const modalEndOverlay = document.createElement('div');
+    modalEndOverlay.classList.add('modal-end-overlay');
+    document.getElementById('modal-end').appendChild(modalEndOverlay);
+    // modal-endを表示
+    document.querySelectorAll('.modal').forEach(function(modal) {
+      modal.classList.remove('fade-in');
+      modal.classList.add('fade-out')
+    });
+    setTimeout(function() {
+      document.querySelectorAll('.modal').forEach(function(modal) {
+        modal.style.display = 'none';
+      });
+      document.getElementById('modal-end').classList.remove('fade-out');
+      document.getElementById('modal-end').style.display = 'block';
+      document.getElementById('modal-end').classList.add('fade-in');
+    }, 500);
+    // アニメーション
+    AnimationOfResultModal(isClear);
   }
 }
 
@@ -39,10 +63,10 @@ async function AnimationOfResultModal(isClear) {
   // タイトル変更
   if (isClear) {
     document.getElementById('end-title').textContent = 'Game Clear';
-    document.getElementById('end-subtext').textContent = subtextContent.clear;
+    document.getElementById('end-subtext').innerHTML = subtextContent.clear;
   } else {
     document.getElementById('end-title').textContent = 'Game Over';
-    document.getElementById('end-subtext').textContent = subtextContent.fail;
+    document.getElementById('end-subtext').innerHTML = subtextContent.fail;
   }
   // json
   const response = await fetch('cards.json');
@@ -102,7 +126,6 @@ async function AnimationOfResultModal(isClear) {
         setTimeout(() => {
           button.classList.remove('no-display');
           button.classList.add("fade-in");
-          button.classList.add("active");
         }, delay + window.deck.length * 200 + 200);
       }, 1000); // 上移動完了からさらに 1秒後
     }, 750);
@@ -111,8 +134,8 @@ async function AnimationOfResultModal(isClear) {
 
 // subtextの内容
 const subtextContent = {
-  clear: "おめでとうございます！\nあなたはゲームをクリアしました！",
-  fail: "あなたはゲームを失敗しました。\nもう一度挑戦してください。"
+  clear: "<span>あなたはこれらのカードと戦い抜いた。</span><span>勝利はあなたのものだった。</span>",
+  fail: "<span>敗北はあなたの運命だった。</span><span>あなたは道半ばで倒れた。</span>"
 }
 
 // コンテナの高さを計算
@@ -122,8 +145,11 @@ function heightCalc() {
   // 計算に必要な定数をCSSから定義
   const containerWidthPercentage = 0.8; // コンテナの幅 (80%)
   const gap = 10;                       // gap
-  const padding = 10;                     // padding
-  const minCardWidth = 90;               // カードの最小幅: minmax(90px, 1fr)
+  const padding = 10;                   // padding
+  let minCardWidth = 90;                // カードの最小幅: minmax(90px, 1fr)
+  if (windowWidth < 480) {
+    minCardWidth = 60;
+  }
   const cardAspectRatio = 7 / 5;        // カードのアスペクト比 (高さ / 幅)
 
   // ステップ1: グリッドが使用できるコンテナ内部の幅を計算
@@ -131,11 +157,9 @@ function heightCalc() {
   const containerContentWidth = containerTotalWidth - (padding * 2);
 
   // ステップ2: 1行に何枚のカードが入るかを計算
-  // (カードの最小幅 + ギャップ)が、コンテナ内部の幅にいくつ収まるか
   const cardsPerRow = Math.floor((containerContentWidth + gap) / (minCardWidth + gap));
 
   // ステップ3: 実際のカードの幅を計算
-  // 1frによって幅が均等に分配されるため、ギャップを除いた領域をカード数で割る
   const totalGapWidthInRow = (cardsPerRow - 1) * gap;
   const cardWidth = (containerContentWidth - totalGapWidthInRow) / cardsPerRow;
   
@@ -147,18 +171,52 @@ function heightCalc() {
   const numberOfRows = Math.ceil(totalCards / cardsPerRow);
 
   // ステップ6: コンテナの最終的な高さを計算
-  // (全行の高さ) + (行間のギャップの合計) + (上下のパディング)
+  // 基本の高さ計算
   const totalRowsHeight = numberOfRows * cardHeight;
   const totalGapsHeight = (numberOfRows - 1) * gap;
   const totalPaddingHeight = padding * 2;
 
-  const finalContainerHeight = totalRowsHeight + totalGapsHeight + totalPaddingHeight;
+  let finalContainerHeight = totalRowsHeight + totalGapsHeight + totalPaddingHeight;
+
+  // 【修正1】行数が3行以上の場合の補正
+  // CSS Grid での実際のレンダリング時の微調整
+  if (numberOfRows >= 3) {
+    // 画面幅による補正係数
+    let correctionFactor = 1.0;
+    
+    if (windowWidth < 480) {
+      // 非常に小さい画面: より大きな補正が必要
+      correctionFactor = 1.06;
+    }
+    
+    finalContainerHeight *= correctionFactor;
+  }
+
+  // 【修正2】ブラウザの丸め処理に対応するため、小数点以下を切り上げ
+  finalContainerHeight = Math.ceil(finalContainerHeight);
 
   console.log(`1行あたりのカード数: ${cardsPerRow}枚`);
   console.log(`カードの実際の幅: ${cardWidth.toFixed(2)}px`);
   console.log(`カードの高さ: ${cardHeight.toFixed(2)}px`);
   console.log(`行数: ${numberOfRows}行`);
-  console.log(`コンテナの最終的な高さ: ${finalContainerHeight.toFixed(2)}px`);
+  console.log(`補正後の高さ: ${finalContainerHeight.toFixed(2)}px`);
 
   return finalContainerHeight;
 }
+
+// 画面リサイズ時のheightCalc呼び出し処理
+let resizeTimeout;
+
+window.addEventListener('resize', function() {
+  // デバウンス処理（連続したリサイズイベントを制限）
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(function() {
+    const deckListContainer = document.getElementById('end-deck-list-container');
+    
+    // コンテナが存在し、表示されている場合のみ実行
+    if (deckListContainer && deckListContainer.style.display !== 'none' && !deckListContainer.classList.contains('no-display')) {
+      const newHeight = heightCalc();
+      deckListContainer.style.height = `${newHeight}px`;
+    }
+  }, 100); // 100ms後に実行（頻繁な呼び出しを防ぐ）
+});

@@ -1,9 +1,4 @@
 // game-process-enemy.js
-let enemyHpNow = 0;
-// このターン開始時の敵HP
-export function setEnemyHpNow(hp) {
-  enemyHpNow = hp;
-}
 
 import { globalGameState } from './game-status.js';
 import { log } from './game-prosses-cards.js';
@@ -39,7 +34,7 @@ export async function processEnemyTurn() {
     const hpThresholdValue = globalGameState.enemy.maxHp * (nextTrigger.hp / 100);
 
     // ターン開始時のHPが閾値以上 ^ 現在のHPが閾値を下回った -> 特殊行動
-    if (enemyHpNow >= hpThresholdValue && globalGameState.enemy.hp < hpThresholdValue) {
+    if (globalGameState.enemy.hp <= hpThresholdValue) {
       // 特殊行動発動
       specialActionOccurred = true;
       log(`特殊行動発動！`);
@@ -81,7 +76,6 @@ async function useCard(cardsIdText) {
   const effectRegistry = {
     "damage": new DamageEffect(),             // 基本ダメージ
     "shield": new ShieldEffect(),             // バリア
-    "addMark": new AddMarkEffect(),           // 刻印付与（ラスボスのみ）
     "addNextDamage": new AddNextDamageEffect(), // 吸血少女
     "addTurnDamage": new AddTurnDamageEffect(), // 執行人 ゼガ
     "LC-3": new LuminaCombo3Effect(),         // 血染の闘華 リリス
@@ -127,12 +121,15 @@ async function useCard(cardsIdText) {
       }
     }
   }
-  // 更新されたゲーム状態を返す <- いる？
-  return globalGameState;
+  // ゲーム終了処理
+  if (globalGameState.player.hp <= 0) {
+    endGame(false);
+  }
 }
 
 import { updateBuff } from './game-buff-update.js';
 import { playSoundEffect } from './music.js';
+import { endGame } from './end-game.js';
 
 // 個別の処理用クラス
 class DamageEffect {
@@ -202,12 +199,15 @@ class ShieldEffect {
 }
 
 // 刻印付与
-class AddMarkEffect {
-  execute(card, effectInfo, context) {
-    // ここで行うことなのか？？
-    const markArray = ['daybreak-mark', 'sand-mark', 'hollow-mark', 'fog-mark', 'lumina-mark'];
-    for (let i = 0; i < effectInfo.value; i++) {
-      const randomMark = markArray[Math.floor(Math.random() * markArray.length)];
+export function addMark() {
+  // ここで行うことなのか？？ -> 普通の関数にした
+  const markArray = ['daybreak-mark', 'sand-mark', 'hollow-mark', 'fog-mark', 'lumina-mark'];
+  for (let i = 0; i < 2; i++) {
+    const randomMark = markArray[Math.floor(Math.random() * markArray.length)];
+    // 刻印の対象を分別
+    if (randomMark === 'daybreak-mark' || randomMark === 'sand-mark') {
+      updateBuff('player', randomMark, 1);
+    } else {
       updateBuff('enemy', randomMark, 1);
     }
   }
@@ -300,6 +300,8 @@ class NSyncEffect {
   }
 }
 
+import { renderBuffs } from './game-buff-update.js';
+
 // ダメージを与える関数
 async function dealDamage(baseDamage, times, context, sourceName = 'error name', canIgnoreBarrier) {
   let totalBuffValue = 0;
@@ -347,6 +349,8 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
           // バリアが割れる場合
           globalGameState.player.hp -= damageToHp;
         }
+        // 減ったバリアを表示更新
+        renderBuffs();
       } else {
         // バリアがない場合は直接HPを減らす
         globalGameState.player.hp -= finalDamage;

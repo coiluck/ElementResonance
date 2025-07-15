@@ -1,4 +1,4 @@
-// game-prosses-cards.js
+// game-process-cards.js
 // 選択したカードidを複数与えられるのでそれを処理する
 
 // ゲーム全体の永続的な状態
@@ -70,6 +70,8 @@ function adjustOverlayHeight() {
 
 import { finishGame } from './result-reward.js';
 
+let currentTurnContext = null;
+
 export async function processCards(cards) {
   // カードデータを取得
   let allCards;
@@ -105,6 +107,8 @@ export async function processCards(cards) {
   };
   // ターン進行処理の初期化
   const context = new TurnContext(globalGameState);
+  // contextをprocess-cardsのボタンのイベントリスナー内であとから実行する「when==last」で使用できるようにする
+  currentTurnContext = context;
   // id -> jsonデータ
   const selectedCards = cards.map(id => allCards.find(card => card.id === id))
   // このターンに使用したカードとして記録
@@ -125,11 +129,8 @@ export async function processCards(cards) {
         }
         // "when": "last" のものはターン終了時効果として登録
         else if (damageInfo.when === 'last') {
-          context.endOfTurnEffects.push((ctx) => {
-            const damageValue = damageInfo.value * (damageInfo.times || 1);
-            ctx.results.damage += damageValue;
-            console.log(`[ターン終了時効果] ${card.name}により${damageValue}ダメージ`);
-          });
+          context.endOfTurnEffects.push({ card, damageInfo });
+          log(`[${card.name}]がターン終了時に効果を発動します`);
         }
       }
       // 待機
@@ -187,15 +188,14 @@ export async function processCards(cards) {
     
     // ゲーム終了処理
     if (globalGameState.enemy.hp <= 0) {
-      // finishGame();
-      endGame(true);
+      if (window.round === 9) {
+        endGame(true);
+      } else {
+        finishGame();
+      }
       return true;
     }
   }
-
-  // ターン終了時効果の処理
-  // 後で書く
-
   // ゲームが終了していないことを伝える
   return false;
 }
@@ -249,6 +249,7 @@ class AddTurnDamageEffect {
       source: card.name
     };
     context.turnModifiers.push(modifier);
+    currentTurnContext.turnModifiers.push(modifier); // ターン終了時用
     log(`このターンの全ての攻撃時に ${effectInfo.value} の追加ダメージ`);
   }
 }
@@ -261,6 +262,7 @@ class AddNextDamageEffect {
       source: card.name
     };
     context.nextCardModifiers.push(modifier);
+    currentTurnContext.nextCardModifiers.push(modifier); // ターン終了時用
     log(`次の攻撃時に ${effectInfo.value} の追加ダメージ`);
   }
 }
@@ -315,6 +317,7 @@ class ReduceCoolTimeEffect {
         slot.removeAttribute('data-recast-time');
       }
     });
+    log(`${card.element}の再使用間隔が減少した`);
   }
 }
 class DamageCombo2Effect {
@@ -532,6 +535,8 @@ class SandMark3Effect {
   }
 }
 
+import { renderBuffs } from './game-buff-update.js';
+
 // ダメージを与える関数
 async function dealDamage(baseDamage, times, context, sourceName = 'error name', canIgnoreBarrier) {
   let totalBuffValue = 0;
@@ -570,7 +575,7 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
     if (canIgnoreBarrier === true) {
       // 直接HPを減らす
       globalGameState.enemy.hp -= finalDamage;
-      logMessage += ' [直接ダメージ]';
+      log(' [直接ダメージ]');
     } else {
       // バリアを考慮
       if (globalGameState.enemy.buff.shield > 0) {
@@ -583,6 +588,9 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
           // バリアが割れる場合
           globalGameState.enemy.hp -= damageToHp;
         }
+
+        // 減ったバリアを表示更新
+        renderBuffs();
       } else {
         // バリアがない場合は直接HPを減らす
         globalGameState.enemy.hp -= finalDamage;
@@ -601,5 +609,43 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
     if (i < times - 1) {
       await wait(WAIT_TIME_MS);
     }
+  }
+}
+
+// ターン終了時効果の処理
+export async function processEndOfTurnEffects() {
+  if (!currentTurnContext || currentTurnContext.endOfTurnEffects.length === 0) {
+    return;
+  }
+
+  log(`=== ターン終了時効果 ===`);
+
+  // 登録された効果を一つずつ実行
+  for (const effect of currentTurnContext.endOfTurnEffects) {
+    const { card, damageInfo } = effect;
+    const damageValue = damageInfo.value;
+    const times = damageInfo.times || 1;
+
+    log(`--${card.name}のターン終了時効果が発動！--`);
+
+    // 攻撃回数繰り返す
+    for (let i = 0; i < times; i++) {
+      // カード自身の基本ダメージを処理
+      await dealDamage(damageValue, 1, currentTurnContext, card.name, false);
+      // ターン中の追加ダメージ
+      currentTurnContext.turnModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      // 次のカードへの追加ダメージ
+      currentTurnContext.nextCardModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
+        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      // 待機
+      if (i < times - 1) {
+        await wait(WAIT_TIME_MS);
+      }
+    }
+    // 「次のカードへの効果」は全て消費されたのでリセット
+    currentTurnContext.nextCardModifiers = [];
   }
 }

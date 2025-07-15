@@ -101,6 +101,9 @@
   font-size: 1rem;
   padding: 10px;
 }
+#end-subtext span {
+  display: inline-block;
+}
 
 #end-deck-list-container {
   display: grid;
@@ -120,11 +123,32 @@
   object-fit: cover;
   filter: drop-shadow(0 0 3px rgba(255, 250, 180, 0.8));
 }
+@media (max-width: 480px) {
+  #end-deck-list-container {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
+}
+
 #end-button {
+  display: block;
   position: relative;
+  padding: 10px 30px;
   margin: 10px auto 0;
   text-align: center;
+  color: #00ff88;
   font-family: 'Zen Old Mincho', 'Noto Serif JP', serif;
-  font-size: 1rem;
-  padding: 10px;
+  font-size: .9rem;
+  background: transparent;
+  border: 1px solid #00ff88;
+  border-radius: calc(0.9rem + 10px + 10px);
+}
+
+.modal-end-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(116, 59, 59, 0.2) 0%, rgba(90, 48, 48, 0.8) 70%, rgba(79, 19, 19, 0.95) 100%);
+  z-index: -1;
 }

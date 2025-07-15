@@ -16,8 +16,8 @@
     "image": "./images/character_enemy/2.webp",
     "hp": 15,
     "deck": [
-      [1,2],
-      [4,5]
+      [46,47],
+      [61,53]
     ],
     "maxHoldCards": 2,
     "triggers": null
@@ -28,8 +28,8 @@
     "image": "./images/character_enemy/3.avif",
     "hp": 25,
     "deck": [
-      [1,2],
-      [4,5]
+      [48,48],
+      [54,61]
     ],
     "maxHoldCards": 2,
     "triggers": [
@@ -51,8 +51,8 @@
     "image": "./images/character_enemy/4.avif",
     "hp": 20,
     "deck": [
-      [1,2],
-      [4,5]
+      [47,47],
+      [61,54]
     ],
     "maxHoldCards": 2,
     "triggers": null
@@ -63,8 +63,8 @@
     "image": "./images/character_enemy/5.webp",
     "hp": 25,
     "deck": [
-      [1, 2],
-      [4, 5]
+      [50, 62],
+      [49, 63]
     ],
     "maxHoldCards": 2,
     "triggers": null
@@ -75,8 +75,9 @@
     "image": "./images/character_enemy/6.avif",
     "hp": 30,
     "deck": [
-      [1,2],
-      [4,5]
+      [63,48],
+      [64,55],
+      [64,67]
     ],
     "maxHoldCards": 2,
     "triggers": [
@@ -134,11 +135,11 @@
     "image": "./images/character_enemy/9.webp",
     "hp": 40,
     "deck": [
-      [1,2],
-      [4,5],
-      [7,8]
+      [2,54,72],
+      [50,61,71],
+      [50,62,70]
     ],
-    "maxHoldCards": 2,
+    "maxHoldCards": 3,
     "triggers": [
       {
         "hp": 60,

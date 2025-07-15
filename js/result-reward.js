@@ -45,9 +45,8 @@ export async function finishGame() {
     document.getElementById('modal-result').classList.add('fade-in');
   }, 500);
 
-  // プレイヤーのアニメーションを停止 // modal消えてからだな
+  // プレイヤーのアニメーションを停止
   characterAnim.stop();
-
 }
 
 import { globalGameState } from './game-status.js';

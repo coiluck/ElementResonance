@@ -1,5 +1,4 @@
 // win-animation.js
-// Victory Animation Configuration
 const VICTORY_CONFIG = {
   parentElement: document.getElementById('modal-game'), // アニメーションを追加する親要素
   animationDuration: 3000, // アニメーション時間

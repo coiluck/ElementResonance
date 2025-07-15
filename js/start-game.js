@@ -270,6 +270,8 @@ function checkAllSlotsFilled() {
   }
 }
 
+import { processEndOfTurnEffects } from './game-prosses-cards.js';
+
 // ボタンを表示
 function showButton(filledCardIds) {
   // 親コンテナを取得
@@ -286,8 +288,6 @@ function showButton(filledCardIds) {
   button.addEventListener('click', async () => {
     // 再キャスト時間を更新
     setUpRecastTime();
-    // 敵のHPを記憶
-    setEnemyHpNow(globalGameState.enemy.hp);
     // 前のターンにスキップしたかどうか
     globalGameState.wasTurnSkippedLastTurn = window.isSkipEnemyTurn;
     window.isSkipEnemyTurn = false;
@@ -301,6 +301,7 @@ function showButton(filledCardIds) {
       // 敵のターン進行処理を呼ぶ
       await processEnemyTurn();
     }
+    await processEndOfTurnEffects();
     setUpNextTurn();
   });
   // 要素を組み立て
@@ -345,6 +346,7 @@ async function getEnemyData() {
 }
 
 import { renderBuffs } from './game-buff-update.js';
+import { addMark } from './game-process-enemy.js';
 
 // 敵を設定
 async function setUpEnemy() {
@@ -381,6 +383,10 @@ async function setUpEnemy() {
     globalGameState.enemy.maxHp = enemy.hp;
     document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${enemy.hp}/${enemy.hp}`;
     document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.enemy.hp} / ${globalGameState.enemy.maxHp})`;
+  }
+  // 刻印を追加
+  if (window.round === 9) {
+    addMark();
   }
   // triggeerとdeckのホバーの反映
   renderBuffs();
