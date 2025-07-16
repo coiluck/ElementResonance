@@ -206,6 +206,8 @@ function updatePreview() {
     });
 }
 
+import { saveData } from './save-data.js';
+
 // 合成ボタンを押したら
 document.querySelector('.middleSynthesis-confirm').addEventListener('click', function() {
   if (!previewCard) {
@@ -232,6 +234,8 @@ document.querySelector('.middleSynthesis-confirm').addEventListener('click', fun
   window.essence.rarity -= rarityToConsume;
   // 表示を更新
   initMiddleSynthesis();
+  // データを保存
+  saveData();
 });
 
 function showCard() {

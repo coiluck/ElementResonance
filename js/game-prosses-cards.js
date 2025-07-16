@@ -317,7 +317,14 @@ class ReduceCoolTimeEffect {
         slot.removeAttribute('data-recast-time');
       }
     });
-    log(`${card.element}の再使用間隔が減少した`);
+    const attribute = {
+      'daybreak': '暁',
+      'sand': '砂',
+      'hollow': '虚',
+      'fog': '霧',
+      'lumina': '燐'
+    };
+    log(`${attribute[card.element]}の再使用間隔が減少した`);
   }
 }
 class DamageCombo2Effect {

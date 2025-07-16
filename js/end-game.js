@@ -220,3 +220,9 @@ window.addEventListener('resize', function() {
     }
   }, 100); // 100ms後に実行（頻繁な呼び出しを防ぐ）
 });
+
+
+import { toTop } from './top.js';
+
+// Topへ戻る
+document.getElementById('end-button').addEventListener('click', toTop);

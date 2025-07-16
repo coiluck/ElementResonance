@@ -90,6 +90,10 @@ export function renderBuffs() {
         // "-mark"で終わる場合
         if (buffName.endsWith('-mark')) {
           icon.classList.add('game-buff-mark-icon');
+          // 内側のマークを作成
+          const innerMark = document.createElement('div');
+          innerMark.className = 'game-buff-mark-icon-inner';
+          icon.appendChild(innerMark);
         }
         // 数値を表示するためのスタイル
         const number = document.createElement('div');

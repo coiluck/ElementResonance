@@ -1,10 +1,22 @@
-document.addEventListener('DOMContentLoaded', function() {
+import { isContinueGame } from './save-data.js';
+
+document.addEventListener('DOMContentLoaded', isShowContinueButton);
+
+export function isShowContinueButton () {
   // 前回のデータがあるなら「続きから」を表示
-  const lastGameData = localStorage.getItem('lastGameData');
-  if (!lastGameData) {
+  const isContinue = isContinueGame();
+  if (isContinue) {
+    console.log('前回のデータがあります');
+    if (isContinue.isGameStart || isContinue.round === 1) {
+      document.querySelector('.top-continue-game-button').style.display = 'none';
+    } else {
+      document.querySelector('.top-continue-game-button').style.display = 'flex';
+    }
+  } else {
     console.log('前回のデータがありません');
+    document.querySelector('.top-continue-game-button').style.display = 'none';
   }
-});
+}
 
 // galleryへ
 document.querySelector('.top-card-list-button').addEventListener('click', function() {
@@ -62,19 +74,38 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
     document.getElementById('modal-game-middle').style.display = 'block';
     document.getElementById('modal-game-middle').classList.add('fade-in');
   }, 500);
-}); 
+});
+document.querySelector('.top-continue-game-button').addEventListener('click', function() {
+  // すべてのモーダルを閉じる
+  document.querySelectorAll('.modal').forEach(function(modal) {
+    modal.classList.remove('fade-in');
+    modal.classList.add('fade-out')
+  });
+  setTimeout(function() {
+    // gameモーダルを表示
+    document.querySelectorAll('.modal').forEach(function(modal) {
+      modal.style.display = 'none';
+    });
+    document.getElementById('modal-game-middle').classList.remove('fade-out');
+    document.getElementById('modal-game-middle').style.display = 'block';
+    document.getElementById('modal-game-middle').classList.add('fade-in');
+  }, 500);
+});
 
 // topへ戻るのはこの関数
 document.getElementById('gallery-close-button').addEventListener('click', toTop);
 document.getElementById('rules-close-button').addEventListener('click', toTop);
 document.getElementById('middle-close-button').addEventListener('click', toTop);
 
-function toTop() {
+export function toTop() {
   // すべてのモーダルを閉じる
   document.querySelectorAll('.modal').forEach(function(modal) {
     modal.classList.remove('fade-in');
     modal.classList.add('fade-out')
   });
+  // 「続きから」ボタンが必要か判定
+  isShowContinueButton();
+
   setTimeout(function() {
     // Topモーダルを表示
     document.querySelectorAll('.modal').forEach(function(modal) {

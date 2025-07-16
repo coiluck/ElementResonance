@@ -109,8 +109,8 @@
     "image": "./images/character_enemy/7.webp",
     "hp": 30,
     "deck": [
-      [1,2],
-      [4,5]
+      [64,50],
+      [48,54]
     ],
     "maxHoldCards": 2,
     "triggers": null,
@@ -122,8 +122,8 @@
     "image": "./images/character_enemy/8.webp",
     "hp": 30,
     "deck": [
-      [1,2],
-      [4,5]
+      [64,50],
+      [2,53]
     ],
     "maxHoldCards": 2,
     "triggers": null,

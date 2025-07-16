@@ -9,9 +9,13 @@ async function changeMusic() {
   playMusic("theme1");
 }
 
+import { saveData } from './save-data.js';
+
 export async function finishGame() {
-  console.log('finishGame');
+  window.playerHp = globalGameState.player.hp;
+  console.log(`今のプレイヤーのHPは${window.playerHp}です`);
   window.isGameStart = false;
+  saveData();
 
   // 勝利アニメーション
   playVictoryAnimation();
@@ -288,6 +292,8 @@ async function processRewards(rewards) {
 
     // イベントリスナー
     button.addEventListener('click', () => {
+      // 何度も押せなくする
+      button.disabled = true;
       // 獲得
       switch (reward.type) {
         case 'point':
@@ -323,7 +329,9 @@ async function processRewards(rewards) {
 
         case 'hp':
           window.playerHp += reward.value;
-          console.log(`HP updated: ${window.playerHp}`);
+          if (window.playerHp > 30) {
+            window.playerHp = 30;
+          }
           break;
 
         case 'deckLimitUp':
@@ -333,6 +341,8 @@ async function processRewards(rewards) {
           window.maxHoldCards += reward.value;
           break;
       }
+      // データを保存
+      saveData();
 
       // 消去
       el.classList.remove('fade-in');

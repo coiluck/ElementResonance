@@ -1,19 +1,4 @@
-// ゲームで使用する変数
-// 実際にはローカルストレージから取得
-window.cards = []; // 所持カード
-window.deck = []; // デッキの選択中
-window.holdCards = []; // 永続スロットの選択中
-window.maxDeckCards = 10; // デッキの最大枚数
-window.maxHoldCards = 3; // スロットの最大枚数
-window.maxPermanentCards = 0; // 永続スロットの最大枚数
-window.round = 1; // 現在のラウンド
-window.isGameStart = false; // これがtrueなら続き殻からを表示しない
-window.essence = {
-  attributes: [],
-  cardTypes: [],
-  rarity: 0,
-}
-window.playerHp = 30;
+import { saveData, loadData } from './save-data.js';
 
 document.querySelector('.top-start-game-button').addEventListener('click', function() {
   // ゲームで使用する変数
@@ -26,11 +11,9 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
   }
   // デッキは所持しているカードのうち10枚
   window.deck = [];
-  window.holdCards = [];
   window.round = 1;
   window.maxDeckCards = 10;
   window.maxHoldCards = 3;
-  window.maxPermanentCards = 0;
   window.isGameStart = false;
   window.playerHp = 30;
   window.essence = {
@@ -48,6 +31,16 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
     ],
     rarity: 0,
   };
+  // 新規で始める
+  localStorage.clear();
+  saveData();
+});
+
+// 続きからを押した場合
+document.querySelector('.top-continue-game-button').addEventListener('click', function() {
+  loadData();
+  // ラウンド数を更新
+  document.querySelectorAll('.middle-round-number').textContent = `${window.round}`;
 });
 
 import { message } from './message.js';
@@ -63,6 +56,7 @@ document.getElementById('middle-game-start-button').addEventListener('click', fu
   }
   playSoundEffect("metallic");
   window.isGameStart = true;
+  saveData();
   // アニメーション開始
   characterAnim.start();
   // すべてのモーダルを閉じる
@@ -262,8 +256,13 @@ function checkAllSlotsFilled() {
   
   window.selectedSlotCards = filledCardIds;
 
+  // リキャストやスロットに入っていないカードを取得
+  const usableCards = document.querySelectorAll('.game-image-container:not(.game-card-recast):not(.game-is-used-in-slot)');
+
   // 埋まっていたらボタンを表示し、埋まっていなかったらボタンを削除
   if (filledCardIds.length === window.maxHoldCards) {
+    showButton(filledCardIds);
+  }  else if (usableCards.length === 0) {
     showButton(filledCardIds);
   } else if (document.querySelector('.game-process-turn-overlay')) {
     document.querySelector('.game-process-turn-overlay').remove();
@@ -315,7 +314,6 @@ function showButton(filledCardIds) {
 
 import { processCards } from './game-prosses-cards.js';
 import { processEnemyTurn } from './game-process-enemy.js';
-import { setEnemyHpNow } from './game-process-enemy.js';
 
 // ターンが進行した際の処理
 async function processTurn(cardIds) {

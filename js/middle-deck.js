@@ -111,6 +111,9 @@ function handleCardClick(event) {
   document.getElementById('middleDeck-selectedCards').textContent = `${selectedCards.length}/${window.maxDeckCards}`
 }
 
+
+import { saveData } from './save-data.js';
+
 // 確定ボタンがクリックされたときの処理
 function handleConfirmClick() {
   // すべての要素を取得
@@ -120,7 +123,7 @@ function handleConfirmClick() {
   // window.deckをidの配列にする
   window.deck = selectedIds;
   console.log("現在のデッキ:", window.deck);
-
+  saveData();
   // ここからはmodalの切り替え
   document.querySelectorAll('.modal').forEach(function(modal) {
     modal.classList.remove('fade-in');
@@ -165,7 +168,7 @@ const config = {
 observer.observe(middleModal, config);
 // 未設定表示の判定・反映
 function checkUnset() {
-  if (window.deck.length !== window.maxDeckCards || window.holdCards.length !== window.maxPermanentCards) {
+  if (window.deck.length !== window.maxDeckCards) {
     document.querySelector('.middle-button-container .middle-deck').classList.add('middle-deck-first');
   } else {
     document.querySelector('.middle-button-container .middle-deck').classList.remove('middle-deck-first');
