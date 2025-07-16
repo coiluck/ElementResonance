@@ -87,6 +87,11 @@ export function renderBuffs() {
       else if (typeof buffValue === 'number' && buffValue > 0) {
         icon = document.createElement('div');
         icon.className = `game-buff-${buffName}`;
+        // burn-turnの場合、対象によって説明文を生成
+        if (buffName === 'burn-turn') {
+            const damage = target.selector.includes('player') ? 3 : 4;
+            icon.dataset.description = `ターン開始時に${damage}ダメージを受ける。値の数値ターン持続する。`;
+        }
         // "-mark"で終わる場合
         if (buffName.endsWith('-mark')) {
           icon.classList.add('game-buff-mark-icon');

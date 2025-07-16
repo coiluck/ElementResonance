@@ -214,19 +214,20 @@ class DamageEffect {
 
     // 攻撃回数繰り返す
     for (let i = 0; i < times; i++) {
-
       // カード自身の基本ダメージを処理
       await dealDamage(effectInfo.value, 1, context, card.name, false);
 
       // ターン中の追加ダメージ
-      context.turnModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      const turnAddedDamages = context.turnModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of turnAddedDamages) {
+        await dealDamage(added.value, 1, context, added.source, false);
+      }
 
       // 次のカードへの追加ダメージ
-      context.nextCardModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      const nextAddedDamages = context.nextCardModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of nextAddedDamages) {
+        await dealDamage(added.value, 1, context, added.source, false);
+      }
 
       // 待機
       if (i < times - 1) {
@@ -249,7 +250,6 @@ class AddTurnDamageEffect {
       source: card.name
     };
     context.turnModifiers.push(modifier);
-    currentTurnContext.turnModifiers.push(modifier); // ターン終了時用
     log(`このターンの全ての攻撃時に ${effectInfo.value} の追加ダメージ`);
   }
 }
@@ -262,7 +262,6 @@ class AddNextDamageEffect {
       source: card.name
     };
     context.nextCardModifiers.push(modifier);
-    currentTurnContext.nextCardModifiers.push(modifier); // ターン終了時用
     log(`次の攻撃時に ${effectInfo.value} の追加ダメージ`);
   }
 }
@@ -328,7 +327,7 @@ class ReduceCoolTimeEffect {
   }
 }
 class DamageCombo2Effect {
-  execute(card, effectInfo, context) {
+  async execute(card, effectInfo, context) {
     // 同じ属性であるカードのid
     const attributeCount = Array.from({length: 9}, (_, i) => card.id - 4 + i);
     const ratio = context.playedCardsInTurn.filter(playedCard => attributeCount.includes(playedCard.id)).length;
@@ -336,15 +335,23 @@ class DamageCombo2Effect {
     const damageValue = basicDamage * ratio;
     const times = effectInfo.times || 1;
     const timesValue = times * 1;
-    dealDamage(damageValue, timesValue, context, card.name, true);
+
+    await dealDamage(damageValue, timesValue, context, card.name, true);
+
     // ターン中の追加ダメージ
-    context.turnModifiers
-      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+    const turnAddedDamages = context.turnModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+    for (const added of turnAddedDamages) {
+      await dealDamage(added.value, 1, context, added.source, false);
+    }
+
     // 次のカードへの追加ダメージ
-    context.nextCardModifiers
-      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+    const nextAddedDamages = context.nextCardModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+    for (const added of nextAddedDamages) {
+      await dealDamage(added.value, 1, context, added.source, false);
+    }
+
+    // 「次のカードへの効果」は全て消費されたのでリセット
+    context.nextCardModifiers = [];
   }
 }
 class AddMarkEffect {
@@ -395,21 +402,28 @@ class HollowMark3Effect {
   }
 }
 class FogCombo3Effect {
-  execute(card, effectInfo, context) {
+  async execute(card, effectInfo, context) {
     // ダメージ処理
-    dealDamage(context.turnHitCount, 2, context, card.name, false);
+    await dealDamage(context.turnHitCount, 2, context, card.name, false);
+
     // ターン中の追加ダメージ
-    context.turnModifiers
-      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+    const turnAddedDamages = context.turnModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+    for (const added of turnAddedDamages) {
+      await dealDamage(added.value, 1, context, added.source, false);
+    }
+
     // 次のカードへの追加ダメージ
-    context.nextCardModifiers
-      .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-      .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+    const nextAddedDamages = context.nextCardModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+    for (const added of nextAddedDamages) {
+      await dealDamage(added.value, 1, context, added.source, false);
+    }
+    
+    // 「次のカードへの効果」は全て消費されたのでリセット
+    context.nextCardModifiers = [];
   }
 }
 class FogMark3Effect {
-  execute(card, effectInfo, context) {
+  async execute(card, effectInfo, context) {
     updateBuff('enemy', 'fog-mark', 2);
     log(`霧の刻印を2追加`);
     if (globalGameState.enemy.buff['fog-mark'] === 3) {
@@ -417,18 +431,27 @@ class FogMark3Effect {
       const hp = globalGameState.player.hp;
       const maxHp = globalGameState.player.maxHp;
       const damage = Math.floor(25 * (1 - Math.pow(hp / maxHp, 2)));
-      dealDamage(damage, 1, context, card.name, false);
+      
+      await dealDamage(damage, 1, context, card.name, false);
+
       // ターン中の追加ダメージ
-      context.turnModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      const turnAddedDamages = context.turnModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of turnAddedDamages) {
+        await dealDamage(added.value, 1, context, added.source, false);
+      }
+
       // 次のカードへの追加ダメージ
-        context.nextCardModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      const nextAddedDamages = context.nextCardModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of nextAddedDamages) {
+        await dealDamage(added.value, 1, context, added.source, false);
+      }
+      
       // 減らす処理
       updateBuff('enemy', 'fog-mark', -3);
       log(`敵に${damage}ダメージ`);
+      
+      // 「次のカードへの効果」は全て消費されたのでリセット
+      context.nextCardModifiers = [];
     }
   }
 }
@@ -512,7 +535,7 @@ class SandCombo3Effect {
   }
 }
 class SandMark3Effect {
-  execute(card, effectInfo, context) {
+  async execute(card, effectInfo, context) {
     updateBuff('player', 'sand-mark', 2);
     log(`砂の刻印を2追加`);
     const daybreak = globalGameState.player.buff['daybreak-mark'] || 0;
@@ -525,19 +548,24 @@ class SandMark3Effect {
       log(`暁の刻印と砂の刻印をすべて消費`);
       const damage = mark * 3;
       // ダメージ処理
-      dealDamage(damage, 1, context, card.name, false);
+      await dealDamage(damage, 1, context, card.name, false);
       // ターン中の追加ダメージ
-      context.turnModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      const turnAddedDamages = context.turnModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of turnAddedDamages) {
+        await dealDamage(added.value, 1, context, added.source, false);
+      }
       // 次のカードへの追加ダメージ
-      context.nextCardModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
+      const nextAddedDamages = context.nextCardModifiers.filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of nextAddedDamages) {
+        await dealDamage(added.value, 1, context, added.source, false);
+      }
       // バリア処理
       const shield = Math.floor(damage * 0.5);
       updateBuff('player', 'shield', shield);
       log(`${shield}バリアを獲得`);
+      
+      // 「次のカードへの効果」は全て消費されたのでリセット
+      context.nextCardModifiers = [];
     }
   }
 }
@@ -639,18 +667,32 @@ export async function processEndOfTurnEffects() {
     for (let i = 0; i < times; i++) {
       // カード自身の基本ダメージを処理
       await dealDamage(damageValue, 1, currentTurnContext, card.name, false);
+
       // ターン中の追加ダメージ
-      currentTurnContext.turnModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
-      // 次のカードへの追加ダメージ
-      currentTurnContext.nextCardModifiers
-        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage')
-        .forEach(added => dealDamage(added.value, 1, context, added.source, false));
-      // 待機
-      if (i < times - 1) {
-        await wait(WAIT_TIME_MS);
+      const turnAddedDamages = currentTurnContext.turnModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of turnAddedDamages) {
+        await dealDamage(added.value, 1, currentTurnContext, added.source, false);
       }
+
+      // 次のカードへの追加ダメージ
+      const nextAddedDamages = currentTurnContext.nextCardModifiers
+        .filter(m => m.modifierType === 'addedDamage' && m.type === 'damage');
+      for (const added of nextAddedDamages) {
+        await dealDamage(added.value, 1, currentTurnContext, added.source, false);
+      }
+
+      // ゲーム終了処理
+      if (globalGameState.enemy.hp <= 0) {
+        if (window.round === 9) {
+          endGame(true);
+        } else {
+          finishGame();
+        }
+      }
+
+      // 待機
+      await wait(WAIT_TIME_MS);
     }
     // 「次のカードへの効果」は全て消費されたのでリセット
     currentTurnContext.nextCardModifiers = [];

@@ -57,8 +57,6 @@ export async function processEnemyTurn() {
     // カード使用
     await useCard(cardIds);
   }
-  
-  log('=== ターン終了！ ===');
 }
 
 async function useCard(cardsIdText) {
@@ -229,7 +227,7 @@ class LuminaCombo3Effect {
 class LuminaMark3Effect {
   execute(card, effectInfo, context) {
     playSoundEffect("buff");
-    updateBuff('enemy', 'burn-turn', 3);
+    updateBuff('player', 'burn-turn', 3);
     log(`プレイヤーに火傷効果`);
   }
 }
@@ -254,8 +252,8 @@ class NCollapseEffect {
     updateBuff('enemy', 'hollow-mark', -3);
     updateBuff('enemy', 'fog-mark', -3);
     updateBuff('enemy', 'lumina-mark', -3);
-    updateBuff('enemy', 'daybreak-mark', -3);
-    updateBuff('enemy', 'sand-mark', -3);
+    updateBuff('player', 'daybreak-mark', -3);
+    updateBuff('player', 'sand-mark', -3);
     // ダメージ計算
     await dealDamage(2, damage, context, card.name, false);
   }

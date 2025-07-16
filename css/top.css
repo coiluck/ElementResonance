@@ -182,7 +182,8 @@ button {
 
 .top-button {
   border: none;
-  margin-bottom: 20px;
+  max-width: 400px;
+  margin: 0 auto 20px;
   padding: 18px 30px;
   color: var(--text-color-light);
   font-family: 'Zen Old Mincho', serif;

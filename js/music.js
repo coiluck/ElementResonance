@@ -16,26 +16,50 @@ export function playMusic(music, loop = true) {
   }
   bgmAudio.play();
 }
+let fadeOutInterval = null; // setIntervalのIDを管理する変数
 export function stopMusic(fadeDuration = 1.0) {
   return new Promise((resolve) => {
-    if (bgmAudio) {
-      const fadeSteps = 30;
-      const stepTime = (fadeDuration * 1000) / fadeSteps;
-      const volumeStep = bgmAudio.volume / fadeSteps;
-      const fadeInterval = setInterval(() => {
-        if (bgmAudio.volume - volumeStep > 0) {
-          bgmAudio.volume -= volumeStep;
-        } else {
-          bgmAudio.volume = 0;
-          bgmAudio.pause();
-          bgmAudio = null;
-          clearInterval(fadeInterval);
-          resolve();
-        }
-      }, stepTime);
-    } else {
-      resolve();
+    // 既存のフェードアウト処理が進行中なら停止する
+    if (fadeOutInterval) {
+      clearInterval(fadeOutInterval);
     }
+
+    // BGMが存在しない、または既に停止している場合は即座に処理を完了
+    if (!bgmAudio || bgmAudio.paused) {
+      if (bgmAudio) {
+        bgmAudio = null;
+      }
+      resolve();
+      return;
+    }
+
+    const fadeSteps = 30;
+    const stepTime = (fadeDuration * 1000) / fadeSteps;
+    const volumeStep = bgmAudio.volume / fadeSteps;
+
+    // setIntervalのIDを保存する
+    fadeOutInterval = setInterval(() => {
+      // 念のため、各ステップでbgmAudioの存在を確認
+      if (!bgmAudio) {
+        clearInterval(fadeOutInterval);
+        fadeOutInterval = null;
+        resolve();
+        return;
+      }
+      
+      if (bgmAudio.volume > volumeStep) {
+        bgmAudio.volume -= volumeStep;
+      } else {
+        bgmAudio.volume = 0;
+        bgmAudio.pause();
+        bgmAudio = null;
+        clearInterval(fadeOutInterval);
+        
+        // 処理が完了したらIDをnullに戻す
+        fadeOutInterval = null; 
+        resolve();
+      }
+    }, stepTime);
   });
 }
 

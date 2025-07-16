@@ -470,6 +470,8 @@ async function setUpNextTurn() {
   if (overlay) {
     overlay.remove();
   }
+  // すべてのカードが使えない場合
+  checkAllSlotsFilled()
 }
 
 function setUpRecastTime() {

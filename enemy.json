@@ -135,7 +135,7 @@
     "image": "./images/character_enemy/9.webp",
     "hp": 40,
     "deck": [
-      [2,54,72],
+      [69,54,72],
       [50,61,71],
       [50,62,70]
     ],
@@ -147,9 +147,14 @@
         "card": 73
       },
       {
-        "hp": 20,
-        "description": "HPが20%を下回ったターン、20ダメージ * 2",
+        "hp": 15,
+        "description": "HPが15%を下回ったターン、20ダメージ * 2",
         "card": 59
+      },
+      {
+        "hp": 0,
+        "description": "パッシブ: ターン開始時にランダムな刻印を2つ付与",
+        "card": null
       }
     ],
     "damageReduction": 1
