@@ -255,7 +255,7 @@ class NCollapseEffect {
     updateBuff('player', 'daybreak-mark', -3);
     updateBuff('player', 'sand-mark', -3);
     // ダメージ計算
-    await dealDamage(2, damage, context, card.name, false);
+    await dealDamage(damage, 2, context, card.name, false);
   }
 }
 class NEchoEffect {

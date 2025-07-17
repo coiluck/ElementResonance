@@ -1,11 +1,11 @@
-import { stopMusic } from './music.js';
+import { stopMusic,playSoundEffect } from './music.js';
 
 export function endGame(isClear) {
   // 背景音楽を停止
   stopMusic(3);
   // ゲーム終了
   if (isClear) {
-    console.log("clear");
+    playSoundEffect("clear");
     // localstorageをクリア
     localStorage.clear();
     // modal-endを表示

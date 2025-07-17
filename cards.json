@@ -1107,7 +1107,7 @@
     "id": 67,
     "name": "反撃の狼煙",
     "description": "バリアの半分を消費して、消費の3倍ダメージ",
-    "image_icon": "./images/cards_icon/",
+    "image_icon": "./images/cards_icon/enemy_cards/six.avif",
     "damage": null,
     "effect": [
       {
@@ -1147,8 +1147,8 @@
   {
     "id": 70,
     "name": "万象崩落・極",
-    "description": "場のすべての刻印を消費して、2 * 消費した刻印の数のダメージ",
-    "image_icon": "./images/cards_icon/",
+    "description": "場のすべての刻印を消費して、消費した刻印の数 * 2 のダメージ",
+    "image_icon": "./images/cards_icon/enemy_cards/n-collapse.avif",
     "damage": null,
     "effect": [
       {
@@ -1161,7 +1161,7 @@
     "id": 71,
     "name": "幽魂の残響",
     "description": "場のすべての刻印1つにつき2ダメージ（この効果では刻印は消費しない）",
-    "image_icon": "./images/cards_icon/",
+    "image_icon": "./images/cards_icon/enemy_cards/n-echo.avif",
     "damage": null,
     "effect": [
       {
@@ -1173,8 +1173,8 @@
   {
     "id": 72,
     "name": "秩序への断罪",
-    "description": "プレイヤーのデッキの通常・コンボ・刻印の偏りでダメージ 20-(デッキ内の最少カードタイプの枚数×4) ",
-    "image_icon": "./images/cards_icon/",
+    "description": "プレイヤーのデッキの通常・コンボ・刻印の偏りでダメージ（20-デッキ内の最少カードタイプの枚数×4）",
+    "image_icon": "./images/cards_icon/enemy_cards/n-order.avif",
     "damage": null,
     "effect": [
       {

@@ -66,7 +66,7 @@ export function stopMusic(fadeDuration = 1.0) {
 // 効果音の再生
 export function playSoundEffect(sound) {
   let se;
-  if (sound === "click1" || sound === "click2" || sound === "back") {
+  if (sound === "click1" || sound === "click2" || sound === "back" || sound === "clear") {
     se = new Audio(`./music/${sound}.wav`);
   } else {
     se = new Audio(`./music/${sound}.mp3`);
