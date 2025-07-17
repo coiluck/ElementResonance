@@ -1,7 +1,7 @@
 // win-animation.js
 const VICTORY_CONFIG = {
   parentElement: document.getElementById('modal-game'), // アニメーションを追加する親要素
-  animationDuration: 3000, // アニメーション時間
+  animationDuration: 2500, // アニメーション時間
   victoryText: 'VICTORY', // アニメーションのテキスト
   particleCount: 20 // パーティクルの数
 };

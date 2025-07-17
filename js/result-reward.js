@@ -18,9 +18,11 @@ export async function finishGame() {
 
   // 勝利アニメーション
   playVictoryAnimation();
+  // 少し待ってから音楽再生
+  await new Promise(resolve => setTimeout(resolve, 400));
   playSoundEffect("clear");
   // 勝利アニメーションが終わるまで待つ
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  await new Promise(resolve => setTimeout(resolve, 2100));
 
   // 背景音楽を停止
   changeMusic();
