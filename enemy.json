@@ -87,11 +87,6 @@
         "card": 66
       },
       {
-        "hp": 50,
-        "description":"HPが50%を下回ったターン以降、ダメージを1軽減",
-        "card": 73
-      },
-      {
         "hp": 30,
         "description": "HPが30%を下回ったターン、自分に10バリアを付与",
         "card": 65
@@ -101,7 +96,8 @@
         "description": "HPが10%を下回ったターン、自分に10バリアを付与",
         "card": 65
       }
-    ]
+    ],
+    "damageReduction": 1
   },
   {
     "round": 7,

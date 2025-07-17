@@ -1,6 +1,5 @@
 // result-reward.js
-import { stopMusic } from './music.js';
-import { playMusic } from './music.js';
+import { playMusic, stopMusic } from './music.js';
 import { characterAnim } from './game-player-animation.js';
 import { playVictoryAnimation } from './win-animation.js';
 
@@ -19,6 +18,7 @@ export async function finishGame() {
 
   // 勝利アニメーション
   playVictoryAnimation();
+  playSoundEffect("clear");
   // 勝利アニメーションが終わるまで待つ
   await new Promise(resolve => setTimeout(resolve, 3000));
 

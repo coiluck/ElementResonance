@@ -269,7 +269,7 @@ function checkAllSlotsFilled() {
   }
 }
 
-import { processEndOfTurnEffects } from './game-prosses-cards.js';
+import { processEndOfTurnEffects } from './game-process-cards.js';
 
 // ボタンを表示
 function showButton(filledCardIds) {
@@ -312,7 +312,7 @@ function showButton(filledCardIds) {
   }, 10);
 }
 
-import { processCards } from './game-prosses-cards.js';
+import { processCards } from './game-process-cards.js';
 import { processEnemyTurn } from './game-process-enemy.js';
 
 // ターンが進行した際の処理
@@ -403,7 +403,7 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
   }
   container.innerHTML = '';
   // 使用するカード
-  const deckIndex = globalGameState.turn % enemyDeck.length;
+  const deckIndex = (globalGameState.turn - 1) % enemyDeck.length; // ターン数は1から始まるので-1する（最初は配列の0番目）
   console.log(`${globalGameState.turn}ターン目用のデッキを用意しました`);
   const currentCardIds = enemyDeck[deckIndex]; // 配列の中のいずれかの配列を取得
   // 取得した配列の画像を表示
@@ -433,6 +433,8 @@ async function setUpEnemyDeck(enemyDeck, cardsMaster) {
 }
 
 async function setUpNextTurn() {
+  // 火傷効果の解決
+  processFireScar();
   globalGameState.turn++;
   setUpEnemy();
   // ログをクリア
@@ -497,4 +499,50 @@ function updateRecastTime() {
       }
     }
   });
+}
+
+import { updateBuff } from './game-buff-update.js';
+
+function processFireScar() {
+  const isEnemyFire = globalGameState.enemy.buff['burn-turn'];
+  const isPlayerFire = globalGameState.player.buff['burn-turn'];
+  if (isEnemyFire) {
+    updateBuff('enemy', 'burn-turn', -1);
+    // ダメージ処理
+    if (globalGameState.player.buff.shield > 0) {
+      const damageToShield = Math.min(globalGameState.player.buff.shield, 3);
+      const damageToHp = 3 - damageToShield;
+
+      globalGameState.player.buff.shield -= damageToShield;
+        
+      if (damageToHp > 0) {
+        // バリアが割れる場合
+        globalGameState.player.hp -= damageToHp;
+      }
+      // 減ったバリアを表示更新
+      renderBuffs();
+    } else {
+      // バリアがない場合は直接HPを減らす
+      globalGameState.player.hp -= finalDamage;
+    }
+  } else if (isPlayerFire) {
+    updateBuff('player', 'burn-turn', -1);
+    // ダメージ処理
+    if (globalGameState.enemy.buff.shield > 0) {
+      const damageToShield = Math.min(globalGameState.enemy.buff.shield, 4);
+      const damageToHp = 4 - damageToShield;
+
+      globalGameState.enemy.buff.shield -= damageToShield;
+        
+      if (damageToHp > 0) {
+        // バリアが割れる場合
+        globalGameState.enemy.hp -= damageToHp;
+      }
+      // 減ったバリアを表示更新
+      renderBuffs();
+    } else {
+      // バリアがない場合は直接HPを減らす
+      globalGameState.enemy.hp -= finalDamage;
+    }
+  }
 }

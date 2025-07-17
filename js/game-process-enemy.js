@@ -1,7 +1,7 @@
 // game-process-enemy.js
 
 import { globalGameState } from './game-status.js';
-import { log } from './game-prosses-cards.js';
+import { log } from './game-process-cards.js';
 
 // 待機時間
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
