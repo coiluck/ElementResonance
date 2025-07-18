@@ -482,7 +482,7 @@
   {
     "id": 27,
     "name": "聖焔の再誕",
-    "description": "敵に燐の刻印を2つ付与。敵の燐の刻印を3つ消費して、敵に火傷効果（ターン開始時ダメージ4、3ターン持続）",
+    "description": "敵に燐の刻印を2つ付与。敵の燐の刻印を3つ消費して、敵に火傷効果（ターン開始時ダメージ5、3ターン持続）",
     "image": "./images/cards/lumina_mark_3.avif",
     "image_icon": "./images/cards_icon/lumina_mark_3.avif",
     "element": "lumina",
@@ -649,7 +649,7 @@
   {
     "id": 36,
     "name": "蒼翼機竜 アーク",
-    "description": "自分に暁の刻印を2つ付与。自分についているすべての刻印を消費して、自分のHPを消費した刻印の数 × 3 回復",
+    "description": "自分に暁の刻印を2つ付与。自分についているすべての刻印を消費して、自分のHPを消費した刻印の数 × 3 回復し、最大HPを超えた回復量をダメージとして敵に与える",
     "image": "./images/cards/daybreak_mark_3.avif",
     "image_icon": "./images/cards_icon/daybreak_mark_3.avif",
     "element": "daybreak",

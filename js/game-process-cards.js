@@ -495,24 +495,30 @@ class DaybreakCombo3Effect {
   }
 }
 class DaybreakMark3Effect {
-  execute(card, effectInfo, context) {
+  async execute(card, effectInfo, context) {
     playSoundEffect("buff");
     updateBuff('player', 'daybreak-mark', 2);
     log(`暁の刻印を2追加`);
+    // 現在の刻印数を取得
     const daybreak = globalGameState.player.buff['daybreak-mark'] || 0;
     const sand = globalGameState.player.buff['sand-mark'] || 0;
     const mark = daybreak + sand;
     log(`暁の刻印: ${daybreak}、砂の刻印: ${sand}、合計: ${mark}`);
     if (mark !== 0) {
+      // 刻印を消費（0以下のならなロジックはupdateBuffにある）
       updateBuff('player', 'daybreak-mark', -3);
       updateBuff('player', 'sand-mark', -3);
       log(`暁の刻印と砂の刻印をすべて消費`);
+      // 回復量を計算
       const healValue = mark * 3;
-      globalGameState.player.hp += healValue;
-      if (globalGameState.player.hp + healValue > globalGameState.player.maxHp) {
+      globalGameState.player.hp += healValue; // ここでHP更新
+      let overHeal = globalGameState.player.hp - globalGameState.player.maxHp; // 更新されたHPがどれだけ最大HPを超えているか
+      if (globalGameState.player.hp > globalGameState.player.maxHp) {
         globalGameState.player.hp = globalGameState.player.maxHp;
-      } else {
-        globalGameState.player.hp += healValue;
+      }
+      // 余剰回復量をダメージにする
+      if (overHeal > 0) {
+        await dealDamage(overHeal, 1, context, card.name, false);
       }
       // 最終HPの表示更新
       document.querySelector('.game-main-characters-player-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.player.hp} / ${globalGameState.player.maxHp})`;
@@ -595,7 +601,7 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
 
   // ダメージ処理ループ
   for (let i = 0; i < times; i++) {
-    const reduction = globalGameState.enemy.buff['damage-reduction'] || 0;
+    const reduction = (canIgnoreBarrier === true) ? 0 : (globalGameState.enemy.buff['damage-reduction'] || 0);
     const finalDamage = Math.max(0, (baseDamage + totalBuffValue) - reduction);
   
     if (finalDamage <= 0) {
@@ -637,7 +643,7 @@ async function dealDamage(baseDamage, times, context, sourceName = 'error name',
     document.querySelector('.game-main-characters-enemy-status-hp-bar .hp-bar-inner').style.width = `calc(100% * ${globalGameState.enemy.hp} / ${globalGameState.enemy.maxHp})`;
     document.querySelector('.game-main-characters-enemy-status-hp').textContent = `HP: ${globalGameState.enemy.hp}/${globalGameState.enemy.maxHp}`;
     // ログ
-    const reductionLog = globalGameState.enemy.damageReduction > 0 ? ` - 軽減:${globalGameState.enemy.damageReduction}` : '';
+    const reductionLog = reduction > 0 ? ` - 軽減:${reduction}` : '';
     log(`${finalDamage}ダメージ (基本値:${baseDamage} + バフ:${totalBuffValue}${reductionLog}${buffDetailLog})`);
 
     // 待機

@@ -510,8 +510,8 @@ function processFireScar() {
     updateBuff('enemy', 'burn-turn', -1);
     // ダメージ処理
     if (globalGameState.player.buff.shield > 0) {
-      const damageToShield = Math.min(globalGameState.player.buff.shield, 3);
-      const damageToHp = 3 - damageToShield;
+      const damageToShield = Math.min(globalGameState.player.buff.shield, 5); // 敵のやけどダメージは5
+      const damageToHp = 5 - damageToShield;
 
       globalGameState.player.buff.shield -= damageToShield;
         
@@ -523,14 +523,14 @@ function processFireScar() {
       renderBuffs();
     } else {
       // バリアがない場合は直接HPを減らす
-      globalGameState.player.hp -= finalDamage;
+      globalGameState.player.hp -= 5;
     }
   } else if (isPlayerFire) {
     updateBuff('player', 'burn-turn', -1);
     // ダメージ処理
     if (globalGameState.enemy.buff.shield > 0) {
-      const damageToShield = Math.min(globalGameState.enemy.buff.shield, 4);
-      const damageToHp = 4 - damageToShield;
+      const damageToShield = Math.min(globalGameState.enemy.buff.shield, 3); // プレイヤーのやけどダメージは3
+      const damageToHp = 3 - damageToShield;
 
       globalGameState.enemy.buff.shield -= damageToShield;
         
@@ -542,7 +542,7 @@ function processFireScar() {
       renderBuffs();
     } else {
       // バリアがない場合は直接HPを減らす
-      globalGameState.enemy.hp -= finalDamage;
+      globalGameState.enemy.hp -= 3;
     }
   }
 }

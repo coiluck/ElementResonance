@@ -55,7 +55,8 @@
       [61,54]
     ],
     "maxHoldCards": 2,
-    "triggers": null
+    "triggers": null,
+    "damageReduction": 1
   },
   {
     "round": 5,
@@ -67,7 +68,8 @@
       [49, 63]
     ],
     "maxHoldCards": 2,
-    "triggers": null
+    "triggers": null,
+    "damageReduction": 1
   },
   {
     "round": 6,
@@ -110,7 +112,7 @@
     ],
     "maxHoldCards": 2,
     "triggers": null,
-    "damageReduction": 1
+    "damageReduction": 2
   },
   {
     "round": 8,
@@ -123,7 +125,7 @@
     ],
     "maxHoldCards": 2,
     "triggers": null,
-    "damageReduction": 1
+    "damageReduction": 2
   },
   {
     "round": 9,
@@ -139,8 +141,8 @@
     "triggers": [
       {
         "hp": 60,
-        "description": "HPが60%を下回ったターン以降、ダメージを更に1軽減",
-        "card": 73
+        "description": "HPが60%を下回ったターン、場のすべての刻印1つにつき2ダメージ（この効果では刻印は消費しない）",
+        "card": 71
       },
       {
         "hp": 15,
@@ -153,6 +155,6 @@
         "card": null
       }
     ],
-    "damageReduction": 1
+    "damageReduction": 2
   }
 ]
