@@ -64,8 +64,8 @@
     "image": "./images/character_enemy/5.webp",
     "hp": 25,
     "deck": [
-      [50, 62],
-      [49, 63]
+      [49, 62],
+      [48, 63]
     ],
     "maxHoldCards": 2,
     "triggers": null,
@@ -75,11 +75,11 @@
     "round": 6,
     "name": "狐王 フェン",
     "image": "./images/character_enemy/6.avif",
-    "hp": 30,
+    "hp": 35,
     "deck": [
-      [63,48],
-      [64,55],
-      [64,67]
+      [61,47],
+      [62,53],
+      [63,67]
     ],
     "maxHoldCards": 2,
     "triggers": [
@@ -90,8 +90,8 @@
       },
       {
         "hp": 30,
-        "description": "HPが30%を下回ったターン、自分に10バリアを付与",
-        "card": 65
+        "description": "HPが30%を下回ったターン、自分に5バリアを付与",
+        "card": 64
       },
       {
         "hp": 10,
@@ -103,9 +103,9 @@
   },
   {
     "round": 7,
-    "name": "鬼閃 オグレイネ",
+    "name": "黒槍 レヴァ",
     "image": "./images/character_enemy/7.webp",
-    "hp": 30,
+    "hp": 35,
     "deck": [
       [64,50],
       [48,54]
@@ -118,12 +118,13 @@
     "round": 8,
     "name": "鬼閃 オグレイネ",
     "image": "./images/character_enemy/8.webp",
-    "hp": 30,
+    "hp": 35,
     "deck": [
-      [64,50],
-      [2,53]
+      [64,50,47],
+      [2,53,53],
+      [60,61,62]
     ],
-    "maxHoldCards": 2,
+    "maxHoldCards": 3,
     "triggers": null,
     "damageReduction": 2
   },
@@ -131,11 +132,11 @@
     "round": 9,
     "name": "共鳴する混沌",
     "image": "./images/character_enemy/9.webp",
-    "hp": 40,
+    "hp": 45,
     "deck": [
       [69,54,72],
-      [50,61,71],
-      [50,62,70]
+      [50,61,62],
+      [50,63,70]
     ],
     "maxHoldCards": 3,
     "triggers": [
@@ -143,6 +144,11 @@
         "hp": 60,
         "description": "HPが60%を下回ったターン、場のすべての刻印1つにつき2ダメージ（この効果では刻印は消費しない）",
         "card": 71
+      },
+      {
+        "hp": 40,
+        "description": "HPが40%を下回ったターン、自分に10バリアを付与",
+        "card": 65
       },
       {
         "hp": 15,

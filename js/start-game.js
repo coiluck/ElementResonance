@@ -34,6 +34,8 @@ document.querySelector('.top-start-game-button').addEventListener('click', funct
   // 新規で始める
   localStorage.clear();
   saveData();
+  // ラウンド数を更新
+  document.querySelectorAll('.middle-round-number').textContent = `${window.round}`;
 });
 
 // 続きからを押した場合
