@@ -316,6 +316,7 @@ async function processRewards(rewards) {
             // どちらも選択されていない
             message('warning', '属性を選択してください');
             playSoundEffect("disable");
+            button.disabled = false;
             return;
           }
           break;
