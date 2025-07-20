@@ -590,7 +590,7 @@
   {
     "id": 33,
     "name": "祈りの少女 ココネ",
-    "description": "これ以降のターン中、すべての通常カードに追加で「自分のHPを2回復」を付与",
+    "description": "これ以降のターン中、すべてのカードに追加で「自分のHPを2回復」を付与",
     "image": "./images/cards/daybreak_combo_3.avif",
     "image_icon": "./images/cards_icon/daybreak_combo_3.avif",
     "element": "daybreak",
