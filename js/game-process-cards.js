@@ -328,11 +328,17 @@ class ReduceCoolTimeEffect {
 }
 class DamageCombo2Effect {
   async execute(card, effectInfo, context) {
-    // 同じ属性であるカードのid
-    const attributeCount = Array.from({length: 9}, (_, i) => card.id - 4 + i);
-    const ratio = context.playedCardsInTurn.filter(playedCard => attributeCount.includes(playedCard.id)).length;
+    const getAttribute = (id) => Math.floor((id - 1) / 9);
+    // 現在のカードの属性を取得
+    const targetAttribute = getAttribute(card.id);
+    // このターンに出されたカードで同じ属性をカウント
+    const sameAttributeCount = context.playedCardsInTurn.filter(playedCard => {
+      return getAttribute(playedCard.id) === targetAttribute;
+    }).length;
+    // const attributeCount = Array.from({length: 9}, (_, i) => card.id - 4 + i); <- これだとメアの効果の時にずれる
+    // const ratio = context.playedCardsInTurn.filter(playedCard => attributeCount.includes(playedCard.id)).length;
     const basicDamage = effectInfo.value || 1;
-    const damageValue = basicDamage * ratio;
+    const damageValue = basicDamage * sameAttributeCount;
     const times = effectInfo.times || 1;
     const timesValue = times * 1;
 
