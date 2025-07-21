@@ -99,7 +99,7 @@
   {
     "id": 6,
     "name": "破壊霊 メア",
-    "description": "このターンに発動した虚属性のカード1枚につき、敵に直接3ダメージ",
+    "description": "このターンに発動した虚属性のカード1枚につき、敵に直接2ダメージ",
     "image": "./images/cards/hollow_combo_3.avif",
     "image_icon": "./images/cards_icon/hollow_combo_3.avif",
     "element": "hollow",
@@ -110,7 +110,7 @@
       {
         "when": "now",
         "type": "damageCombo2",
-        "value": 3
+        "value": 2
       }
     ]
   },
