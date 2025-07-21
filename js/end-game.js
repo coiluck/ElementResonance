@@ -54,6 +54,19 @@ async function AnimationOfResultModal(isClear) {
   const imgWrap = document.querySelector('.img-wrap');
   const lineContainer = document.querySelector('.line-container');
   const lines = document.querySelectorAll('.line');
+  // ほかの要素
+  const title = document.getElementById('end-title');
+  const subtext = document.getElementById('end-subtext');
+  const deckListContainer = document.getElementById('end-deck-list-container');
+  const button = document.getElementById('end-button');
+
+  // デッキリストをクリア
+  deckListContainer.innerHTML = '';
+  // すべての要素にno-displayを追加
+  title.classList.add('no-display');
+  subtext.classList.add('no-display');
+  deckListContainer.classList.add('no-display');
+  button.classList.add('no-display');
 
   // 画像アニメーションを実行
   imgWrap.classList.remove('no-display');
@@ -85,10 +98,6 @@ async function AnimationOfResultModal(isClear) {
       lineContainer.style.top = '10%';
       // アニメーション完了後の表示処理
       setTimeout(() => {
-        const title = document.getElementById('end-title');
-        const subtext = document.getElementById('end-subtext');
-        const deckListContainer = document.getElementById('end-deck-list-container');
-        const button = document.getElementById('end-button');
         let delay = 0;
         // タイトル表示
         setTimeout(() => {
